@@ -393,12 +393,6 @@
                         <li>Creating depth effects with size and brightness</li>
                     </ul>
                 </div>
-
-                <div class="info-box">
-                    <h3>⚡ Important Note</h3>
-                    <p>In Lua for MicroStudio, use <code>:</code> (colon) for screen methods instead of <code>.</code> (dot)!</p>
-                    <p>For example: <code>screen:clear()</code> instead of <code>screen.clear()</code></p>
-                </div>
             </div>
         </div>
 
@@ -880,7 +874,7 @@ end</pre>
             
             const nextBtn = document.getElementById('nextBtn');
             if (currentStep === totalSteps) {
-                nextBtn.textContent = '🎉 Finish';
+                nextBtn.textContent = '🎉 Finished!';
             } else {
                 nextBtn.textContent = 'Next →';
             }
@@ -894,8 +888,7 @@ end</pre>
                 currentStep++;
                 updateDisplay();
             } else {
-                // Finished - could show a completion message or restart
-                alert('🎉 Congratulations! You\'ve completed the challenge! Feel free to review any step by clicking Previous.');
+                
             }
         }
 
