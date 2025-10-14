@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Generator Tutorial - MicroStudio Lua</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .step-content {
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+
+        .step-content p {
+            margin-bottom: 20px;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #a8e6cf;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+        }
+
+        .code-block::before {
+            content: '⌨️ Type this code out - no copy/paste!';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(246, 147, 251, 0.8);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .info-box {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+        }
+
+        .info-box li {
+            margin: 8px 0;
+        }
+
+        .challenge {
+            background: rgba(246, 147, 251, 0.1);
+            border-left: 4px solid #f093fb;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .challenge h3 {
+            color: #f093fb;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .challenge-content {
+            margin-top: 15px;
+        }
+
+        .solution {
+            margin-top: 20px;
+        }
+
+        .solution-toggle {
+            background: #764ba2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .solution-toggle:hover {
+            background: #667eea;
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-btn.prev {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .step-indicator {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.1em;
+            color: #a0a0a0;
+        }
+
+        .step-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: #667eea;
+            transform: scale(1.3);
+        }
+
+        .dot.completed {
+            background: #f093fb;
+        }
+
+        .keyword {
+            color: #ff79c6;
+            font-weight: bold;
+        }
+
+        .string {
+            color: #f1fa8c;
+        }
+
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        .complete-code {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .complete-code h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌟 Star Generator Tutorial</h1>
+            <p class="subtitle">Learn to create a scrolling starfield in MicroStudio Lua</p>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="step-indicator">
+            <span id="stepNumber">Step 1</span> of <span id="totalSteps">8</span>
+        </div>
+
+        <div class="step-dots" id="stepDots"></div>
+
+        <!-- Step 0: Introduction -->
+        <div class="step active" data-step="0">
+            <h2>Welcome! 🚀</h2>
+            <div class="step-content">
+                <p>In this tutorial, you'll create a scrolling starfield background that simulates flying through space! We'll build it step by step, and after each step, you'll have a challenge to complete on your own.</p>
+                
+                <div class="info-box">
+                    <h3>🎯 What You'll Learn</h3>
+                    <ul>
+                        <li>Using <strong>for loops with ranges</strong> to create multiple objects</li>
+                        <li>Working with <strong>tables</strong> to store star data</li>
+                        <li>Updating positions in a loop for animation</li>
+                        <li>Creating depth effects with size and brightness</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>⚡ Important Note</h3>
+                    <p>In Lua for MicroStudio, use <code>:</code> (colon) for screen methods instead of <code>.</code> (dot)!</p>
+                    <p>For example: <code>screen:clear()</code> instead of <code>screen.clear()</code></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: Creating the Stars Table -->
+        <div class="step" data-step="1">
+            <h2>Step 1: Creating the Stars Table</h2>
+            <div class="step-content">
+                <p>First, let's set up our program structure and create an empty table to hold our stars.</p>
+                
+                <div class="code-block">
+                    <pre>stars = {}
+
+init = function()
+  <span class="comment">-- We'll add code here next</span>
+end
+
+update = function()
+  <span class="comment">-- We'll add code here later</span>
+end
+
+draw = function()
+  <span class="comment">-- We'll add code here later</span>
+end</pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>What's happening?</h3>
+                    <ul>
+                        <li>We created an empty table called <code>stars</code> that will store all our star data</li>
+                        <li>We set up the three main functions that MicroStudio needs</li>
+                        <li><code>init()</code> runs once when the program starts</li>
+                        <li><code>update()</code> runs every frame to update game logic</li>
+                        <li><code>draw()</code> runs every frame to draw to the screen</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Generating Stars -->
+        <div class="step" data-step="2">
+            <h2>Step 2: Generating Stars with a For Loop</h2>
+            <div class="step-content">
+                <p>Now we'll use a <strong>for loop with a range</strong> to create 50 stars. This is a new concept! A for loop with a range looks like this: <code>for i = 1, 50 do</code></p>
+                
+                <div class="code-block">
+                    <pre>init = function()
+  <span class="keyword">for</span> i = 1, 50 <span class="keyword">do</span>
+    <span class="keyword">local</span> star = {}
+    star.x = (math.random() - 0.5) * screen.width
+    star.y = (math.random() - 0.5) * screen.height
+    star.speed = math.random() * 1.5 + 0.5
+    table.insert(stars, star)
+  <span class="keyword">end</span>
+end</pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>What's happening?</h3>
+                    <ul>
+                        <li><code>for i = 1, 50 do</code> creates a loop that runs 50 times</li>
+                        <li>Each time through the loop, we create a new star table with:
+                            <ul>
+                                <li><code>x</code>: random position across the screen width</li>
+                                <li><code>y</code>: random position across the screen height</li>
+                                <li><code>speed</code>: random speed between 0.5 and 2.0</li>
+                            </ul>
+                        </li>
+                        <li>We add each star to our <code>stars</code> table using <code>table.insert()</code></li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>Understanding the random positions</h3>
+                    <ul>
+                        <li><code>math.random()</code> gives us a number between 0 and 1</li>
+                        <li>Subtracting 0.5 gives us a number between -0.5 and 0.5</li>
+                        <li>Multiplying by screen width/height spreads stars across the whole screen</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Drawing the Stars -->
+        <div class="step" data-step="3">
+            <h2>Step 3: Drawing the Stars</h2>
+            <div class="step-content">
+                <p>Let's make our stars visible! We'll use a <strong>pairs loop</strong> (which you already know) to draw each star.</p>
+                
+                <div class="code-block">
+                    <pre>draw = function()
+  screen:clear(<span class="string">"rgb(0, 0, 20)"</span>)
+  
+  screen:setColor(<span class="string">"white"</span>)
+  <span class="keyword">for</span> key, star <span class="keyword">in</span> pairs(stars) <span class="keyword">do</span>
+    screen:fillRect(star.x, star.y, 2, 2)
+  <span class="keyword">end</span>
+end</pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>What's happening?</h3>
+                    <ul>
+                        <li>We clear the screen with a dark blue color (like space!)</li>
+                        <li>We set the drawing color to white</li>
+                        <li>We loop through all stars using <code>pairs</code></li>
+                        <li>We draw each star as a small 2x2 pixel rectangle</li>
+                    </ul>
+                </div>
+
+                <p><strong>Run your code!</strong> You should see 50 white dots scattered across the screen.</p>
+
+                <div class="challenge">
+                    <h3>🎯 Challenge 1: Change the Star Color</h3>
+                    <div class="challenge-content">
+                        <p><strong>Try this on your own first!</strong></p>
+                        <p>Make the stars yellow instead of white. Yellow looks like: <code>"rgb(255, 255, 150)"</code></p>
+                        
+                        <div class="solution">
+                            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                            <div class="solution-content">
+                                <div class="code-block">
+                                    <pre>draw = function()
+  screen:clear(<span class="string">"rgb(0, 0, 20)"</span>)
+  
+  screen:setColor(<span class="string">"rgb(255, 255, 150)"</span>)  <span class="comment">-- Changed to yellow!</span>
+  <span class="keyword">for</span> key, star <span class="keyword">in</span> pairs(stars) <span class="keyword">do</span>
+    screen:fillRect(star.x, star.y, 2, 2)
+  <span class="keyword">end</span>
+end</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Making Stars Move -->
+        <div class="step" data-step="4">
+            <h2>Step 4: Making Stars Move</h2>
+            <div class="step-content">
+                <p>Now for the fun part - animation! We'll update the star positions each frame to make them move down the screen.</p>
+                
+                <div class="code-block">
+                    <pre>update = function()
+  <span class="keyword">for</span> key, star <span class="keyword">in</span> pairs(stars) <span class="keyword">do</span>
+    star.y = star.y - star.speed
+  <span class="keyword">end</span>
+end</pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>What's happening?</h3>
+                    <ul>
+                        <li>We loop through each star</li>
+                        <li>We subtract the star's speed from its y position</li>
+                        <li>This makes the star move downward (toward negative y)</li>
+                    </ul>
+                </div>
+
+                <p><strong>Run your code!</strong> Your stars should be moving! But they disappear... let's fix that next.</p>
+            </div>
+        </div>
+
+        <!-- Step 5: Wrapping Stars -->
+        <div class="step" data-step="5">
+            <h2>Step 5: Wrapping Stars Around</h2>
+            <div class="step-content">
+                <p>When a star moves off the bottom of the screen, we need to move it back to the top. This creates an endless scrolling effect!</p>
+                
+                <div class="code-block">
+                    <pre>update = function()
+  <span class="keyword">for</span> key, star <span class="keyword">in</span> pairs(stars) <span class="keyword">do</span>
+    star.y = star.y - star.speed
+    
+    <span class="keyword">if</span> star.y < -screen.height / 2 <span class="keyword">then</span>
+      star.y = screen.height / 2
+      star.x = (math.random() - 0.5) * screen.width
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+end</pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>What's happening?</h3>
+                    <ul>
+                        <li>After moving the star, we check if it's gone off the bottom of the screen</li>
+                        <li>If it has, we reset it to the top (<code>screen.height / 2</code>)</li>
+                        <li>We also give it a new random x position for variety</li>
+                    </ul>
+                </div>
+
+                <p><strong>Run your code!</strong> You now have an infinite starfield! ✨</p>
+
+                <div class="challenge">
+                    <h3>🎯 Challenge 2: Change the Direction</h3>
+                    <div class="challenge-content">
+                        <p><strong>Try this on your own first!</strong></p>
+                        <p>Instead of stars moving downward, make them move to the left (like you're flying sideways through space). You'll need to:</p>
+                        <ul>
+                            <li>Subtract from <code>star.x</code> instead of <code>star.y</code></li>
+                            <li>Check if the star has gone off the left edge</li>
+                            <li>Reset it to the right edge</li>
+                        </ul>
+                        
+                        <div class="solution">
+                            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                            <div class="solution-content">
+                                <div class="code-block">
+                                    <pre>update = function()
+  <span class="keyword">for</span> key, star <span class="keyword">in</span> pairs(stars) <span class="keyword">do</span>
+    star.x = star.x - star.speed  <span class="comment">-- Move left</span>
+    
+    <span class="keyword">if</span> star.x < -screen.width / 2 <span class="keyword">then</span>  <span class="comment">-- Gone off left edge?</span>
+      star.x = screen.width / 2  <span class="comment">-- Reset to right edge</span>
+      star.y = (math.random() - 0.5) * screen.height  <span class="comment">-- New random y</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+end</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6: Adding Depth -->
+        <div class="step" data-step="6">
+            <h2>Step 6: Adding Depth with Different Sizes</h2>
+            <div class="step-content">
+                <p>Let's make the starfield more realistic by making some stars bigger (closer to us) and some smaller (farther away). Stars that are closer should also move faster!</p>
+                
+                <p><strong>First, let's add a size to each star. Update your <code>init</code> function:</strong></p>
+                
+                <div class="code-block">
+                    <pre>init = function()
+  <span class="keyword">for</span> i = 1, 50 <span class="keyword">do</span>
+    <span class="keyword">local</span> star = {}
+    star.x = (math.random() - 0.5) * screen.width
+    star.y = (math.random() - 0.5) * screen.height
+    star.speed = math.random() * 1.5 + 0.5
+    star.size = star.speed  <span class="comment">-- Size based on speed!</span>
+    table.insert(stars, star)
+  <span class="keyword">end</span>
+end</pre>
+                </div>
+
+                <p><strong>Now update your <code>draw</code> function to use the size:</strong></p>
+
+                <div class="code-block">
+                    <pre>draw = function()
+  screen:clear(<span class="string">"rgb(0, 0, 20)"</span>)
+  
+  screen:setColor(<span class="string">"white"</span>)
+  <span class="keyword">for</span> key, star <span class="keyword">in</span> pairs(stars) <span class="keyword">do</span>
+    screen:fillRect(star.x, star.y, star.size, star.size)
+  <span class="keyword">end</span>
+end</pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>What's happening?</h3>
+                    <ul>
+                        <li>We calculate each star's size based on its speed</li>
+                        <li>Faster stars are bigger (closer)</li>
+                        <li>Slower stars are smaller (farther away)</li>
+                        <li>We draw each star with its own size</li>
+                    </ul>
+                </div>
+
+                <p><strong>Run your code!</strong> You should see stars of different sizes creating a depth effect!</p>
+
+                <div class="challenge">
+                    <h3>🎯 Challenge 3: Add Variable Brightness</h3>
+                    <div class="challenge-content">
+                        <p><strong>Try this on your own first!</strong></p>
+                        <p>Make faster/bigger stars brighter and slower/smaller stars dimmer. This will enhance the depth effect!</p>
+                        <p><strong>Hints:</strong></p>
+                        <ul>
+                            <li>You'll need to set a different color for each star inside the loop</li>
+                            <li>Use the star's speed to determine brightness</li>
+                            <li>Brighter stars have higher RGB values</li>
+                        </ul>
+                        
+                        <div class="solution">
+                            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                            <div class="solution-content">
+                                <div class="code-block">
+                                    <pre>draw = function()
+  screen:clear(<span class="string">"rgb(0, 0, 20)"</span>)
+  
+  <span class="keyword">for</span> key, star <span class="keyword">in</span> pairs(stars) <span class="keyword">do</span>
+    <span class="comment">-- Calculate brightness based on speed (0.5 to 2.0)</span>
+    <span class="keyword">local</span> brightness = (star.speed - 0.5) / 1.5  <span class="comment">-- Normalize to 0-1</span>
+    <span class="keyword">local</span> colorValue = 100 + brightness * 155  <span class="comment">-- Range: 100-255</span>
+    
+    screen:setColor(<span class="string">"rgb("</span> .. colorValue .. <span class="string">","</span> .. colorValue .. <span class="string">","</span> .. colorValue .. <span class="string">")"</span>)
+    screen:fillRect(star.x, star.y, star.size, star.size)
+  <span class="keyword">end</span>
+end</pre>
+                                </div>
+                                <div class="info-box">
+                                    <h3>What's happening:</h3>
+                                    <ul>
+                                        <li>We calculate brightness as a value between 0 and 1 based on speed</li>
+                                        <li>We convert that to a color value between 100 (dim gray) and 255 (bright white)</li>
+                                        <li>We set a new color for each star before drawing it</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 7: Final Challenge -->
+        <div class="step" data-step="7">
+            <h2>🎯 Final Challenge: Add More Stars Based on Speed</h2>
+            <div class="step-content">
+                <p><strong>Try this on your own first!</strong></p>
+                <p>Modify the program to create 100 stars instead of 50. But here's the twist: slower stars should be more common than faster stars (since distant objects are more numerous in space).</p>
+                <p><strong>Hint:</strong> You could create 100 stars but give more of them slower speeds. Try using <code>math.random() * math.random()</code> for the speed - this makes lower values more likely!</p>
+                
+                <div class="solution">
+                    <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                    <div class="solution-content">
+                        <div class="code-block">
+                            <pre>init = function()
+  <span class="keyword">for</span> i = 1, 100 <span class="keyword">do</span>  <span class="comment">-- More stars!</span>
+    <span class="keyword">local</span> star = {}
+    star.x = (math.random() - 0.5) * screen.width
+    star.y = (math.random() - 0.5) * screen.height
+    
+    <span class="comment">-- Multiply two random numbers to bias toward smaller values</span>
+    star.speed = math.random() * math.random() * 1.5 + 0.5
+    star.size = star.speed
+    table.insert(stars, star)
+  <span class="keyword">end</span>
+end</pre>
+                        </div>
+                        <div class="info-box">
+                            <h3>What's happening:</h3>
+                            <ul>
+                                <li>Multiplying two random numbers together gives you values biased toward 0</li>
+                                <li>This means most stars will be slower/smaller (farther away)</li>
+                                <li>Fewer stars will be fast/large (closer)</li>
+                                <li>This creates a more realistic depth distribution!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 8: Complete Code -->
+        <div class="step" data-step="8">
+            <h2>🎉 Congratulations!</h2>
+            <div class="step-content">
+                <p>You've completed the Star Generator tutorial! You've learned how to use for loops with ranges and created a cool visual effect.</p>
+
+                <div class="complete-code">
+                    <h3>📝 Complete Solution Code</h3>
+                    <p>Here's the complete code with all features:</p>
+                    <div class="code-block">
+                        <pre>stars = {}
+
+init = function()
+  <span class="keyword">for</span> i = 1, 50 <span class="keyword">do</span>
+    <span class="keyword">local</span> star = {}
+    star.x = (math.random() - 0.5) * screen.width
+    star.y = (math.random() - 0.5) * screen.height
+    star.speed = math.random() * 1.5 + 0.5
+    star.size = star.speed
+    table.insert(stars, star)
+  <span class="keyword">end</span>
+end
+
+update = function()
+  <span class="keyword">for</span> key, star <span class="keyword">in</span> pairs(stars) <span class="keyword">do</span>
+    star.y = star.y - star.speed
+    
+    <span class="keyword">if</span> star.y < -screen.height / 2 <span class="keyword">then</span>
+      star.y = screen.height / 2
+      star.x = (math.random() - 0.5) * screen.width
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+end
+
+draw = function()
+  screen:clear(<span class="string">"rgb(0, 0, 20)"</span>)
+  
+  <span class="keyword">for</span> key, star <span class="keyword">in</span> pairs(stars) <span class="keyword">do</span>
+    <span class="keyword">local</span> brightness = (star.speed - 0.5) / 1.5
+    <span class="keyword">local</span> colorValue = 100 + brightness * 155
+    
+    screen:setColor(<span class="string">"rgb("</span> .. colorValue .. <span class="string">","</span> .. colorValue .. <span class="string">","</span> .. colorValue .. <span class="string">")"</span>)
+    screen:fillRect(star.x, star.y, star.size, star.size)
+  <span class="keyword">end</span>
+end</pre>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h3>🚀 Extension Ideas</h3>
+                    <p>Once you've completed the basic challenge, try these enhancements:</p>
+                    <ul>
+                        <li><strong>Different colored stars</strong> - Make some stars slightly blue, yellow, or red</li>
+                        <li><strong>Twinkle effect</strong> - Randomly adjust star brightness each frame</li>
+                        <li><strong>Keyboard control</strong> - Press UP/DOWN to speed up or slow down</li>
+                        <li><strong>Layers</strong> - Create multiple star layers at different speeds for parallax</li>
+                        <li><strong>Shooting stars</strong> - Occasionally add a fast-moving star that leaves a trail</li>
+                    </ul>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <h3 style="color: #667eea;">Great work! 🌟</h3>
+                    <p>You've mastered the basics of creating animated graphics in MicroStudio Lua!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn prev" id="prevBtn" onclick="previousStep()">← Previous</button>
+            <button class="nav-btn next" id="nextBtn" onclick="nextStep()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const totalSteps = 8;
+
+        // Initialize step dots
+        function initStepDots() {
+            const dotsContainer = document.getElementById('stepDots');
+            for (let i = 0; i <= totalSteps; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (i === 0) dot.classList.add('active');
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Update the display
+        function updateDisplay() {
+            // Hide all steps
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+
+            // Show current step
+            const currentStepElement = document.querySelector(`[data-step="${currentStep}"]`);
+            if (currentStepElement) {
+                currentStepElement.classList.add('active');
+            }
+
+            // Update progress bar
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Update step indicator
+            document.getElementById('stepNumber').textContent = `Step ${currentStep}`;
+            document.getElementById('totalSteps').textContent = totalSteps;
+
+            // Update dots
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.remove('active', 'completed');
+                if (index < currentStep) {
+                    dot.classList.add('completed');
+                } else if (index === currentStep) {
+                    dot.classList.add('active');
+                }
+            });
+
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentStep === 0;
+            
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentStep === totalSteps) {
+                nextBtn.textContent = '🎉 Finish';
+            } else {
+                nextBtn.textContent = 'Next →';
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateDisplay();
+            } else {
+                // Finished - could show a completion message or restart
+                alert('🎉 Congratulations! You\'ve completed the tutorial! Feel free to review any step by clicking Previous.');
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateDisplay();
+            }
+        }
+
+        function toggleSolution(button) {
+            const solutionContent = button.nextElementSibling;
+            solutionContent.classList.toggle('show');
+            
+            if (solutionContent.classList.contains('show')) {
+                button.textContent = 'Hide Solution';
+            } else {
+                button.textContent = 'Show Solution';
+            }
+        }
+
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            // Create temporary textarea
+            const textarea = document.createElement('textarea');
+            textarea.value = code;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            
+            // Select and copy
+            textarea.select();
+            document.execCommand('copy');
+            
+            // Clean up
+            document.body.removeChild(textarea);
+            
+            // Visual feedback
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.background = '#f093fb';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '#667eea';
+            }, 2000);
+        }
+
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            // Create temporary textarea
+            const textarea = document.createElement('textarea');
+            textarea.value = code;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            
+            // Select and copy
+            textarea.select();
+            document.execCommand('copy');
+            
+            // Clean up
+            document.body.removeChild(textarea);
+            
+            // Visual feedback
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.background = '#f093fb';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '#667eea';
+            }, 2000);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentStep < totalSteps) {
+                nextStep();
+            } else if (e.key === 'ArrowLeft' && currentStep > 0) {
+                previousStep();
+            }
+        });
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initStepDots();
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>
