@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collision Detection Challenge - MicroStudio Lua</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .step-content {
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+
+        .step-content p {
+            margin-bottom: 20px;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .code-block.copyable {
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+        }
+
+        .code-block.copyable pre {
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            pointer-events: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #a8e6cf;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+        }
+
+        .code-block::before {
+            content: '⌨️ Type this code out - no copy/paste!';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(246, 147, 251, 0.8);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .code-block.copyable::before {
+            content: '✅ Copy mode enabled';
+            background: rgba(102, 234, 147, 0.8);
+        }
+
+        .info-box {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+        }
+
+        .info-box li {
+            margin: 8px 0;
+        }
+
+        .info-box code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .challenge {
+            background: rgba(246, 147, 251, 0.1);
+            border-left: 4px solid #f093fb;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .challenge h3 {
+            color: #f093fb;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .challenge-content {
+            margin-top: 15px;
+        }
+
+        .solution {
+            margin-top: 20px;
+        }
+
+        .solution-toggle {
+            background: #764ba2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .solution-toggle:hover {
+            background: #667eea;
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-btn.prev {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .step-indicator {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.1em;
+            color: #a0a0a0;
+        }
+
+        .step-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: #667eea;
+            transform: scale(1.3);
+        }
+
+        .dot.completed {
+            background: #f093fb;
+        }
+
+        .keyword {
+            color: #ff79c6;
+            font-weight: bold;
+        }
+
+        .string {
+            color: #f1fa8c;
+        }
+
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        .number {
+            color: #bd93f9;
+        }
+
+        .warning-box {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .warning-box h3 {
+            color: #ffc107;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .diagram {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .diagram img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .diagram-box {
+            display: inline-block;
+            border: 3px solid #667eea;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .diagram-text {
+            margin-top: 10px;
+            color: #a0a0a0;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💥 Collision Detection Challenge</h1>
+            <p class="subtitle">Learn to detect when objects collide using box collision in MicroStudio Lua</p>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="step-indicator">
+            <span id="stepNumber">Step 0</span> of <span id="totalSteps">9</span>
+        </div>
+
+        <div class="step-dots" id="stepDots"></div>
+
+        <!-- Step 0: Introduction -->
+        <div class="step active" data-step="0">
+            <h2>Welcome! 🚀</h2>
+            <div class="step-content">
+                <p>Have you ever wondered how games know when two objects hit each other? Whether it's a bullet hitting an enemy, a player collecting a coin, or a character bumping into a wall - it all uses <strong>collision detection</strong>!</p>
+
+                <p>In this challenge, you'll learn how to detect when rectangles (boxes) collide with each other. This is one of the most important skills in game programming!</p>
+
+                <div class="diagram" style="margin: 30px 0;">
+                    <h3 style="margin-bottom: 15px; color: #f093fb;">What You'll Create - Finished Version:</h3>
+                    <iframe src="https://microstudio.io/jocolloman/collisionfinished/BCGTYBSA/"
+                            width="100%"
+                            height="500"
+                            style="border: 2px solid rgba(246, 147, 251, 0.5); border-radius: 10px; background: #000;">
+                    </iframe>
+                    <p style="margin-top: 10px; color: #a0a0a0; font-size: 0.9em;">
+                        This is the final result - multiple colorful boxes bouncing off each other and the screen edges!
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎯 What You'll Learn</h3>
+                    <ul>
+                        <li>How to make a box bounce off screen boundaries</li>
+                        <li>How to create multiple boxes using functions</li>
+                        <li>How box collision detection works (AABB algorithm)</li>
+                        <li>How to detect when two boxes overlap</li>
+                        <li>How to make boxes bounce off each other</li>
+                        <li>How to handle collisions between many objects</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>📋 Prerequisites</h3>
+                    <p>Before starting this challenge, make sure you know:</p>
+                    <ul>
+                        <li>How to use functions (the Functions Challenge)</li>
+                        <li>How to use tables to store data</li>
+                        <li>How to use for loops</li>
+                        <li>Basic drawing with <code>screen:fillRect()</code></li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h3>💡 What is Collision Detection?</h3>
+                    <p><strong>Collision detection</strong> is checking if two objects are overlapping or touching. For rectangles, we use a method called <strong>AABB (Axis-Aligned Bounding Box)</strong> collision detection.</p>
+                    <p>It works by checking if the edges of one rectangle overlap with the edges of another rectangle.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: Clone the Starter Project -->
+        <div class="step" data-step="1">
+            <h2>Step 1: Clone the Starter Project</h2>
+            <div class="step-content">
+                <p>Before we begin coding, you need to get your own copy of the starter project. This will give you a blank canvas to work with!</p>
+
+                <div class="info-box">
+                    <h3>🎮 How to Clone the Project</h3>
+                    <ol style="margin-left: 20px;">
+                        <li>Click the button below to open the starter project</li>
+                        <li>Look for the <strong>"Clone"</strong> button at the top of the page</li>
+                        <li>Click <strong>"Clone"</strong> to create your own copy</li>
+                        <li>The project will open in your account - now you can edit it!</li>
+                    </ol>
+                </div>
+
+                <p style="text-align: center; margin: 30px 0;">
+                    <a href="https://microstudio.io/i/jocolloman/collisiondetectionstarter/"
+                       target="_blank"
+                       style="display: inline-block; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px 40px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 1.3em; transition: transform 0.2s; box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);">
+                       🚀 Open Starter Project
+                    </a>
+                </p>
+
+                <div class="diagram" style="margin: 30px 0;">
+                    <h3 style="margin-bottom: 15px;">Starter Project Preview:</h3>
+                    <iframe src="https://microstudio.io/jocolloman/collisiondetectionstarter/"
+                            width="100%"
+                            height="450"
+                            style="border: 2px solid rgba(102, 126, 234, 0.5); border-radius: 10px; background: #000;">
+                    </iframe>
+                    <p style="margin-top: 10px; color: #a0a0a0; font-size: 0.9em;">
+                        This is the starter project. It's currently empty - you'll build on this throughout the lesson!
+                    </p>
+                </div>
+
+                <div class="warning-box">
+                    <h3>💡 Important!</h3>
+                    <p>Make sure you click the <strong>"Clone"</strong> button! If you don't clone the project, you won't be able to save your work.</p>
+                    <p>After cloning, the project will appear in your MicroStudio account under "My Projects".</p>
+                </div>
+
+                <p><strong>Once you've cloned the project, click "Next" to continue!</strong></p>
+            </div>
+        </div>
+
+        <!-- Step 2: Understanding the Bouncing Box -->
+        <div class="step" data-step="2">
+            <h2>Step 2: Understanding the Bouncing Box</h2>
+            <div class="step-content">
+                <p>Good news! Your starter project already has a bouncing box. Let's understand how it works before we add collision detection.</p>
+
+                <p><strong>Look at the code in your project. Here's what you should see:</strong></p>
+
+                <div class="code-block copyable">
+                    <pre><span class="comment">-- Initialize the box</span>
+init = <span class="keyword">function</span>()
+  <span class="comment">-- Box position</span>
+  box_x = <span class="number">0</span>
+  box_y = <span class="number">0</span>
+
+  <span class="comment">-- Box size</span>
+  box_size = <span class="number">20</span>
+
+  <span class="comment">-- Box velocity (speed and direction)</span>
+  box_vx = <span class="number">2</span>
+  box_vy = <span class="number">1.5</span>
+
+  <span class="comment">-- Box color</span>
+  box_color = <span class="string">"#FF0000"</span>
+<span class="keyword">end</span>
+
+<span class="comment">-- Update the box position</span>
+update = <span class="keyword">function</span>()
+  <span class="comment">-- Move the box</span>
+  box_x = box_x + box_vx
+  box_y = box_y + box_vy
+
+  <span class="comment">-- Check left and right boundaries</span>
+  <span class="keyword">if</span> box_x - box_size / <span class="number">2</span> < -screen.width / <span class="number">2</span> <span class="keyword">then</span>
+    box_x = -screen.width / <span class="number">2</span> + box_size / <span class="number">2</span>
+    box_vx = -box_vx  <span class="comment">-- Reverse horizontal direction</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">if</span> box_x + box_size / <span class="number">2</span> > screen.width / <span class="number">2</span> <span class="keyword">then</span>
+    box_x = screen.width / <span class="number">2</span> - box_size / <span class="number">2</span>
+    box_vx = -box_vx  <span class="comment">-- Reverse horizontal direction</span>
+  <span class="keyword">end</span>
+
+  <span class="comment">-- Check top and bottom boundaries</span>
+  <span class="keyword">if</span> box_y - box_size / <span class="number">2</span> < -screen.height / <span class="number">2</span> <span class="keyword">then</span>
+    box_y = -screen.height / <span class="number">2</span> + box_size / <span class="number">2</span>
+    box_vy = -box_vy  <span class="comment">-- Reverse vertical direction</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">if</span> box_y + box_size / <span class="number">2</span> > screen.height / <span class="number">2</span> <span class="keyword">then</span>
+    box_y = screen.height / <span class="number">2</span> - box_size / <span class="number">2</span>
+    box_vy = -box_vy  <span class="comment">-- Reverse vertical direction</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">-- Draw the box</span>
+draw = <span class="keyword">function</span>()
+  screen:clear(<span class="string">"#000020"</span>)
+  screen:setColor(box_color)
+  screen:fillRect(box_x, box_y, box_size, box_size)
+<span class="keyword">end</span></pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>🔍 How This Works</h3>
+                    <ul>
+                        <li><strong>Position:</strong> <code>box_x</code> and <code>box_y</code> are the center of the box</li>
+                        <li><strong>Velocity:</strong> <code>box_vx</code> and <code>box_vy</code> determine how fast and which direction the box moves</li>
+                        <li><strong>Boundaries:</strong> We check if the box's edges go past the screen edges</li>
+                        <li><strong>Bouncing:</strong> When hitting a boundary, we reverse the velocity (<code>box_vx = -box_vx</code>)</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h3>💡 Understanding Box Edges</h3>
+                    <p>Since the box is drawn from its center, we need to calculate the edges:</p>
+                    <ul>
+                        <li><strong>Left edge:</strong> <code>box_x - box_size / 2</code></li>
+                        <li><strong>Right edge:</strong> <code>box_x + box_size / 2</code></li>
+                        <li><strong>Bottom edge:</strong> <code>box_y - box_size / 2</code></li>
+                        <li><strong>Top edge:</strong> <code>box_y + box_size / 2</code></li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎮 Three Important Functions</h3>
+                    <p>MicroStudio uses three main functions to create games:</p>
+                    <ul>
+                        <li><strong>init():</strong> Runs once when the program starts - sets up initial values</li>
+                        <li><strong>update():</strong> Runs 60 times per second - handles game logic and movement</li>
+                        <li><strong>draw():</strong> Runs 60 times per second - draws everything on screen</li>
+                    </ul>
+                </div>
+
+                <div class="challenge">
+                    <h3>🎯 Try It Yourself!</h3>
+                    <div class="challenge-content">
+                        <p><strong>Run your project and watch the box bounce!</strong> Then try modifying these values to see what happens:</p>
+                        <ul>
+                            <li>Change <code>box_vx</code> to <code>3</code> - makes it move faster horizontally</li>
+                            <li>Change <code>box_color</code> to <code>"#00FF00"</code> - makes it green</li>
+                            <li>Change <code>box_size</code> to <code>30</code> - makes it bigger</li>
+                        </ul>
+                        <p>Experiment, then change the values back to the original settings!</p>
+                    </div>
+                </div>
+
+                <p><strong>Once you understand how the bouncing box works, click "Next" to continue!</strong></p>
+            </div>
+        </div>
+
+        <!-- Step 3: Using a Table for the Box -->
+        <div class="step" data-step="3">
+            <h2>Step 3: Organize Box Data in a Table</h2>
+            <div class="step-content">
+                <p>Right now, we have separate variables for each box property. This works for one box, but what if we want multiple boxes? Let's organize the box data into a table!</p>
+
+                <p><strong>Replace your <code>init</code> function with this:</strong></p>
+
+                <div class="code-block">
+                    <pre>init = <span class="keyword">function</span>()
+  <span class="comment">-- Create a box table with all properties</span>
+  box = {
+    x = <span class="number">0</span>,
+    y = <span class="number">0</span>,
+    size = <span class="number">20</span>,
+    vx = <span class="number">2</span>,
+    vy = <span class="number">1.5</span>,
+    color = <span class="string">"#FF0000"</span>
+  }
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Now update your <code>update</code> function - change all variable names to use <code>box.</code>:</strong></p>
+
+                <div class="code-block">
+                    <pre>update = <span class="keyword">function</span>()
+  <span class="comment">-- Move the box (notice box.x instead of box_x)</span>
+  box.x = box.x + box.vx
+  box.y = box.y + box.vy
+
+  <span class="comment">-- Check boundaries (update all variables)</span>
+  <span class="keyword">if</span> box.x - box.size / <span class="number">2</span> < -screen.width / <span class="number">2</span> <span class="keyword">then</span>
+    box.x = -screen.width / <span class="number">2</span> + box.size / <span class="number">2</span>
+    box.vx = -box.vx
+  <span class="keyword">end</span>
+
+  <span class="keyword">if</span> box.x + box.size / <span class="number">2</span> > screen.width / <span class="number">2</span> <span class="keyword">then</span>
+    box.x = screen.width / <span class="number">2</span> - box.size / <span class="number">2</span>
+    box.vx = -box.vx
+  <span class="keyword">end</span>
+
+  <span class="keyword">if</span> box.y - box.size / <span class="number">2</span> < -screen.height / <span class="number">2</span> <span class="keyword">then</span>
+    box.y = -screen.height / <span class="number">2</span> + box.size / <span class="number">2</span>
+    box.vy = -box.vy
+  <span class="keyword">end</span>
+
+  <span class="keyword">if</span> box.y + box.size / <span class="number">2</span> > screen.height / <span class="number">2</span> <span class="keyword">then</span>
+    box.y = screen.height / <span class="number">2</span> - box.size / <span class="number">2</span>
+    box.vy = -box.vy
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Finally, update your <code>draw</code> function:</strong></p>
+
+                <div class="code-block">
+                    <pre>draw = <span class="keyword">function</span>()
+  screen:clear(<span class="string">"#000020"</span>)
+  screen:setColor(box.color)  <span class="comment">-- Changed from box_color</span>
+  screen:fillRect(box.x, box.y, box.size, box.size)  <span class="comment">-- Changed variables</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>✨ What Changed?</h3>
+                    <ul>
+                        <li><code>box_x</code> → <code>box.x</code> (now accessing table properties)</li>
+                        <li><code>box_y</code> → <code>box.y</code></li>
+                        <li><code>box_size</code> → <code>box.size</code></li>
+                        <li><code>box_vx</code> → <code>box.vx</code></li>
+                        <li><code>box_vy</code> → <code>box.vy</code></li>
+                        <li><code>box_color</code> → <code>box.color</code></li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>✨ Why Use a Table?</h3>
+                    <ul>
+                        <li>All box data is organized in one place</li>
+                        <li>Easy to create multiple boxes later</li>
+                        <li>Can pass the whole box to functions</li>
+                        <li>Cleaner and more organized code</li>
+                    </ul>
+                </div>
+
+                <p><strong>Test your code!</strong> It should work exactly the same as before, but now the code is better organized.</p>
+            </div>
+        </div>
+
+        <!-- Step 4: Create a Function to Make Boxes -->
+        <div class="step" data-step="4">
+            <h2>Step 4: Create a Function to Make Boxes</h2>
+            <div class="step-content">
+                <p>Now let's create helper functions to work with boxes. This will make it easy to create multiple boxes and manage them!</p>
+
+                <p><strong>Add these three functions at the TOP of your code (before <code>init</code>):</strong></p>
+
+                <div class="code-block">
+                    <pre><span class="comment">-- Function to create a new box</span>
+<span class="keyword">function</span> create_box(x, y, size, vx, vy, color)
+  <span class="keyword">local</span> new_box = {
+    x = x,
+    y = y,
+    size = size,
+    vx = vx,
+    vy = vy,
+    color = color
+  }
+  <span class="keyword">return</span> new_box
+<span class="keyword">end</span>
+
+<span class="comment">-- Update a box (move it and check boundaries)</span>
+<span class="keyword">function</span> update_box(b)
+  <span class="comment">-- Move the box</span>
+  b.x = b.x + b.vx
+  b.y = b.y + b.vy
+
+  <span class="comment">-- Check boundaries (same as before, but uses 'b' parameter)</span>
+  <span class="keyword">if</span> b.x - b.size / <span class="number">2</span> < -screen.width / <span class="number">2</span> <span class="keyword">then</span>
+    b.x = -screen.width / <span class="number">2</span> + b.size / <span class="number">2</span>
+    b.vx = -b.vx
+  <span class="keyword">end</span>
+
+  <span class="keyword">if</span> b.x + b.size / <span class="number">2</span> > screen.width / <span class="number">2</span> <span class="keyword">then</span>
+    b.x = screen.width / <span class="number">2</span> - b.size / <span class="number">2</span>
+    b.vx = -b.vx
+  <span class="keyword">end</span>
+
+  <span class="keyword">if</span> b.y - b.size / <span class="number">2</span> < -screen.height / <span class="number">2</span> <span class="keyword">then</span>
+    b.y = -screen.height / <span class="number">2</span> + b.size / <span class="number">2</span>
+    b.vy = -b.vy
+  <span class="keyword">end</span>
+
+  <span class="keyword">if</span> b.y + b.size / <span class="number">2</span> > screen.height / <span class="number">2</span> <span class="keyword">then</span>
+    b.y = screen.height / <span class="number">2</span> - b.size / <span class="number">2</span>
+    b.vy = -b.vy
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">-- Draw a box</span>
+<span class="keyword">function</span> draw_box(b)
+  screen:setColor(b.color)
+  screen:fillRect(b.x, b.y, b.size, b.size)
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Now update your <code>init</code> function to create TWO boxes:</strong></p>
+
+                <div class="code-block">
+                    <pre>init = <span class="keyword">function</span>()
+  <span class="comment">-- Use our function to create boxes!</span>
+  box1 = create_box(<span class="number">0</span>, <span class="number">0</span>, <span class="number">20</span>, <span class="number">2</span>, <span class="number">1.5</span>, <span class="string">"#FF0000"</span>)
+  box2 = create_box(<span class="number">-50</span>, <span class="number">30</span>, <span class="number">25</span>, <span class="number">-1.5</span>, <span class="number">-2</span>, <span class="string">"#00FF00"</span>)
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Update your <code>update</code> function to use the new helper function:</strong></p>
+
+                <div class="code-block">
+                    <pre>update = <span class="keyword">function</span>()
+  update_box(box1)
+  update_box(box2)
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Update your <code>draw</code> function to use the new helper function:</strong></p>
+
+                <div class="code-block">
+                    <pre>draw = <span class="keyword">function</span>()
+  screen:clear(<span class="string">"#000020"</span>)
+  draw_box(box1)
+  draw_box(box2)
+<span class="keyword">end</span></pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎉 Now We Have Two Boxes!</h3>
+                    <p>Notice how easy it is to create and manage multiple boxes:</p>
+                    <ul>
+                        <li><code>create_box()</code> - Makes a new box with custom properties</li>
+                        <li><code>update_box()</code> - Updates one box's position and checks boundaries</li>
+                        <li><code>draw_box()</code> - Draws one box on screen</li>
+                    </ul>
+                </div>
+
+                <p><strong>Run your code!</strong> You should see two boxes bouncing around - a red one and a green one. Notice they pass through each other... let's fix that!</p>
+            </div>
+        </div>
+
+        <!-- Step 5: Collision Detection Theory -->
+        <div class="step" data-step="5">
+            <h2>Step 5: How Collision Detection Works</h2>
+            <div class="step-content">
+                <p>Before we write the collision detection code, let's understand <strong>how</strong> it works!</p>
+
+                <div class="info-box">
+                    <h3>📐 AABB Collision Detection</h3>
+                    <p><strong>AABB</strong> stands for "Axis-Aligned Bounding Box". It's a method to check if two rectangles overlap.</p>
+                    <p>Two boxes are <strong>colliding</strong> if they overlap on BOTH the X-axis AND the Y-axis.</p>
+                </div>
+
+                <div class="diagram">
+                    <h3>Visual Example:</h3>
+                    <div style="margin: 20px 0;">
+                        <p><strong>NOT Colliding:</strong></p>
+                        <div style="display: inline-block; position: relative; width: 300px; height: 100px; background: rgba(0,0,0,0.2); border-radius: 5px;">
+                            <div style="position: absolute; left: 30px; top: 25px; width: 50px; height: 50px; background: #FF0000; border: 2px solid white;"></div>
+                            <div style="position: absolute; left: 150px; top: 25px; width: 50px; height: 50px; background: #00FF00; border: 2px solid white;"></div>
+                        </div>
+                        <p style="color: #ff4444;">Boxes are separated - no overlap</p>
+                    </div>
+
+                    <div style="margin: 20px 0;">
+                        <p><strong>Colliding:</strong></p>
+                        <div style="display: inline-block; position: relative; width: 300px; height: 100px; background: rgba(0,0,0,0.2); border-radius: 5px;">
+                            <div style="position: absolute; left: 80px; top: 25px; width: 50px; height: 50px; background: #FF0000; border: 2px solid white;"></div>
+                            <div style="position: absolute; left: 110px; top: 25px; width: 50px; height: 50px; background: #00FF00; border: 2px solid white;"></div>
+                        </div>
+                        <p style="color: #44ff44;">Boxes overlap - collision detected!</p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h3>🧮 The Math Behind It</h3>
+                    <p>For two boxes to collide, ALL four of these conditions must be true:</p>
+                    <ul>
+                        <li><strong>Box1's right edge</strong> is past Box2's left edge</li>
+                        <li><strong>Box1's left edge</strong> is before Box2's right edge</li>
+                        <li><strong>Box1's top edge</strong> is above Box2's bottom edge</li>
+                        <li><strong>Box1's bottom edge</strong> is below Box2's top edge</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h3>💡 Remember Box Edges!</h3>
+                    <p>For a box with center at <code>(x, y)</code> and <code>size</code>:</p>
+                    <ul>
+                        <li><strong>Left edge:</strong> <code>x - size / 2</code></li>
+                        <li><strong>Right edge:</strong> <code>x + size / 2</code></li>
+                        <li><strong>Bottom edge:</strong> <code>y - size / 2</code></li>
+                        <li><strong>Top edge:</strong> <code>y + size / 2</code></li>
+                    </ul>
+                </div>
+
+                <p>Now that we understand the theory, let's write the code!</p>
+            </div>
+        </div>
+
+        <!-- Step 6: Implement Collision Detection -->
+        <div class="step" data-step="6">
+            <h2>Step 6: Detect Collisions Between Boxes</h2>
+            <div class="step-content">
+                <p>Now let's write a function that checks if two boxes are colliding!</p>
+
+                <p><strong>Add this NEW function with your other helper functions (near the top):</strong></p>
+
+                <div class="code-block">
+                    <pre><span class="comment">-- Check if two boxes are colliding</span>
+<span class="keyword">function</span> boxes_colliding(box_a, box_b)
+  <span class="comment">-- Calculate edges of box_a</span>
+  <span class="keyword">local</span> a_left = box_a.x - box_a.size / <span class="number">2</span>
+  <span class="keyword">local</span> a_right = box_a.x + box_a.size / <span class="number">2</span>
+  <span class="keyword">local</span> a_bottom = box_a.y - box_a.size / <span class="number">2</span>
+  <span class="keyword">local</span> a_top = box_a.y + box_a.size / <span class="number">2</span>
+
+  <span class="comment">-- Calculate edges of box_b</span>
+  <span class="keyword">local</span> b_left = box_b.x - box_b.size / <span class="number">2</span>
+  <span class="keyword">local</span> b_right = box_b.x + box_b.size / <span class="number">2</span>
+  <span class="keyword">local</span> b_bottom = box_b.y - box_b.size / <span class="number">2</span>
+  <span class="keyword">local</span> b_top = box_b.y + box_b.size / <span class="number">2</span>
+
+  <span class="comment">-- Check if boxes overlap on both axes</span>
+  <span class="keyword">if</span> a_right > b_left <span class="keyword">and</span>
+     a_left < b_right <span class="keyword">and</span>
+     a_top > b_bottom <span class="keyword">and</span>
+     a_bottom < b_top <span class="keyword">then</span>
+    <span class="keyword">return</span> <span class="keyword">true</span>  <span class="comment">-- Boxes are colliding!</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">return</span> <span class="keyword">false</span>  <span class="comment">-- No collision</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Now let's make the boxes change color when they collide! Add these lines to <code>init</code>:</strong></p>
+
+                <div class="code-block">
+                    <pre><span class="comment">-- Add these two lines AFTER creating the boxes in init:</span>
+box1.original_color = <span class="string">"#FF0000"</span>
+box2.original_color = <span class="string">"#00FF00"</span></pre>
+                </div>
+
+                <p><strong>Update your <code>update</code> function to add collision checking:</strong></p>
+
+                <div class="code-block">
+                    <pre>update = <span class="keyword">function</span>()
+  update_box(box1)
+  update_box(box2)
+
+  <span class="comment">-- ADD THIS NEW CODE: Check for collision and change colors</span>
+  <span class="keyword">if</span> boxes_colliding(box1, box2) <span class="keyword">then</span>
+    box1.color = <span class="string">"#FFFF00"</span>  <span class="comment">-- Yellow when colliding</span>
+    box2.color = <span class="string">"#FFFF00"</span>
+  <span class="keyword">else</span>
+    box1.color = box1.original_color  <span class="comment">-- Back to original</span>
+    box2.color = box2.original_color
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><em>Note: Your <code>draw</code> function stays the same - no changes needed!</em></p>
+
+                <div class="info-box">
+                    <h3>🎨 What's Happening?</h3>
+                    <ul>
+                        <li>The <code>boxes_colliding()</code> function checks if two boxes overlap</li>
+                        <li>In <code>update()</code>, we check if box1 and box2 are colliding</li>
+                        <li>If they collide, both boxes turn yellow</li>
+                        <li>When they separate, they return to their original colors</li>
+                    </ul>
+                </div>
+
+                <p><strong>Run your code!</strong> Watch the boxes - they should turn yellow when they overlap!</p>
+
+                <div class="challenge">
+                    <h3>🎯 Challenge: Test Your Understanding</h3>
+                    <div class="challenge-content">
+                        <p>Try changing the collision color to something else. Then try creating a third box!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 7: Make Boxes Bounce Off Each Other -->
+        <div class="step" data-step="7">
+            <h2>Step 7: Make Boxes Bounce Off Each Other</h2>
+            <div class="step-content">
+                <p>Detecting collision is great, but let's make the boxes actually <strong>bounce</strong> off each other! This is where physics comes in.</p>
+
+                <p><strong>Add this NEW function to handle collision response (with your other helper functions):</strong></p>
+
+                <div class="code-block">
+                    <pre><span class="comment">-- Make two boxes bounce off each other</span>
+<span class="keyword">function</span> bounce_boxes(box_a, box_b)
+  <span class="comment">-- Only bounce if they're actually colliding</span>
+  <span class="keyword">if</span> <span class="keyword">not</span> boxes_colliding(box_a, box_b) <span class="keyword">then</span>
+    <span class="keyword">return</span>
+  <span class="keyword">end</span>
+
+  <span class="comment">-- Calculate overlap on each axis</span>
+  <span class="keyword">local</span> dx = box_b.x - box_a.x
+  <span class="keyword">local</span> dy = box_b.y - box_a.y
+
+  <span class="comment">-- Calculate overlap amounts</span>
+  <span class="keyword">local</span> overlap_x = (box_a.size + box_b.size) / <span class="number">2</span> - math.abs(dx)
+  <span class="keyword">local</span> overlap_y = (box_a.size + box_b.size) / <span class="number">2</span> - math.abs(dy)
+
+  <span class="comment">-- Separate along the axis with least overlap</span>
+  <span class="keyword">if</span> overlap_x < overlap_y <span class="keyword">then</span>
+    <span class="comment">-- Separate horizontally</span>
+    <span class="keyword">if</span> dx > <span class="number">0</span> <span class="keyword">then</span>
+      box_a.x = box_a.x - overlap_x / <span class="number">2</span>
+      box_b.x = box_b.x + overlap_x / <span class="number">2</span>
+    <span class="keyword">else</span>
+      box_a.x = box_a.x + overlap_x / <span class="number">2</span>
+      box_b.x = box_b.x - overlap_x / <span class="number">2</span>
+    <span class="keyword">end</span>
+    <span class="comment">-- Bounce horizontally</span>
+    <span class="keyword">local</span> temp_vx = box_a.vx
+    box_a.vx = box_b.vx
+    box_b.vx = temp_vx
+  <span class="keyword">else</span>
+    <span class="comment">-- Separate vertically</span>
+    <span class="keyword">if</span> dy > <span class="number">0</span> <span class="keyword">then</span>
+      box_a.y = box_a.y - overlap_y / <span class="number">2</span>
+      box_b.y = box_b.y + overlap_y / <span class="number">2</span>
+    <span class="keyword">else</span>
+      box_a.y = box_a.y + overlap_y / <span class="number">2</span>
+      box_b.y = box_b.y - overlap_y / <span class="number">2</span>
+    <span class="keyword">end</span>
+    <span class="comment">-- Bounce vertically</span>
+    <span class="keyword">local</span> temp_vy = box_a.vy
+    box_a.vy = box_b.vy
+    box_b.vy = temp_vy
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Update your <code>update</code> function - add ONE line to call the bounce function:</strong></p>
+
+                <div class="code-block">
+                    <pre>update = <span class="keyword">function</span>()
+  update_box(box1)
+  update_box(box2)
+
+  <span class="comment">-- ADD THIS NEW LINE: Make boxes bounce off each other</span>
+  bounce_boxes(box1, box2)
+
+  <span class="comment">-- Check for collision and change colors (already there)</span>
+  <span class="keyword">if</span> boxes_colliding(box1, box2) <span class="keyword">then</span>
+    box1.color = <span class="string">"#FFFF00"</span>
+    box2.color = <span class="string">"#FFFF00"</span>
+  <span class="keyword">else</span>
+    box1.color = box1.original_color
+    box2.color = box2.original_color
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>⚽ How Bouncing Works</h3>
+                    <ul>
+                        <li><strong>Overlap detection:</strong> We calculate how much the boxes overlap on each axis (X and Y)</li>
+                        <li><strong>Minimum overlap:</strong> We separate the boxes along the axis with the smallest overlap</li>
+                        <li><strong>Separation:</strong> We push both boxes apart equally so they no longer overlap</li>
+                        <li><strong>Velocity swap:</strong> We swap velocities on the collision axis (horizontal or vertical) to simulate bouncing</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h3>💡 Why This Approach Works Better</h3>
+                    <p>This collision response uses <strong>axis-based separation</strong>, which prevents boxes from getting stuck together:</p>
+                    <ul>
+                        <li>We separate along the axis with <em>least</em> overlap (the direction they hit from)</li>
+                        <li>We only swap velocity on that one axis, not both</li>
+                        <li>This creates realistic box-on-box collisions</li>
+                    </ul>
+                </div>
+
+                <p><strong>Run your code!</strong> Now the boxes should bounce off each other when they collide!</p>
+            </div>
+        </div>
+
+        <!-- Step 8: Multiple Boxes -->
+        <div class="step" data-step="8">
+            <h2>Step 8: Create Many Boxes</h2>
+            <div class="step-content">
+                <p>Now for the grand finale - let's create many boxes that all bounce off each other! We'll use a table (array) to store all our boxes.</p>
+
+                <p><strong>First, update your <code>create_box</code> function to automatically store the original color:</strong></p>
+
+                <div class="code-block">
+                    <pre><span class="comment">-- Update the create_box function to add original_color</span>
+<span class="keyword">function</span> create_box(x, y, size, vx, vy, color)
+  <span class="keyword">local</span> new_box = {
+    x = x,
+    y = y,
+    size = size,
+    vx = vx,
+    vy = vy,
+    color = color,
+    original_color = color  <span class="comment">-- ADD THIS LINE</span>
+  }
+  <span class="keyword">return</span> new_box
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><em>Note: Your other helper functions (update_box, draw_box, boxes_colliding, bounce_boxes) stay the same!</em></p>
+
+                <p><strong>Now completely replace your <code>init</code> function to create many boxes:</strong></p>
+
+                <div class="code-block">
+                    <pre>init = <span class="keyword">function</span>()
+  boxes = {}
+
+  <span class="comment">-- Create 8 random boxes</span>
+  <span class="keyword">local</span> colors = {<span class="string">"#FF0000"</span>, <span class="string">"#00FF00"</span>, <span class="string">"#0000FF"</span>, <span class="string">"#FF00FF"</span>,
+                  <span class="string">"#FFFF00"</span>, <span class="string">"#00FFFF"</span>, <span class="string">"#FF8800"</span>, <span class="string">"#8800FF"</span>}
+
+  <span class="keyword">for</span> i = <span class="number">1</span>, <span class="number">8</span> <span class="keyword">do</span>
+    <span class="keyword">local</span> x = (math.random() - <span class="number">0.5</span>) * screen.width * <span class="number">0.8</span>
+    <span class="keyword">local</span> y = (math.random() - <span class="number">0.5</span>) * screen.height * <span class="number">0.8</span>
+    <span class="keyword">local</span> size = math.random(<span class="number">15</span>, <span class="number">30</span>)
+    <span class="keyword">local</span> vx = (math.random() - <span class="number">0.5</span>) * <span class="number">3</span>
+    <span class="keyword">local</span> vy = (math.random() - <span class="number">0.5</span>) * <span class="number">3</span>
+
+    table.insert(boxes, create_box(x, y, size, vx, vy, colors[i]))
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Replace your <code>update</code> function to handle all boxes with nested loops:</strong></p>
+
+                <div class="code-block">
+                    <pre>update = <span class="keyword">function</span>()
+  <span class="comment">-- Move all boxes</span>
+  <span class="keyword">for</span> i, box <span class="keyword">in</span> ipairs(boxes) <span class="keyword">do</span>
+    update_box(box)
+  <span class="keyword">end</span>
+
+  <span class="comment">-- Check collisions between all pairs of boxes</span>
+  <span class="keyword">for</span> i = <span class="number">1</span>, #boxes <span class="keyword">do</span>
+    boxes[i].color = boxes[i].original_color  <span class="comment">-- Reset color</span>
+
+    <span class="keyword">for</span> j = i + <span class="number">1</span>, #boxes <span class="keyword">do</span>
+      bounce_boxes(boxes[i], boxes[j])
+
+      <span class="comment">-- Change color if colliding</span>
+      <span class="keyword">if</span> boxes_colliding(boxes[i], boxes[j]) <span class="keyword">then</span>
+        boxes[i].color = <span class="string">"#FFFFFF"</span>
+        boxes[j].color = <span class="string">"#FFFFFF"</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Finally, replace your <code>draw</code> function to draw all boxes:</strong></p>
+
+                <div class="code-block">
+                    <pre>draw = <span class="keyword">function</span>()
+  screen:clear(<span class="string">"#000020"</span>)
+
+  <span class="keyword">for</span> i, box <span class="keyword">in</span> ipairs(boxes) <span class="keyword">do</span>
+    draw_box(box)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎯 Key Concepts in This Code</h3>
+                    <ul>
+                        <li><strong>Array of boxes:</strong> We store all boxes in the <code>boxes</code> table</li>
+                        <li><strong>Nested loops:</strong> We check every box against every other box</li>
+                        <li><strong>Efficient pairing:</strong> The loop <code>for j = i + 1, #boxes</code> avoids checking the same pair twice</li>
+                        <li><strong>Random generation:</strong> Each box starts at a random position with random velocity</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h3>💡 Understanding the Nested Loop</h3>
+                    <p>The collision checking uses a nested loop:</p>
+                    <ul>
+                        <li><code>for i = 1, #boxes</code> - Loop through each box</li>
+                        <li><code>for j = i + 1, #boxes</code> - Check against boxes that come after it</li>
+                        <li>This avoids checking box 1 vs box 2, and then box 2 vs box 1 (same collision!)</li>
+                    </ul>
+                </div>
+
+                <p><strong>Run your code!</strong> You should see 8 colorful boxes bouncing around and colliding with each other. They turn white when colliding!</p>
+
+                <div class="challenge">
+                    <h3>🎯 Challenge: Experiment!</h3>
+                    <div class="challenge-content">
+                        <p>Try these modifications:</p>
+                        <ul>
+                            <li>Change the number of boxes (try 15 or 20!)</li>
+                            <li>Make boxes different sizes</li>
+                            <li>Adjust the velocities to make them faster or slower</li>
+                            <li>Add a box that follows the mouse!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 9: Conclusion -->
+        <div class="step" data-step="9">
+            <h2>🎉 Congratulations!</h2>
+            <div class="step-content">
+                <p>You've mastered box collision detection! This is a fundamental skill that you'll use in almost every game you create.</p>
+
+                <div class="info-box">
+                    <h3>🎯 What You've Learned</h3>
+                    <ul>
+                        <li>How to make objects bounce off screen boundaries</li>
+                        <li>How to organize object data in tables</li>
+                        <li>How to create objects using factory functions</li>
+                        <li>How AABB collision detection works</li>
+                        <li>How to detect when two boxes overlap</li>
+                        <li>How to make objects bounce off each other</li>
+                        <li>How to handle collisions between many objects efficiently</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>🚀 Next Steps & Project Ideas</h3>
+                    <p>Now that you understand collision detection, you can create amazing things:</p>
+                    <ul>
+                        <li><strong>Pong Game:</strong> Use box collision to detect when the ball hits paddles</li>
+                        <li><strong>Breakout:</strong> Detect when the ball hits bricks and remove them</li>
+                        <li><strong>Space Shooter:</strong> Detect when lasers hit enemies</li>
+                        <li><strong>Platformer:</strong> Detect when the player lands on platforms</li>
+                        <li><strong>Billiards:</strong> Create a pool game with realistic ball collisions</li>
+                        <li><strong>Particle System:</strong> Create bouncing particles for effects</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h3>⚡ Performance Tips</h3>
+                    <p>When you have many objects checking collisions:</p>
+                    <ul>
+                        <li><strong>Don't check everything:</strong> Only check objects that are close to each other</li>
+                        <li><strong>Use spatial partitioning:</strong> Divide your game world into a grid</li>
+                        <li><strong>Avoid unnecessary checks:</strong> If an object doesn't move, don't check it every frame</li>
+                        <li><strong>Consider simpler shapes:</strong> Circle collision is faster than box collision</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎓 Advanced Topics to Explore</h3>
+                    <p>Ready to level up? Research these topics:</p>
+                    <ul>
+                        <li><strong>Circle collision detection:</strong> Using distance between centers</li>
+                        <li><strong>Pixel-perfect collision:</strong> Checking actual sprite pixels</li>
+                        <li><strong>Collision layers:</strong> Some objects collide with certain things but not others</li>
+                        <li><strong>Continuous collision:</strong> Detecting collisions between frames for fast objects</li>
+                        <li><strong>Physics engines:</strong> Libraries that handle collision and physics for you</li>
+                    </ul>
+                </div>
+
+                <div class="challenge">
+                    <h3>🏆 Final Challenge: Create a Game!</h3>
+                    <div class="challenge-content">
+                        <p><strong>Create a simple game using collision detection:</strong></p>
+                        <p><strong>Idea 1 - Collector Game:</strong></p>
+                        <ul>
+                            <li>Create a player box that follows the mouse</li>
+                            <li>Spawn collectible boxes that bounce around</li>
+                            <li>Collect boxes by touching them (detect collision!)</li>
+                            <li>Keep a score and display it</li>
+                        </ul>
+                        <p><strong>Idea 2 - Avoider Game:</strong></p>
+                        <ul>
+                            <li>Create a player box controlled with keyboard</li>
+                            <li>Spawn enemy boxes that chase the player</li>
+                            <li>Game over if an enemy touches the player (collision!)</li>
+                            <li>Track how long you survive</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h3>💎 Remember</h3>
+                    <p><strong>Collision detection is everywhere in games!</strong></p>
+                    <p>Every time you see objects interact in a game - characters picking up items, bullets hitting enemies, cars crashing - that's collision detection at work. You now have this superpower!</p>
+                    <p>Keep practicing and experimenting. The best way to learn is by building your own projects!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn prev" id="prevBtn" onclick="previousStep()">← Previous</button>
+            <button class="nav-btn next" id="nextBtn" onclick="nextStep()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const totalSteps = 9;
+
+        // Initialize step dots
+        function initStepDots() {
+            const dotsContainer = document.getElementById('stepDots');
+            for (let i = 0; i <= totalSteps; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (i === 0) dot.classList.add('active');
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Update the display
+        function updateDisplay() {
+            // Hide all steps
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+
+            // Show current step
+            const currentStepElement = document.querySelector(`[data-step="${currentStep}"]`);
+            if (currentStepElement) {
+                currentStepElement.classList.add('active');
+            }
+
+            // Update progress bar
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Update step indicator
+            document.getElementById('stepNumber').textContent = `Step ${currentStep}`;
+            document.getElementById('totalSteps').textContent = totalSteps;
+
+            // Update dots
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.remove('active', 'completed');
+                if (index < currentStep) {
+                    dot.classList.add('completed');
+                } else if (index === currentStep) {
+                    dot.classList.add('active');
+                }
+            });
+
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentStep === 0;
+
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentStep === totalSteps) {
+                nextBtn.textContent = '🎉 Finished!';
+            } else {
+                nextBtn.textContent = 'Next →';
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateDisplay();
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateDisplay();
+            }
+        }
+
+        function toggleSolution(button) {
+            const solutionContent = button.nextElementSibling;
+            solutionContent.classList.toggle('show');
+
+            if (solutionContent.classList.contains('show')) {
+                button.textContent = 'Hide Solution';
+            } else {
+                button.textContent = 'Show Solution';
+            }
+        }
+
+        // Hidden function for teachers to enable copy mode
+        window.enableCopyMode = function() {
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                block.classList.add('copyable');
+            });
+            console.log('✅ Copy mode enabled! Students can now select and copy code.');
+            return 'Copy mode is now active.';
+        };
+
+        // Hidden function to disable copy mode
+        window.disableCopyMode = function() {
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                block.classList.remove('copyable');
+            });
+            console.log('🔒 Copy mode disabled! Code blocks are now read-only.');
+            return 'Copy mode is now disabled.';
+        };
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentStep < totalSteps) {
+                nextStep();
+            } else if (e.key === 'ArrowLeft' && currentStep > 0) {
+                previousStep();
+            }
+        });
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initStepDots();
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>
