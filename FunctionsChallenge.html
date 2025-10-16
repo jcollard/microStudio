@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functions Challenge - MicroStudio Lua</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 1.1em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .step-content {
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+
+        .step-content p {
+            margin-bottom: 20px;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .code-block.copyable {
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+        }
+
+        .code-block.copyable pre {
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            pointer-events: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #a8e6cf;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            pointer-events: none;
+        }
+
+        .code-block::before {
+            content: '⌨️ Type this code out - no copy/paste!';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(246, 147, 251, 0.8);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .code-block.copyable::before {
+            content: '✅ Copy mode enabled';
+            background: rgba(102, 234, 147, 0.8);
+        }
+
+        .info-box {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+        }
+
+        .info-box li {
+            margin: 8px 0;
+        }
+
+        .info-box code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .challenge {
+            background: rgba(246, 147, 251, 0.1);
+            border-left: 4px solid #f093fb;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+
+        .challenge h3 {
+            color: #f093fb;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .challenge-content {
+            margin-top: 15px;
+        }
+
+        .solution {
+            margin-top: 20px;
+        }
+
+        .solution-toggle {
+            background: #764ba2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .solution-toggle:hover {
+            background: #667eea;
+        }
+
+        .solution-content {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .solution-content.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-btn.prev {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .step-indicator {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.1em;
+            color: #a0a0a0;
+        }
+
+        .step-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            background: #667eea;
+            transform: scale(1.3);
+        }
+
+        .dot.completed {
+            background: #f093fb;
+        }
+
+        .keyword {
+            color: #ff79c6;
+            font-weight: bold;
+        }
+
+        .string {
+            color: #f1fa8c;
+        }
+
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        .warning-box {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .warning-box h3 {
+            color: #ffc107;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .complete-code {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .complete-code h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .iframe-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .iframe-container h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+        }
+
+        .iframe-container p {
+            margin-top: 15px;
+            color: #a0a0a0;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .navigation {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Functions Challenge</h1>
+            <p class="subtitle">Learn to organize your code with custom functions in MicroStudio Lua</p>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="step-indicator">
+            <span id="stepNumber">Step 1</span> of <span id="totalSteps">9</span>
+        </div>
+
+        <div class="step-dots" id="stepDots"></div>
+
+        <!-- Step 0: Introduction -->
+        <div class="step active" data-step="0">
+            <h2>Welcome! 🚀</h2>
+            <div class="step-content">
+                <p>Great work on adding the starfield to your space game! But have you noticed that your code is getting longer and harder to read? When everything is in just three functions (<code>init</code>, <code>update</code>, and <code>draw</code>), it becomes difficult to find and fix bugs.</p>
+
+                <p>In this challenge, you'll learn how to <strong>organize your code using custom functions</strong>. This is called <strong>refactoring</strong> - improving code without changing what it does.</p>
+
+                <div class="iframe-container">
+                    <h3>Here's the game we'll be refactoring:</h3>
+                    <iframe
+                        src="https://microstudio.io/jocolloman/googlyeyes/"
+                        allowfullscreen>
+                    </iframe>
+                    <p>
+                        🎮 Your space game with googly eyes and lasers!<br>
+                        Want to use this project? <a href="https://microstudio.io/i/jocolloman/googlyeyes/" target="_blank" style="color: #667eea;">Clone it here</a>
+                    </p>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎯 What You'll Learn</h3>
+                    <ul>
+                        <li>Why breaking code into functions makes it easier to read and maintain</li>
+                        <li>How to create your own custom functions</li>
+                        <li>How to organize related code together</li>
+                        <li>Best practices for naming functions</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>📋 Prerequisites</h3>
+                    <p>Before starting this challenge, make sure you've completed:</p>
+                    <ul>
+                        <li>The Star Generator Challenge (you need to know about for loops and tables)</li>
+                        <li>Added the starfield background to your space game</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: Understanding the Problem -->
+        <div class="step" data-step="1">
+            <h2>Step 1: Understanding the Problem</h2>
+            <div class="step-content">
+                <p>Let's look at your current <code>update</code> function. It's doing A LOT of different things:</p>
+
+                <div class="code-block">
+                    <pre>update = function()
+  <span class="comment">-- Update Stars</span>
+  <span class="keyword">for</span> key, star <span class="keyword">in</span> pairs(stars) <span class="keyword">do</span>
+    star.y = star.y - star.speed
+    <span class="keyword">if</span> star.y < -screen.height / 2 <span class="keyword">then</span>
+      star.y = screen.width / 2
+      star.x = (math.random() - 0.5) * screen.width
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="comment">-- Reset rotation</span>
+  rotation = 0
+
+  <span class="comment">-- Handle keyboard input</span>
+  <span class="keyword">if</span> keyboard.LEFT == 1 <span class="keyword">then</span>
+    x = x - 1
+    rotation = 15
+  <span class="keyword">end</span>
+
+  <span class="comment">-- More keyboard code...</span>
+  <span class="comment">-- Eye movement code...</span>
+  <span class="comment">-- Laser code...</span>
+  <span class="comment">-- And more!</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <div class="warning-box">
+                    <h3>⚠️ Problems with This Approach</h3>
+                    <ul>
+                        <li><strong>Hard to read:</strong> You have to scroll through lots of code to find what you need</li>
+                        <li><strong>Hard to debug:</strong> When something breaks, it's difficult to find where the problem is</li>
+                        <li><strong>Hard to reuse:</strong> If you want to use the same code elsewhere, you can't easily copy it</li>
+                        <li><strong>Hard to understand:</strong> It's not clear what each section does without reading all the code</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>💡 The Solution: Custom Functions!</h3>
+                    <p>Instead of having one giant <code>update</code> function, we can break it into smaller, focused functions:</p>
+                    <ul>
+                        <li><code>update_stars()</code> - handles star movement</li>
+                        <li><code>update_player()</code> - handles player movement</li>
+                        <li><code>update_eyes()</code> - handles the googly eyes</li>
+                        <li><code>update_lasers()</code> - handles laser movement and firing</li>
+                    </ul>
+                    <p>Each function has a clear purpose and is easy to find and fix!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Creating Your First Custom Function -->
+        <div class="step" data-step="2">
+            <h2>Step 2: Creating Your First Custom Function</h2>
+            <div class="step-content">
+                <p>Let's start by moving the star update code into its own function. We'll call it <code>update_stars</code>.</p>
+
+                <p><strong>First, create the function BEFORE your <code>init</code> function:</strong></p>
+
+                <div class="code-block">
+                    <pre><span class="comment">-- Custom function to update all the stars</span>
+<span class="keyword">function</span> update_stars()
+  <span class="keyword">for</span> key, star <span class="keyword">in</span> pairs(stars) <span class="keyword">do</span>
+    star.y = star.y - star.speed
+
+    <span class="keyword">if</span> star.y < -screen.height / 2 <span class="keyword">then</span>
+      star.y = screen.height / 2
+      star.x = (math.random() - 0.5) * screen.width
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+stars = {}
+
+init = <span class="keyword">function</span>()
+  <span class="comment">-- Your init code stays the same</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>📚 Two Ways to Create Functions</h3>
+                    <p>You'll notice we're using a different syntax for custom functions compared to <code>init</code>, <code>update</code>, and <code>draw</code>:</p>
+                    <ul>
+                        <li><strong>microStudio style:</strong> <code>init = function() ... end</code></li>
+                        <li><strong>Traditional Lua style:</strong> <code>function update_stars() ... end</code></li>
+                    </ul>
+                    <p>Both work the same way! We use the traditional style for our custom functions because it's easier to read and is used in many Lua programs. microStudio requires <code>init</code>, <code>update</code>, and <code>draw</code> to use the assignment style.</p>
+                </div>
+
+                <p><strong>Now, update your <code>update</code> function to CALL this new function:</strong></p>
+
+                <div class="code-block">
+                    <pre>update = <span class="keyword">function</span>()
+  <span class="comment">-- Call our custom function!</span>
+  update_stars()
+
+  <span class="comment">-- Reset rotation</span>
+  rotation = 0
+
+  <span class="comment">-- Rest of your update code...</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>What's happening?</h3>
+                    <ul>
+                        <li>We created a new function called <code>update_stars</code></li>
+                        <li>We moved all the star update code INTO that function</li>
+                        <li>We CALL that function from <code>update</code> using <code>update_stars()</code></li>
+                        <li>The code does exactly the same thing, but it's better organized!</li>
+                    </ul>
+                </div>
+
+                <p><strong>Test your code!</strong> The stars should still move exactly as before. Nothing should change visually - we're just organizing!</p>
+
+                <div class="challenge">
+                    <h3>🎯 Challenge 1: Create update_player Function</h3>
+                    <div class="challenge-content">
+                        <p><strong>Try this on your own first!</strong></p>
+                        <p>Create an <code>update_player</code> function that handles all the player movement code. This includes:</p>
+                        <ul>
+                            <li>Resetting the rotation to 0</li>
+                            <li>Checking for LEFT key press</li>
+                            <li>Checking for RIGHT key press</li>
+                            <li>Keeping the player on screen (the x boundary checks)</li>
+                        </ul>
+                        <p>Then call this function from <code>update</code>.</p>
+
+                        <div class="solution">
+                            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                            <div class="solution-content">
+                                <div class="code-block">
+                                    <pre><span class="comment">-- Custom function to update the player</span>
+<span class="keyword">function</span> update_player()
+  <span class="comment">-- Reset rotation</span>
+  rotation = 0
+
+  <span class="comment">-- If the user presses left</span>
+  <span class="keyword">if</span> keyboard.LEFT == 1 <span class="keyword">then</span>
+    x = x - 1
+    rotation = 15
+  <span class="keyword">end</span>
+
+  <span class="comment">-- If the user presses right</span>
+  <span class="keyword">if</span> keyboard.RIGHT == 1 <span class="keyword">then</span>
+    x = x + 1
+    rotation = -15
+  <span class="keyword">end</span>
+
+  <span class="comment">-- Keep the player's x position on the screen</span>
+  <span class="keyword">if</span> x < -100 <span class="keyword">then</span> x = -100 <span class="keyword">end</span>
+  <span class="keyword">if</span> x > 100 <span class="keyword">then</span> x = 100 <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">-- In your update function:</span>
+update = <span class="keyword">function</span>()
+  update_stars()
+  update_player()
+
+  <span class="comment">-- Rest of your code...</span>
+<span class="keyword">end</span></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Organizing the Eyes -->
+        <div class="step" data-step="3">
+            <h2>Step 3: Organizing the Googly Eyes Code</h2>
+            <div class="step-content">
+                <p>The googly eyes code is pretty long! Let's organize it into its own function.</p>
+
+                <p><strong>Create an <code>update_eyes</code> function:</strong></p>
+
+                <div class="code-block">
+                    <pre><span class="comment">-- Custom function to update the googly eyes</span>
+<span class="keyword">function</span> update_eyes()
+  <span class="comment">-- Rotate the eyes</span>
+  eye_rotation = eye_rotation + 12
+
+  <span class="comment">-- Make the left eye move</span>
+  left_eye_x = left_eye_x + left_eye_vx
+  left_eye_y = left_eye_y + left_eye_vy
+
+  <span class="comment">-- Keep the left eye on the screen</span>
+  <span class="keyword">if</span> left_eye_x < -100 <span class="keyword">then</span> left_eye_vx = 0.7 <span class="keyword">end</span>
+  <span class="keyword">if</span> left_eye_x > 100 <span class="keyword">then</span> left_eye_vx = -0.7 <span class="keyword">end</span>
+  <span class="keyword">if</span> left_eye_y < -100 <span class="keyword">then</span> left_eye_vy = 0.57575 <span class="keyword">end</span>
+  <span class="keyword">if</span> left_eye_y > 100 <span class="keyword">then</span> left_eye_vy = -0.57575 <span class="keyword">end</span>
+
+  <span class="comment">-- Make the right eye move</span>
+  right_eye_x = right_eye_x + right_eye_vx
+  right_eye_y = right_eye_y + right_eye_vy
+
+  <span class="comment">-- Keep the right eye on the screen</span>
+  <span class="keyword">if</span> right_eye_x < -100 <span class="keyword">then</span> right_eye_vx = 0.6 <span class="keyword">end</span>
+  <span class="keyword">if</span> right_eye_x > 100 <span class="keyword">then</span> right_eye_vx = -0.6 <span class="keyword">end</span>
+  <span class="keyword">if</span> right_eye_y < -100 <span class="keyword">then</span> right_eye_vy = 0.37575 <span class="keyword">end</span>
+  <span class="keyword">if</span> right_eye_y > 100 <span class="keyword">then</span> right_eye_vy = -0.37575 <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Now update your <code>update</code> function:</strong></p>
+
+                <div class="code-block">
+                    <pre>update = <span class="keyword">function</span>()
+  update_stars()
+  update_player()
+  update_eyes()
+
+  <span class="comment">-- Laser code still here...</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>💡 Notice the Pattern?</h3>
+                    <p>Your <code>update</code> function is getting much easier to read! Now you can see at a glance what's being updated:</p>
+                    <ul>
+                        <li>Stars</li>
+                        <li>Player</li>
+                        <li>Eyes</li>
+                    </ul>
+                    <p>If there's a bug with the eyes, you know exactly where to look!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Laser Movement -->
+        <div class="step" data-step="4">
+            <h2>Step 4: Organizing Laser Movement</h2>
+            <div class="step-content">
+                <p>The laser code is actually two separate tasks: <strong>moving lasers</strong> and <strong>firing lasers</strong>. Let's split them into two functions!</p>
+
+                <p><strong>First, create a function to move the lasers:</strong></p>
+
+                <div class="code-block">
+                    <pre><span class="comment">-- Custom function to move all lasers</span>
+<span class="keyword">function</span> move_lasers()
+  <span class="keyword">for</span> ix, laser <span class="keyword">in</span> pairs(lasers) <span class="keyword">do</span>
+    lasers[ix].y = lasers[ix].y + lasers[ix].vy
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Next, create a function to handle firing lasers:</strong></p>
+
+                <div class="code-block">
+                    <pre><span class="comment">-- Custom function to handle firing lasers</span>
+<span class="keyword">function</span> fire_laser()
+  <span class="keyword">if</span> keyboard.press.SPACE == 1 <span class="keyword">then</span>
+    fired_laser = <span class="keyword">nil</span>
+
+    <span class="comment">-- Find a laser that is off the screen</span>
+    <span class="keyword">for</span> ix, laser <span class="keyword">in</span> pairs(lasers) <span class="keyword">do</span>
+      <span class="keyword">if</span> lasers[ix].y > 300 <span class="keyword">then</span>
+        fired_laser = lasers[ix]
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">-- If we did not find a laser, we need to make one</span>
+    <span class="keyword">if</span> fired_laser == <span class="keyword">nil</span> <span class="keyword">then</span>
+      fired_laser = create_laser()
+      table.insert(lasers, fired_laser)
+    <span class="keyword">end</span>
+
+    <span class="comment">-- Finally, move the laser in front of the ship</span>
+    fired_laser.y = y + 15
+    fired_laser.x = x
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Now your <code>update</code> function is super clean:</strong></p>
+
+                <div class="code-block">
+                    <pre>update = <span class="keyword">function</span>()
+  update_stars()
+  update_player()
+  update_eyes()
+  move_lasers()
+  fire_laser()
+<span class="keyword">end</span></pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎉 Look How Clean That Is!</h3>
+                    <p>Your <code>update</code> function went from over 50 lines of code to just 5 lines! And it's perfectly clear what each line does:</p>
+                    <ul>
+                        <li><code>update_stars()</code> - updates the stars</li>
+                        <li><code>update_player()</code> - updates the player</li>
+                        <li><code>update_eyes()</code> - updates the googly eyes</li>
+                        <li><code>move_lasers()</code> - moves all the lasers</li>
+                        <li><code>fire_laser()</code> - handles firing a new laser</li>
+                    </ul>
+                </div>
+
+                <p><strong>Test your code!</strong> Everything should work exactly the same as before.</p>
+            </div>
+        </div>
+
+        <!-- Step 5: Organizing the Draw Function -->
+        <div class="step" data-step="5">
+            <h2>Step 5: Organizing the Draw Function</h2>
+            <div class="step-content">
+                <p>Now let's apply the same idea to the <code>draw</code> function! It's also getting long and does many different things.</p>
+
+                <p><strong>Let's create separate drawing functions for each element:</strong></p>
+
+                <div class="code-block">
+                    <pre><span class="comment">-- Custom function to draw all the stars</span>
+<span class="keyword">function</span> draw_stars()
+  <span class="keyword">for</span> key, star <span class="keyword">in</span> pairs(stars) <span class="keyword">do</span>
+    <span class="keyword">local</span> brightness = (star.speed - 0.5) / 1.5
+    <span class="keyword">local</span> colorValue = 100 + brightness * 155
+
+    screen:setColor(<span class="string">"rgb("</span> .. colorValue .. <span class="string">","</span> .. colorValue .. <span class="string">","</span> .. colorValue .. <span class="string">")"</span>)
+    screen:fillRect(star.x, star.y, star.size, star.size)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">-- Custom function to draw the googly eyes</span>
+<span class="keyword">function</span> draw_eyes()
+  screen:setDrawScale(1, 1)
+  screen:setDrawRotation(eye_rotation)
+  screen:drawSprite(<span class="string">"googlya"</span>, left_eye_x, left_eye_y, 32, 32)
+  screen:setDrawRotation(-eye_rotation)
+  screen:drawSprite(<span class="string">"googlyb"</span>, right_eye_x, right_eye_y, 32, 32)
+<span class="keyword">end</span>
+
+<span class="comment">-- Custom function to draw the player ship</span>
+<span class="keyword">function</span> draw_player()
+  screen:setDrawRotation(rotation)
+  screen:drawSprite(<span class="string">"player"</span>, x, y, 99*0.25, 75*0.25)
+  screen:setDrawRotation(0)
+<span class="keyword">end</span>
+
+<span class="comment">-- Custom function to draw all the lasers</span>
+<span class="keyword">function</span> draw_lasers()
+  <span class="keyword">for</span> ix, laser <span class="keyword">in</span> pairs(lasers) <span class="keyword">do</span>
+    screen:drawSprite(<span class="string">"laser"</span>, lasers[ix].x, lasers[ix].y, 9*0.25, 37*0.25)
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Now update your <code>draw</code> function:</strong></p>
+
+                <div class="code-block">
+                    <pre>draw = <span class="keyword">function</span>()
+  screen:clear(<span class="string">"rgb(0, 0, 20)"</span>)
+
+  draw_stars()
+  draw_eyes()
+  draw_player()
+  draw_lasers()
+<span class="keyword">end</span></pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>✨ Beautiful!</h3>
+                    <p>Your <code>draw</code> function is now easy to read and understand. You can see exactly what order things are drawn in:</p>
+                    <ol>
+                        <li>Clear the screen</li>
+                        <li>Draw stars (background)</li>
+                        <li>Draw eyes</li>
+                        <li>Draw player</li>
+                        <li>Draw lasers</li>
+                    </ol>
+                </div>
+
+                <div class="challenge">
+                    <h3>🎯 Challenge 2: Change the Draw Order</h3>
+                    <div class="challenge-content">
+                        <p><strong>Try this on your own first!</strong></p>
+                        <p>Now that your draw code is organized, it's easy to change the order! Try drawing the lasers BEFORE the player ship instead of after. What happens?</p>
+
+                        <div class="solution">
+                            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                            <div class="solution-content">
+                                <div class="code-block">
+                                    <pre>draw = <span class="keyword">function</span>()
+  screen:clear(<span class="string">"rgb(0, 0, 20)"</span>)
+
+  draw_stars()
+  draw_eyes()
+  draw_lasers()  <span class="comment">-- Draw lasers before player</span>
+  draw_player()
+<span class="keyword">end</span></pre>
+                                </div>
+                                <p><strong>What happens:</strong> The lasers now appear BEHIND the player ship instead of in front! This is because things drawn earlier appear behind things drawn later.</p>
+                                <p>Change it back so the lasers are drawn last (after the player).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 6: Organizing Initialization -->
+        <div class="step" data-step="6">
+            <h2>Step 6: Organizing the Init Function</h2>
+            <div class="step-content">
+                <p>Let's apply the same organization to your <code>init</code> function! Right now, it's initializing stars, player variables, eye variables, and lasers all in one place.</p>
+
+                <p><strong>Create separate initialization functions:</strong></p>
+
+                <div class="code-block">
+                    <pre><span class="comment">-- Custom function to initialize the stars</span>
+<span class="keyword">function</span> init_stars()
+  stars = {}
+  <span class="keyword">for</span> i = 1, 100 <span class="keyword">do</span>
+    <span class="keyword">local</span> star = {}
+    star.x = (math.random() - 0.5) * screen.width
+    star.y = (math.random() - 0.5) * screen.height
+    star.speed = math.random() * math.random() * 1.5 + 0.5
+    star.size = star.speed
+    table.insert(stars, star)
+  <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">-- Custom function to initialize the player</span>
+<span class="keyword">function</span> init_player()
+  x = 0
+  y = -80
+  rotation = 0
+<span class="keyword">end</span>
+
+<span class="comment">-- Custom function to initialize the googly eyes</span>
+<span class="keyword">function</span> init_eyes()
+  eye_rotation = 0
+
+  left_eye_x = 0
+  left_eye_y = 0
+  left_eye_vx = 0.7
+  left_eye_vy = 0.57575
+
+  right_eye_x = 0
+  right_eye_y = 0
+  right_eye_vx = -0.6
+  right_eye_vy = 0.37575
+<span class="keyword">end</span>
+
+<span class="comment">-- Custom function to initialize lasers</span>
+<span class="keyword">function</span> init_lasers()
+  lasers = {}
+<span class="keyword">end</span></pre>
+                </div>
+
+                <p><strong>Now your <code>init</code> function becomes:</strong></p>
+
+                <div class="code-block">
+                    <pre>init = <span class="keyword">function</span>()
+  init_stars()
+  init_player()
+  init_eyes()
+  init_lasers()
+<span class="keyword">end</span></pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎯 Consistency is Key!</h3>
+                    <p>Notice how all three main functions (<code>init</code>, <code>update</code>, <code>draw</code>) now follow the same pattern:</p>
+                    <ul>
+                        <li>They're short and easy to read</li>
+                        <li>They call helper functions in a logical order</li>
+                        <li>Each helper function has a clear, specific job</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 7: Function Naming Best Practices -->
+        <div class="step" data-step="7">
+            <h2>Step 7: Function Naming Best Practices</h2>
+            <div class="step-content">
+                <p>Good function names are really important! They help you (and other programmers) understand what the code does without having to read it all.</p>
+
+                <div class="info-box">
+                    <h3>✅ Good Function Names</h3>
+                    <ul>
+                        <li><code>update_stars()</code> - Clear: updates the stars</li>
+                        <li><code>draw_player()</code> - Clear: draws the player</li>
+                        <li><code>fire_laser()</code> - Clear: fires a laser</li>
+                        <li><code>create_laser()</code> - Clear: creates a new laser</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <h3>❌ Bad Function Names</h3>
+                    <ul>
+                        <li><code>dostuff()</code> - What stuff?</li>
+                        <li><code>x()</code> - Meaningless</li>
+                        <li><code>function1()</code> - Not descriptive</li>
+                        <li><code>a()</code> - Too short and unclear</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>📝 Naming Tips</h3>
+                    <ul>
+                        <li><strong>Use verbs:</strong> Functions DO things, so use action words (update, draw, move, create, fire)</li>
+                        <li><strong>Be specific:</strong> <code>update_stars()</code> is better than <code>update()</code></li>
+                        <li><strong>Use underscores:</strong> In Lua, we typically use <code>snake_case</code> (words separated by underscores)</li>
+                        <li><strong>Keep it consistent:</strong> If you use <code>init_stars()</code>, also use <code>init_player()</code>, not <code>playerInit()</code></li>
+                    </ul>
+                </div>
+
+                <div class="challenge">
+                    <h3>🎯 Challenge 3: Better Function Names</h3>
+                    <div class="challenge-content">
+                        <p><strong>Think about these scenarios:</strong></p>
+                        <p>What would be good names for functions that do the following?</p>
+                        <ul>
+                            <li>Check if the player has collided with an enemy</li>
+                            <li>Reset the game to the starting state</li>
+                            <li>Calculate the distance between two points</li>
+                            <li>Play a sound effect</li>
+                        </ul>
+
+                        <div class="solution">
+                            <button class="solution-toggle" onclick="toggleSolution(this)">Show Solution</button>
+                            <div class="solution-content">
+                                <div class="info-box">
+                                    <h3>Good Names:</h3>
+                                    <ul>
+                                        <li><code>check_player_collision()</code> or <code>player_hit_enemy()</code></li>
+                                        <li><code>reset_game()</code> or <code>restart_game()</code></li>
+                                        <li><code>calculate_distance()</code> or <code>get_distance()</code></li>
+                                        <li><code>play_sound()</code> or <code>play_sound_effect()</code></li>
+                                    </ul>
+                                    <p>All of these names clearly describe what the function does!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 8: Why This Matters -->
+        <div class="step" data-step="8">
+            <h2>Step 8: Why Organizing Code Matters</h2>
+            <div class="step-content">
+                <p>You might be thinking: "The code does the same thing either way, so why bother organizing it?" Let's look at some real examples of why this matters!</p>
+
+                <div class="info-box">
+                    <h3>🐛 Example 1: Finding Bugs</h3>
+                    <p><strong>Problem:</strong> Your lasers aren't firing when you press SPACE.</p>
+                    <p><strong>Before (messy code):</strong> You have to scroll through 50+ lines of <code>update</code> function, reading star code, player code, eye code, and laser code to find the bug.</p>
+                    <p><strong>After (organized code):</strong> You immediately look at <code>fire_laser()</code> - only 15 lines to check!</p>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎨 Example 2: Making Changes</h3>
+                    <p><strong>Task:</strong> Make the player move twice as fast.</p>
+                    <p><strong>Before (messy code):</strong> Search through <code>update</code> function to find where player movement happens.</p>
+                    <p><strong>After (organized code):</strong> Open <code>update_player()</code> and change <code>x = x - 1</code> to <code>x = x - 2</code>. Done!</p>
+                </div>
+
+                <div class="info-box">
+                    <h3>🔁 Example 3: Reusing Code</h3>
+                    <p><strong>Task:</strong> Create enemy ships that move like the player.</p>
+                    <p><strong>Before (messy code):</strong> Copy and paste player code from the middle of <code>update</code>, then modify it. Error-prone!</p>
+                    <p><strong>After (organized code):</strong> Create a similar <code>update_enemy()</code> function based on <code>update_player()</code>. Clean and clear!</p>
+                </div>
+
+                <div class="info-box">
+                    <h3>👥 Example 4: Working with Others</h3>
+                    <p><strong>Scenario:</strong> Your friend wants to help you add enemies to your game.</p>
+                    <p><strong>Before (messy code):</strong> You have to explain where everything is in your giant functions.</p>
+                    <p><strong>After (organized code):</strong> Your friend can easily see the structure and add <code>init_enemies()</code>, <code>update_enemies()</code>, and <code>draw_enemies()</code> functions!</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3>💡 Professional Tip</h3>
+                    <p>Professional programmers spend a LOT of time organizing their code. In fact, they often spend more time refactoring than writing new code! Why? Because well-organized code:</p>
+                    <ul>
+                        <li>Has fewer bugs</li>
+                        <li>Is easier to test</li>
+                        <li>Is easier to extend with new features</li>
+                        <li>Can be understood by other programmers</li>
+                        <li>Can be understood by YOU when you come back to it months later!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 9: Complete Code -->
+        <div class="step" data-step="9">
+            <h2>🎉 Congratulations!</h2>
+            <div class="step-content">
+                <p>You've learned how to organize your code using custom functions! This is a huge step in becoming a better programmer.</p>
+
+                <div class="complete-code">
+                    <h3>📝 Complete Organized Code Structure</h3>
+                    <p>Here's how your code should be organized now:</p>
+                    <div class="code-block">
+                        <pre><span class="comment">// ===== STAR FUNCTIONS =====</span>
+<span class="keyword">function</span> init_stars() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+<span class="keyword">function</span> update_stars() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+<span class="keyword">function</span> draw_stars() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+
+<span class="comment">// ===== PLAYER FUNCTIONS =====</span>
+<span class="keyword">function</span> init_player() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+<span class="keyword">function</span> update_player() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+<span class="keyword">function</span> draw_player() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+
+<span class="comment">// ===== EYE FUNCTIONS =====</span>
+<span class="keyword">function</span> init_eyes() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+<span class="keyword">function</span> update_eyes() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+<span class="keyword">function</span> draw_eyes() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+
+<span class="comment">// ===== LASER FUNCTIONS =====</span>
+<span class="keyword">function</span> init_lasers() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+<span class="keyword">function</span> create_laser() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+<span class="keyword">function</span> move_lasers() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+<span class="keyword">function</span> fire_laser() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+<span class="keyword">function</span> draw_lasers() <span class="comment">/* ... */</span> <span class="keyword">end</span>
+
+<span class="comment">// ===== MAIN MICROSTUDIO FUNCTIONS =====</span>
+init = <span class="keyword">function</span>()
+  init_stars()
+  init_player()
+  init_eyes()
+  init_lasers()
+<span class="keyword">end</span>
+
+update = <span class="keyword">function</span>()
+  update_stars()
+  update_player()
+  update_eyes()
+  move_lasers()
+  fire_laser()
+<span class="keyword">end</span>
+
+draw = <span class="keyword">function</span>()
+  screen:clear(<span class="string">"rgb(0, 0, 20)"</span>)
+  draw_stars()
+  draw_eyes()
+  draw_player()
+  draw_lasers()
+<span class="keyword">end</span></pre>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h3>🎯 What You've Learned</h3>
+                    <ul>
+                        <li>How to break large functions into smaller, focused functions</li>
+                        <li>How to name functions clearly and consistently</li>
+                        <li>How to organize code by grouping related functions together</li>
+                        <li>Why organized code is easier to read, debug, and extend</li>
+                        <li>Professional programming practices that you'll use forever!</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <h3>🚀 Next Steps & Challenges</h3>
+                    <p>Now that your code is well-organized, try adding these features:</p>
+                    <ul>
+                        <li><strong>Add enemies</strong> - Create <code>init_enemies()</code>, <code>update_enemies()</code>, and <code>draw_enemies()</code> functions</li>
+                        <li><strong>Add collision detection</strong> - Create a <code>check_collisions()</code> function</li>
+                        <li><strong>Add a score system</strong> - Create <code>init_score()</code>, <code>update_score()</code>, and <code>draw_score()</code> functions</li>
+                        <li><strong>Add power-ups</strong> - Follow the same pattern with init, update, and draw functions</li>
+                    </ul>
+                    <p>Notice how easy it is to plan new features when you think in terms of organized functions!</p>
+                </div>
+
+                <div class="warning-box">
+                    <h3>💎 Remember</h3>
+                    <p><strong>Good code is code that other people (including future you) can easily read and understand.</strong></p>
+                    <p>Taking time to organize your code isn't wasted time - it's an investment that pays off every time you need to find a bug, add a feature, or share your code with others!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn prev" id="prevBtn" onclick="previousStep()">← Previous</button>
+            <button class="nav-btn next" id="nextBtn" onclick="nextStep()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const totalSteps = 9;
+
+        // Initialize step dots
+        function initStepDots() {
+            const dotsContainer = document.getElementById('stepDots');
+            for (let i = 0; i <= totalSteps; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (i === 0) dot.classList.add('active');
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        // Update the display
+        function updateDisplay() {
+            // Hide all steps
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+
+            // Show current step
+            const currentStepElement = document.querySelector(`[data-step="${currentStep}"]`);
+            if (currentStepElement) {
+                currentStepElement.classList.add('active');
+            }
+
+            // Update progress bar
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Update step indicator
+            document.getElementById('stepNumber').textContent = `Step ${currentStep}`;
+            document.getElementById('totalSteps').textContent = totalSteps;
+
+            // Update dots
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.remove('active', 'completed');
+                if (index < currentStep) {
+                    dot.classList.add('completed');
+                } else if (index === currentStep) {
+                    dot.classList.add('active');
+                }
+            });
+
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentStep === 0;
+
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentStep === totalSteps) {
+                nextBtn.textContent = '🎉 Finished!';
+            } else {
+                nextBtn.textContent = 'Next →';
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateDisplay();
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateDisplay();
+            }
+        }
+
+        function toggleSolution(button) {
+            const solutionContent = button.nextElementSibling;
+            solutionContent.classList.toggle('show');
+
+            if (solutionContent.classList.contains('show')) {
+                button.textContent = 'Hide Solution';
+            } else {
+                button.textContent = 'Show Solution';
+            }
+        }
+
+        // Hidden function for teachers to enable copy mode
+        window.enableCopyMode = function() {
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                block.classList.add('copyable');
+            });
+            console.log('✅ Copy mode enabled! Students can now select and copy code.');
+            return 'Copy mode is now active.';
+        };
+
+        // Hidden function to disable copy mode
+        window.disableCopyMode = function() {
+            const codeBlocks = document.querySelectorAll('.code-block');
+            codeBlocks.forEach(block => {
+                block.classList.remove('copyable');
+            });
+            console.log('🔒 Copy mode disabled! Code blocks are now read-only.');
+            return 'Copy mode is now disabled.';
+        };
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' && currentStep < totalSteps) {
+                nextStep();
+            } else if (e.key === 'ArrowLeft' && currentStep > 0) {
+                previousStep();
+            }
+        });
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initStepDots();
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>
