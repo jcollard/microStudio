@@ -1,11 +1,11 @@
 # Solutions Directory
 
-This directory contains solution code for the "Adding Bounding Boxes" tutorial.
+This directory contains solution code for the "Adding Bounding Boxes" lesson.
 
 ## Files
 
 ### step6_solution.lua
-Complete solution after finishing Step 6 of the tutorial.
+Complete solution after finishing Step 6 of the lesson.
 
 **Based on:** colliding-lasers/starter.lua
 
@@ -93,7 +93,7 @@ init_eyes()
 ```
 
 ### step7_solution.lua
-Complete solution after finishing Step 7 of the tutorial.
+Complete solution after finishing Step 7 of the lesson.
 
 **Based on:** colliding-lasers/starter.lua
 
@@ -138,7 +138,7 @@ Complete solution after finishing Step 7 of the tutorial.
 - Must call `screen:setDrawRotation(0)` before drawing bounding box to prevent rotation
 
 ### step8_solution.lua
-Complete solution after finishing Step 8 of the tutorial.
+Complete solution after finishing Step 8 of the lesson.
 
 **Based on:** colliding-lasers/starter.lua
 
@@ -170,7 +170,7 @@ Complete solution after finishing Step 8 of the tutorial.
 **Note:** The `move_lasers()` and `fire_laser()` functions work without changes because they already access properties like `.x`, `.y`, and `.vy` which exist on box objects.
 
 ### step9_solution.lua
-Complete solution after finishing Step 9 of the tutorial.
+Complete solution after finishing Step 9 of the lesson.
 
 **Based on:** colliding-lasers/starter.lua
 
