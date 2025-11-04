@@ -199,18 +199,18 @@ Complete solution after finishing Step 9 of the tutorial.
    - Applied in: `draw_eyes()`, `draw_player()`, `draw_lasers()`
 
 **Values used:**
-All boxes are currently square (width = height):
-- **Eyes:** 32x32
-- **Player:** 25x25
-- **Lasers:** 8x8
+- **Eyes:** 28x28 (square, slightly smaller)
+- **Player:** 25x25 (square)
+- **Lasers:** 2x8 (rectangular - tall and narrow to match sprite!)
 
 **Why this change?**
 - Industry standard: Most game engines use width/height
 - More flexible: Can support rectangular (non-square) boxes
 - Better accuracy: More precise collision detection for non-square sprites
+- Lasers now use realistic rectangular dimensions instead of square
 - Prepares for collision detection in future lessons
 
-**Total changes:** 7 functions, 10 modifications
+**Total changes:** 5 functions modified, 3 functions work automatically (thanks to draw_box helper!)
 
 ## What's Next?
 

@@ -6,7 +6,7 @@
 -- Based on colliding-lasers/starter.lua
 
 -- --------------------------------------------
--- STEP 9: Create Box Function with Width and Height
+-- STEP 9: Box Helper Functions with Width and Height
 -- --------------------------------------------
 -- Custom function to create a bounding box object
 function create_box(x, y, width, height, vx, vy, color)
@@ -21,6 +21,12 @@ function create_box(x, y, width, height, vx, vy, color)
     original_color = color
   }
   return new_box
+end
+
+-- STEP 9 SOLUTION: Custom function to draw a box (updated for width/height)
+function draw_box(b)
+  screen:setColor(b.color)
+  screen:fillRect(b.x, b.y, b.width, b.height)
 end
 
 -- ===== STAR FUNCTIONS =====
@@ -110,9 +116,8 @@ function draw_player()
   -- Ensure no rotation for bounding box
   screen:setDrawRotation(0)
 
-  -- STEP 9 SOLUTION: Draw player bounding box using width and height
-  screen:setColor(player.color)
-  screen:fillRect(player.x, player.y, player.width, player.height)
+  -- STEP 9 SOLUTION: Draw player bounding box using draw_box helper
+  draw_box(player)
 
   -- Draw the actual player sprite on top of the bounding box with rotation
   screen:setDrawRotation(rotation)
@@ -129,11 +134,11 @@ end
 function init_eyes()
   eye_rotation = 0
 
-  -- STEP 9 SOLUTION: Left eye uses width and height (32x32)
-  left_eye = create_box(0, 0, 32, 32, 0.7, 0.57575, "#FF00FF")
+  -- STEP 9 SOLUTION: Left eye uses width and height (28x28)
+  left_eye = create_box(0, 0, 28, 28, 0.7, 0.57575, "#FF00FF")
 
-  -- STEP 9 SOLUTION: Right eye uses width and height (32x32)
-  right_eye = create_box(0, 0, 32, 32, -0.6, 0.37575, "#00FFFF")
+  -- STEP 9 SOLUTION: Right eye uses width and height (28x28)
+  right_eye = create_box(0, 0, 28, 28, -0.6, 0.37575, "#00FFFF")
 end
 
 -- Custom function to update the googly eyes
@@ -167,13 +172,9 @@ end
 -- --------------------------------------------
 -- Custom function to draw the googly eyes
 function draw_eyes()
-  -- STEP 9 SOLUTION: Draw left eye bounding box using width and height
-  screen:setColor(left_eye.color)
-  screen:fillRect(left_eye.x, left_eye.y, left_eye.width, left_eye.height)
-
-  -- STEP 9 SOLUTION: Draw right eye bounding box using width and height
-  screen:setColor(right_eye.color)
-  screen:fillRect(right_eye.x, right_eye.y, right_eye.width, right_eye.height)
+  -- STEP 9 SOLUTION: Draw eye bounding boxes using draw_box helper
+  draw_box(left_eye)
+  draw_box(right_eye)
 
   -- Draw the actual eye sprites on top of the bounding boxes
   screen:setDrawScale(1, 1)
@@ -195,8 +196,8 @@ end
 -- --------------------------------------------
 -- Custom function to create a new laser
 function create_laser()
-  -- STEP 9 SOLUTION: Lasers now use width and height (8x8)
-  return create_box(0, 200, 8, 8, 0, 2, "#FF0000")
+  -- STEP 9 SOLUTION: Lasers now use width and height (2x8 - tall and narrow)
+  return create_box(0, 200, 2, 8, 0, 2, "#FF0000")
 end
 
 -- Custom function to move all lasers
@@ -236,9 +237,8 @@ end
 -- Custom function to draw all the lasers
 function draw_lasers()
   for ix, laser in pairs(lasers) do
-    -- STEP 9 SOLUTION: Draw laser bounding box using width and height
-    screen:setColor(lasers[ix].color)
-    screen:fillRect(lasers[ix].x, lasers[ix].y, lasers[ix].width, lasers[ix].height)
+    -- STEP 9 SOLUTION: Draw laser bounding box using draw_box helper
+    draw_box(lasers[ix])
 
     -- Draw the actual laser sprite on top of the bounding box
     screen:drawSprite("laser", lasers[ix].x, lasers[ix].y, 9*0.25, 37*0.25)

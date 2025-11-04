@@ -6,7 +6,7 @@
 -- Based on colliding-lasers/starter.lua
 
 -- --------------------------------------------
--- STEP 2: Create Box Function
+-- STEP 2: Box Helper Functions
 -- --------------------------------------------
 -- Custom function to create a bounding box object
 function create_box(x, y, size, vx, vy, color)
@@ -20,6 +20,12 @@ function create_box(x, y, size, vx, vy, color)
     original_color = color
   }
   return new_box
+end
+
+-- Custom function to draw a box
+function draw_box(b)
+  screen:setColor(b.color)
+  screen:fillRect(b.x, b.y, b.size, b.size)
 end
 
 -- ===== STAR FUNCTIONS =====
@@ -154,12 +160,10 @@ end
 -- Custom function to draw the googly eyes
 function draw_eyes()
   -- STEP 5: Draw left eye bounding box for debugging
-  screen:setColor(left_eye.color)
-  screen:fillRect(left_eye.x, left_eye.y, left_eye.size, left_eye.size)
+  draw_box(left_eye)
 
   -- STEP 6 SOLUTION: Draw right eye bounding box for debugging
-  screen:setColor(right_eye.color)
-  screen:fillRect(right_eye.x, right_eye.y, right_eye.size, right_eye.size)
+  draw_box(right_eye)
 
   -- Draw the actual eye sprites on top of the bounding boxes
   screen:setDrawScale(1, 1)

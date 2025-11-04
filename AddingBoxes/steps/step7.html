@@ -76,7 +76,7 @@
                 <strong>Update <code>draw_player()</code></strong>
                 <ul>
                     <li>Add <code>screen:setDrawRotation(0)</code> at the very beginning (before drawing the box)</li>
-                    <li>Add two lines to draw the player's bounding box</li>
+                    <li>Add one line to draw the player's bounding box: <code>draw_box(player)</code></li>
                     <li>Update the sprite drawing to use <code>player.x</code> and <code>player.y</code></li>
                     <li>The existing rotation code for the sprite stays the same</li>
                     <li><strong>Important:</strong> Set rotation to 0 BEFORE the box so it doesn't rotate!</li>

@@ -1,12 +1,17 @@
-<h2>Step 2: Add the create_box Function</h2>
+<h2>Step 2: Add the Box Helper Functions</h2>
 <div class="step-content">
-    <p>Remember the <code>create_box</code> function from the Collision Detection Challenge? We're going to reuse it in this project! This is a great example of how writing reusable functions makes programming easier.</p>
+    <p>Remember the <code>create_box</code> and <code>draw_box</code> functions from the Collision Detection Challenge? We're going to reuse them in this project! This is a great example of how writing reusable functions makes programming easier.</p>
 
     <div class="info-box">
         <h3>🔄 Reusing Code</h3>
-        <p>One of the best practices in programming is to <strong>reuse code</strong> you've already written. The <code>create_box</code> function creates a table with all the properties we need for collision detection.</p>
+        <p>One of the best practices in programming is to <strong>reuse code</strong> you've already written. We'll add two helper functions:</p>
+        <ul>
+            <li><code>create_box()</code> - Creates a table with all the properties we need</li>
+            <li><code>draw_box()</code> - Draws a box on the screen (keeps our code clean!)</li>
+        </ul>
     </div>
 
+    <h3>First Function: create_box</h3>
     <p><strong>Add this function at the TOP of your code (before the other functions):</strong></p>
 
     <div class="code-block">
@@ -25,9 +30,20 @@
 <span class="keyword">end</span></pre>
     </div>
 
+    <h3>Second Function: draw_box</h3>
+    <p><strong>Add this function right after create_box:</strong></p>
+
+    <div class="code-block">
+        <pre><span class="comment">-- Function to draw a box</span>
+<span class="keyword">function</span> draw_box(b)
+  screen:setColor(b.color)
+  screen:fillRect(b.x, b.y, b.size, b.size)
+<span class="keyword">end</span></pre>
+    </div>
+
     <div class="info-box">
-        <h3>🔍 Understanding the Function</h3>
-        <p>This function creates a table (box) with these properties:</p>
+        <h3>🔍 Understanding create_box()</h3>
+        <p>The <code>create_box</code> function creates a table (box) with these properties:</p>
         <ul>
             <li><code>x</code> - The x position (center of the box)</li>
             <li><code>y</code> - The y position (center of the box)</li>
@@ -39,32 +55,49 @@
         </ul>
     </div>
 
+    <div class="info-box">
+        <h3>🔍 Understanding draw_box()</h3>
+        <p>The <code>draw_box</code> function takes a box and draws it on screen:</p>
+        <ul>
+            <li>It takes one parameter: <code>b</code> (the box to draw)</li>
+            <li><code>screen:setColor(b.color)</code> - Sets the drawing color to the box's color</li>
+            <li><code>screen:fillRect(b.x, b.y, b.size, b.size)</code> - Draws a filled rectangle</li>
+        </ul>
+        <p><strong>Why use a helper function?</strong> Instead of writing these two lines every time we want to draw a box, we can just call <code>draw_box(left_eye)</code>. This keeps our code clean and makes it easy to change how boxes are drawn later!</p>
+    </div>
+
     <div class="warning-box">
-        <h3>💡 Why Add This Now?</h3>
-        <p>We're adding this function first because we'll use it in the next step to refactor how we store the googly eyes. Instead of having separate variables like <code>left_eye_x</code>, <code>left_eye_y</code>, etc., we'll have a single <code>left_eye</code> box that contains all this information!</p>
+        <h3>💡 Why Add These Now?</h3>
+        <p>We're adding these helper functions first because we'll use them throughout the project. In the next step, we'll refactor how we store the googly eyes. Instead of having separate variables like <code>left_eye_x</code>, <code>left_eye_y</code>, etc., we'll have a single <code>left_eye</code> box that contains all this information!</p>
     </div>
 
     <div class="success-box">
         <h3>✅ Test Your Code</h3>
-        <p>After adding the function:</p>
+        <p>After adding both functions:</p>
         <ol>
-            <li>Make sure you added it at the <strong>top</strong> of your code (before other functions)</li>
+            <li>Make sure you added them at the <strong>top</strong> of your code (before other functions)</li>
             <li>Run your project - it should work exactly the same as before</li>
-            <li>We haven't changed anything yet, we've just added a helper function</li>
+            <li>We haven't changed anything yet, we've just added helper functions</li>
         </ol>
         <p>If your game still runs normally, you're ready for the next step!</p>
     </div>
 
     <div class="info-box">
-        <h3>📍 Where to Place the Function</h3>
+        <h3>📍 Where to Place the Functions</h3>
         <p>Your code structure should look like this:</p>
         <pre style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 5px; margin-top: 10px;">
 <span class="comment">-- ===== BOX FUNCTIONS =====</span>
+
 <span class="keyword">function</span> create_box(x, y, size, vx, vy, color)
   <span class="comment">-- ... code here ...</span>
 <span class="keyword">end</span>
 
+<span class="keyword">function</span> draw_box(b)
+  <span class="comment">-- ... code here ...</span>
+<span class="keyword">end</span>
+
 <span class="comment">-- ===== STAR FUNCTIONS =====</span>
+
 <span class="keyword">function</span> init_stars()
   <span class="comment">-- ... existing code ...</span>
 <span class="keyword">end</span>
@@ -73,5 +106,5 @@
         </pre>
     </div>
 
-    <p><strong>Once you've added the <code>create_box</code> function, click "Next" to continue!</strong></p>
+    <p><strong>Once you've added both helper functions, click "Next" to continue!</strong></p>
 </div>

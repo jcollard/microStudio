@@ -75,12 +75,7 @@
                 <strong>Update <code>draw_lasers()</code></strong>
                 <ul>
                     <li>Add bounding box visualization BEFORE drawing the sprite</li>
-                    <li>For each laser, add:
-                        <ul>
-                            <li><code>screen:setColor(lasers[ix].color)</code></li>
-                            <li><code>screen:fillRect(lasers[ix].x, lasers[ix].y, lasers[ix].size, lasers[ix].size)</code></li>
-                        </ul>
-                    </li>
+                    <li>For each laser in the loop, add: <code>draw_box(lasers[ix])</code></li>
                     <li>The sprite drawing line should already use <code>lasers[ix].x</code> and <code>lasers[ix].y</code></li>
                 </ul>
             </li>

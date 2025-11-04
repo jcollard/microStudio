@@ -30,18 +30,22 @@
 
     <div class="info-box">
         <h3>🎨 Step 2: Add Bounding Box Visualization (NEW CODE!)</h3>
-        <p><strong>Add these 2 NEW lines at the TOP of your <code>draw_eyes()</code> function</strong> (before the existing drawing code):</p>
+        <p><strong>Add this 1 NEW line at the TOP of your <code>draw_eyes()</code> function</strong> (before the existing drawing code):</p>
     </div>
 
     <div class="code-block no-badge">
-        <pre><span class="comment">-- Draw bounding box for debugging (ADD THESE LINES FIRST)</span>
-screen:setColor(left_eye.color)
-screen:fillRect(left_eye.x, left_eye.y, left_eye.size, left_eye.size)</pre>
+        <pre><span class="comment">-- Draw left eye bounding box for debugging (ADD THIS LINE FIRST)</span>
+draw_box(left_eye)</pre>
+    </div>
+
+    <div class="info-box">
+        <h3>💡 Using the Helper Function</h3>
+        <p>Remember the <code>draw_box()</code> function we added in Step 2? This is where we use it! Instead of writing two lines every time we want to draw a bounding box, we just call <code>draw_box(left_eye)</code>. Much cleaner!</p>
     </div>
 
     <div class="warning-box">
         <h3>💡 Drawing Order Matters!</h3>
-        <p>These lines must go at the <strong>beginning</strong> of the function, BEFORE the sprite drawing code!</p>
+        <p>This line must go at the <strong>beginning</strong> of the function, BEFORE the sprite drawing code!</p>
         <pre style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; margin-top: 10px;">
 <span class="number">1.</span> Draw colored rectangle (bounding box) - NEW!
 <span class="number">2.</span> Draw eye sprites on top - EXISTING
@@ -79,9 +83,8 @@ Result: Sprite appears in front of the box!</pre>
     <div class="code-block no-copy">
         <pre><span class="comment">-- Custom function to draw the googly eyes</span>
 <span class="keyword">function</span> draw_eyes()
-  <span class="comment">-- Draw bounding box (NEW!)</span>
-  screen:setColor(left_eye.color)
-  screen:fillRect(left_eye.x, left_eye.y, left_eye.size, left_eye.size)
+  <span class="comment">-- Draw left eye bounding box (NEW!)</span>
+  draw_box(left_eye)
 
   <span class="comment">-- Draw the actual eye sprites</span>
   screen:setDrawScale(<span class="number">1</span>, <span class="number">1</span>)
@@ -96,7 +99,7 @@ Result: Sprite appears in front of the box!</pre>
         <h3>✅ Check Your Work</h3>
         <p>Your <code>draw_eyes()</code> function should now have:</p>
         <ul>
-            <li>✅ Two NEW lines at the top to draw the left eye bounding box</li>
+            <li>✅ One NEW line at the top: <code>draw_box(left_eye)</code></li>
             <li>✅ Updated left eye sprite line using <code>left_eye.x</code> and <code>left_eye.y</code></li>
             <li>✅ Right eye sprite line <strong>unchanged</strong> (still uses <code>right_eye_x</code> and <code>right_eye_y</code>)</li>
             <li>✅ All the <code>screen:setDrawScale</code> and <code>screen:setDrawRotation</code> lines unchanged</li>
@@ -105,10 +108,9 @@ Result: Sprite appears in front of the box!</pre>
 
     <div class="info-box">
         <h3>🎯 Summary of Changes</h3>
-        <p>You made <strong>3 changes total</strong>:</p>
+        <p>You made <strong>2 changes total</strong>:</p>
         <ol>
-            <li>Added <code>screen:setColor(left_eye.color)</code> - NEW line</li>
-            <li>Added <code>screen:fillRect(...)</code> - NEW line</li>
+            <li>Added <code>draw_box(left_eye)</code> - NEW line to draw the bounding box</li>
             <li>Updated sprite drawing: <code>left_eye_x</code> → <code>left_eye.x</code> and <code>left_eye_y</code> → <code>left_eye.y</code></li>
         </ol>
     </div>
