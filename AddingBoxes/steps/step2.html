@@ -1,0 +1,77 @@
+<h2>Step 2: Add the create_box Function</h2>
+<div class="step-content">
+    <p>Remember the <code>create_box</code> function from the Collision Detection Challenge? We're going to reuse it in this project! This is a great example of how writing reusable functions makes programming easier.</p>
+
+    <div class="info-box">
+        <h3>🔄 Reusing Code</h3>
+        <p>One of the best practices in programming is to <strong>reuse code</strong> you've already written. The <code>create_box</code> function creates a table with all the properties we need for collision detection.</p>
+    </div>
+
+    <p><strong>Add this function at the TOP of your code (before the other functions):</strong></p>
+
+    <div class="code-block">
+        <pre><span class="comment">-- Function to create a new box</span>
+<span class="keyword">function</span> create_box(x, y, size, vx, vy, color)
+  <span class="keyword">local</span> new_box = {
+    x = x,
+    y = y,
+    size = size,
+    vx = vx,
+    vy = vy,
+    color = color,
+    original_color = color
+  }
+  <span class="keyword">return</span> new_box
+<span class="keyword">end</span></pre>
+    </div>
+
+    <div class="info-box">
+        <h3>🔍 Understanding the Function</h3>
+        <p>This function creates a table (box) with these properties:</p>
+        <ul>
+            <li><code>x</code> - The x position (center of the box)</li>
+            <li><code>y</code> - The y position (center of the box)</li>
+            <li><code>size</code> - The width and height of the box</li>
+            <li><code>vx</code> - Velocity in the x direction (horizontal speed)</li>
+            <li><code>vy</code> - Velocity in the y direction (vertical speed)</li>
+            <li><code>color</code> - The current color</li>
+            <li><code>original_color</code> - Remembers the starting color (useful for when we change colors during collisions)</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>💡 Why Add This Now?</h3>
+        <p>We're adding this function first because we'll use it in the next step to refactor how we store the googly eyes. Instead of having separate variables like <code>left_eye_x</code>, <code>left_eye_y</code>, etc., we'll have a single <code>left_eye</code> box that contains all this information!</p>
+    </div>
+
+    <div class="success-box">
+        <h3>✅ Test Your Code</h3>
+        <p>After adding the function:</p>
+        <ol>
+            <li>Make sure you added it at the <strong>top</strong> of your code (before other functions)</li>
+            <li>Run your project - it should work exactly the same as before</li>
+            <li>We haven't changed anything yet, we've just added a helper function</li>
+        </ol>
+        <p>If your game still runs normally, you're ready for the next step!</p>
+    </div>
+
+    <div class="info-box">
+        <h3>📍 Where to Place the Function</h3>
+        <p>Your code structure should look like this:</p>
+        <pre style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 5px; margin-top: 10px;">
+<span class="comment">-- ===== BOX FUNCTIONS =====</span>
+<span class="keyword">function</span> create_box(x, y, size, vx, vy, color)
+  <span class="comment">-- ... code here ...</span>
+<span class="keyword">end</span>
+
+<span class="comment">-- ===== STAR FUNCTIONS =====</span>
+<span class="keyword">function</span> init_stars()
+  <span class="comment">-- ... existing code ...</span>
+<span class="keyword">end</span>
+
+<span class="comment">-- ... rest of your code ...</span>
+        </pre>
+    </div>
+
+    <p><strong>Once you've added the <code>create_box</code> function, click "Next" to continue!</strong></p>
+</div>

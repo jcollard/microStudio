@@ -1,0 +1,210 @@
+<h2>Step 4: Update the Left Eye in update_eyes</h2>
+<div class="step-content">
+    <p>Now let's fix those errors! We need to update the <code>update_eyes()</code> function to use our new <code>left_eye</code> box structure instead of the old separate variables.</p>
+
+    <div class="info-box">
+        <h3>🔍 The Problem</h3>
+        <p>The <code>update_eyes()</code> function is still trying to access the old variables like <code>left_eye_x</code> and <code>left_eye_y</code>, but those don't exist anymore! Now we have <code>left_eye.x</code> and <code>left_eye.y</code> instead.</p>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚠️ Only Update the Left Eye!</h3>
+        <p><strong>Remember:</strong> We're only working on the left eye right now. Leave all the <code>right_eye_x</code>, <code>right_eye_y</code>, <code>right_eye_vx</code>, and <code>right_eye_vy</code> variables unchanged!</p>
+    </div>
+
+    <div class="info-box">
+        <h3>📍 Step 1: Find Your update_eyes Function</h3>
+        <p><strong>Locate</strong> the <code>update_eyes()</code> function in your code. Find the section that updates the left eye.</p>
+    </div>
+
+    <div class="code-block no-copy">
+        <pre><span class="comment">-- Your current update_eyes function</span>
+<span class="keyword">function</span> update_eyes()
+  <span class="comment">-- Rotate the eyes</span>
+  eye_rotation = eye_rotation + <span class="number">12</span>
+
+  <span class="comment">-- Make the left eye move</span>
+  left_eye_x = left_eye_x + left_eye_vx
+  left_eye_y = left_eye_y + left_eye_vy
+
+  <span class="comment">-- Keep the left eye on the screen</span>
+  <span class="keyword">if</span> left_eye_x < -<span class="number">100</span> <span class="keyword">then</span> left_eye_vx = <span class="number">0.7</span> <span class="keyword">end</span>
+  <span class="keyword">if</span> left_eye_x > <span class="number">100</span> <span class="keyword">then</span> left_eye_vx = -<span class="number">0.7</span> <span class="keyword">end</span>
+  <span class="keyword">if</span> left_eye_y < -<span class="number">100</span> <span class="keyword">then</span> left_eye_vy = <span class="number">0.57575</span> <span class="keyword">end</span>
+  <span class="keyword">if</span> left_eye_y > <span class="number">100</span> <span class="keyword">then</span> left_eye_vy = -<span class="number">0.57575</span> <span class="keyword">end</span>
+
+  <span class="comment">-- Right eye code below (DON'T CHANGE THIS YET)</span>
+  <span class="comment">-- ...</span>
+<span class="keyword">end</span></pre>
+    </div>
+
+    <div class="info-box">
+        <h3>🔄 Step 2: Update the Movement Lines</h3>
+        <p>Find these two lines that make the left eye move:</p>
+    </div>
+
+    <div class="comparison">
+        <div class="comparison-side old">
+            <h4>❌ Old Way - Replace These</h4>
+            <div class="code-block no-copy">
+                <pre>left_eye_x = left_eye_x + left_eye_vx
+left_eye_y = left_eye_y + left_eye_vy</pre>
+            </div>
+        </div>
+
+        <div class="comparison-side new">
+            <h4>✅ New Way - Type These</h4>
+            <div class="code-block no-badge">
+                <pre>left_eye.x = left_eye.x + left_eye.vx
+left_eye.y = left_eye.y + left_eye.vy</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <h3>🔄 Step 3: Update the Boundary Checks</h3>
+        <p>Now find the four <code>if</code> statements that keep the left eye on the screen. Update each one:</p>
+    </div>
+
+    <div class="comparison">
+        <div class="comparison-side old">
+            <h4>❌ Left Boundary - Old</h4>
+            <div class="code-block no-copy">
+                <pre><span class="keyword">if</span> left_eye_x < -<span class="number">100</span> <span class="keyword">then</span> left_eye_vx = <span class="number">0.7</span> <span class="keyword">end</span></pre>
+            </div>
+        </div>
+
+        <div class="comparison-side new">
+            <h4>✅ Left Boundary - New</h4>
+            <div class="code-block no-badge">
+                <pre><span class="keyword">if</span> left_eye.x < -<span class="number">100</span> <span class="keyword">then</span> left_eye.vx = <span class="number">0.7</span> <span class="keyword">end</span></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="comparison">
+        <div class="comparison-side old">
+            <h4>❌ Right Boundary - Old</h4>
+            <div class="code-block no-copy">
+                <pre><span class="keyword">if</span> left_eye_x > <span class="number">100</span> <span class="keyword">then</span> left_eye_vx = -<span class="number">0.7</span> <span class="keyword">end</span></pre>
+            </div>
+        </div>
+
+        <div class="comparison-side new">
+            <h4>✅ Right Boundary - New</h4>
+            <div class="code-block no-badge">
+                <pre><span class="keyword">if</span> left_eye.x > <span class="number">100</span> <span class="keyword">then</span> left_eye.vx = -<span class="number">0.7</span> <span class="keyword">end</span></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="comparison">
+        <div class="comparison-side old">
+            <h4>❌ Bottom Boundary - Old</h4>
+            <div class="code-block no-copy">
+                <pre><span class="keyword">if</span> left_eye_y < -<span class="number">100</span> <span class="keyword">then</span> left_eye_vy = <span class="number">0.57575</span> <span class="keyword">end</span></pre>
+            </div>
+        </div>
+
+        <div class="comparison-side new">
+            <h4>✅ Bottom Boundary - New</h4>
+            <div class="code-block no-badge">
+                <pre><span class="keyword">if</span> left_eye.y < -<span class="number">100</span> <span class="keyword">then</span> left_eye.vy = <span class="number">0.57575</span> <span class="keyword">end</span></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="comparison">
+        <div class="comparison-side old">
+            <h4>❌ Top Boundary - Old</h4>
+            <div class="code-block no-copy">
+                <pre><span class="keyword">if</span> left_eye_y > <span class="number">100</span> <span class="keyword">then</span> left_eye_vy = -<span class="number">0.57575</span> <span class="keyword">end</span></pre>
+            </div>
+        </div>
+
+        <div class="comparison-side new">
+            <h4>✅ Top Boundary - New</h4>
+            <div class="code-block no-badge">
+                <pre><span class="keyword">if</span> left_eye.y > <span class="number">100</span> <span class="keyword">then</span> left_eye.vy = -<span class="number">0.57575</span> <span class="keyword">end</span></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="warning-box">
+        <h3>💡 Pattern Recognition</h3>
+        <p>Notice the pattern? It's a simple find-and-replace:</p>
+        <ul>
+            <li><code>left_eye_x</code> → <code>left_eye.x</code> (underscore becomes dot)</li>
+            <li><code>left_eye_y</code> → <code>left_eye.y</code></li>
+            <li><code>left_eye_vx</code> → <code>left_eye.vx</code></li>
+            <li><code>left_eye_vy</code> → <code>left_eye.vy</code></li>
+        </ul>
+        <p>We're accessing properties of the <code>left_eye</code> table instead of separate variables!</p>
+    </div>
+
+    <div class="info-box">
+        <h3>📝 What Your update_eyes Should Look Like Now</h3>
+        <p>After making all the changes, the left eye section should look like this:</p>
+    </div>
+
+    <div class="code-block no-copy">
+        <pre><span class="comment">-- Custom function to update the googly eyes</span>
+<span class="keyword">function</span> update_eyes()
+  <span class="comment">-- Rotate the eyes</span>
+  eye_rotation = eye_rotation + <span class="number">12</span>
+
+  <span class="comment">-- Make the left eye move (UPDATED!)</span>
+  left_eye.x = left_eye.x + left_eye.vx
+  left_eye.y = left_eye.y + left_eye.vy
+
+  <span class="comment">-- Keep the left eye on the screen (UPDATED!)</span>
+  <span class="keyword">if</span> left_eye.x < -<span class="number">100</span> <span class="keyword">then</span> left_eye.vx = <span class="number">0.7</span> <span class="keyword">end</span>
+  <span class="keyword">if</span> left_eye.x > <span class="number">100</span> <span class="keyword">then</span> left_eye.vx = -<span class="number">0.7</span> <span class="keyword">end</span>
+  <span class="keyword">if</span> left_eye.y < -<span class="number">100</span> <span class="keyword">then</span> left_eye.vy = <span class="number">0.57575</span> <span class="keyword">end</span>
+  <span class="keyword">if</span> left_eye.y > <span class="number">100</span> <span class="keyword">then</span> left_eye.vy = -<span class="number">0.57575</span> <span class="keyword">end</span>
+
+  <span class="comment">-- Right eye code - UNCHANGED (still uses old variables)</span>
+  right_eye_x = right_eye_x + right_eye_vx
+  right_eye_y = right_eye_y + right_eye_vy
+
+  <span class="keyword">if</span> right_eye_x < -<span class="number">100</span> <span class="keyword">then</span> right_eye_vx = <span class="number">0.6</span> <span class="keyword">end</span>
+  <span class="keyword">if</span> right_eye_x > <span class="number">100</span> <span class="keyword">then</span> right_eye_vx = -<span class="number">0.6</span> <span class="keyword">end</span>
+  <span class="keyword">if</span> right_eye_y < -<span class="number">100</span> <span class="keyword">then</span> right_eye_vy = <span class="number">0.37575</span> <span class="keyword">end</span>
+  <span class="keyword">if</span> right_eye_y > <span class="number">100</span> <span class="keyword">then</span> right_eye_vy = -<span class="number">0.37575</span> <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+    </div>
+
+    <div class="success-box">
+        <h3>✅ Check Your Work</h3>
+        <p>Your <code>update_eyes()</code> function should now have:</p>
+        <ul>
+            <li>✅ <code>eye_rotation</code> line (unchanged)</li>
+            <li>✅ Left eye movement using <code>left_eye.x</code> and <code>left_eye.y</code></li>
+            <li>✅ Four boundary checks using <code>left_eye.x</code>, <code>left_eye.y</code>, <code>left_eye.vx</code>, <code>left_eye.vy</code></li>
+            <li>✅ Right eye code <strong>unchanged</strong> (still uses <code>right_eye_x</code>, <code>right_eye_y</code>, etc.)</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h3>🎯 Summary of Changes</h3>
+        <p>You made <strong>6 changes total</strong> to the left eye section:</p>
+        <ol>
+            <li>Movement X: <code>left_eye_x</code> → <code>left_eye.x</code> and <code>left_eye_vx</code> → <code>left_eye.vx</code></li>
+            <li>Movement Y: <code>left_eye_y</code> → <code>left_eye.y</code> and <code>left_eye_vy</code> → <code>left_eye.vy</code></li>
+            <li>Left boundary check: 2 changes</li>
+            <li>Right boundary check: 2 changes</li>
+            <li>Bottom boundary check: 2 changes</li>
+            <li>Top boundary check: 2 changes</li>
+        </ol>
+    </div>
+
+    <div class="warning-box">
+        <h3>🐛 Still Getting Errors?</h3>
+        <p>If you run your code now, you'll still see errors about <code>draw_eyes</code>:</p>
+        <pre style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; margin-top: 10px;">
+attempting to read property of undefined: left_eye_x</pre>
+        <p><strong>This is normal!</strong> The <code>draw_eyes()</code> function still uses the old variables. We'll fix that in the next step!</p>
+    </div>
+
+    <p><strong>Once you've updated all 6 lines in <code>update_eyes()</code>, click "Next" to fix the drawing function!</strong></p>
+</div>

@@ -1,0 +1,333 @@
+<h2>Step 9: Refactor - Using Width and Height Instead of Size</h2>
+<div class="step-content">
+    <p>Excellent work! All our game objects now have bounding boxes. But there's a limitation: our boxes are always square because we use a single <code>size</code> property. Let's refactor to use separate <code>width</code> and <code>height</code> properties for more flexibility!</p>
+
+    <div class="diagram">
+        <h3 style="margin-bottom: 15px;">What Your Final Result Should Look Like:</h3>
+        <iframe src="https://microstudio.io/jocolloman/addboxstep9/"
+                width="100%"
+                height="500"
+                style="border: 2px solid rgba(102, 126, 234, 0.5); border-radius: 10px; background: #000;">
+        </iframe>
+        <p style="margin-top: 10px; color: #a0a0a0; font-size: 0.9em;">
+            The game should look and behave exactly the same!<br>
+            This is a <strong>refactoring</strong> - we're improving the code structure without changing behavior.
+        </p>
+    </div>
+
+    <div class="info-box">
+        <h3>💡 What is Refactoring?</h3>
+        <p><strong>Refactoring</strong> means restructuring existing code to improve its design without changing its external behavior. In this step, we're making our bounding box system more flexible by supporting rectangular (not just square) boxes.</p>
+        <p><strong>Why separate width and height?</strong></p>
+        <ul>
+            <li>Some game objects are wider than they are tall (or vice versa)</li>
+            <li>More accurate collision detection for non-square sprites</li>
+            <li>Industry standard - most game engines use width/height, not size</li>
+            <li>Prepares us for future enhancements</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚠️ What We're Changing</h3>
+        <p>We need to update every place that uses <code>size</code>:</p>
+        <ul>
+            <li><code>create_box()</code> function - change the parameter and property</li>
+            <li><code>init_eyes()</code> - update both eye creation calls</li>
+            <li><code>init_player()</code> - update player creation call</li>
+            <li><code>create_laser()</code> - update laser creation call</li>
+            <li><code>draw_eyes()</code> - update fillRect calls to use width and height</li>
+            <li><code>draw_player()</code> - update fillRect call to use width and height</li>
+            <li><code>draw_lasers()</code> - update fillRect calls to use width and height</li>
+        </ul>
+    </div>
+
+    <h3>Step 1: Refactor the <code>create_box()</code> Function</h3>
+    <p>First, let's update the function signature and the box object it creates.</p>
+
+    <div class="comparison">
+        <div class="comparison-item">
+            <h4>Before (using size)</h4>
+            <div class="code-block no-copy">
+                <pre>function create_box(x, y, size, vx, vy, color)
+  local new_box = {
+    x = x,
+    y = y,
+    size = size,
+    vx = vx,
+    vy = vy,
+    color = color,
+    original_color = color
+  }
+  return new_box
+end</pre>
+            </div>
+        </div>
+        <div class="comparison-item">
+            <h4>After (using width and height)</h4>
+            <div class="code-block no-copy">
+                <pre>function create_box(x, y, width, height, vx, vy, color)
+  local new_box = {
+    x = x,
+    y = y,
+    width = width,
+    height = height,
+    vx = vx,
+    vy = vy,
+    color = color,
+    original_color = color
+  }
+  return new_box
+end</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <h3>📝 What Changed?</h3>
+        <ul>
+            <li>Parameter changed from <code>size</code> to <code>width, height</code></li>
+            <li>Box object now has <code>width</code> and <code>height</code> properties instead of <code>size</code></li>
+            <li>Everything else stays the same!</li>
+        </ul>
+    </div>
+
+    <h3>Step 2: Update <code>init_eyes()</code></h3>
+    <p>Now update the eye creation to pass width and height separately. Since the eyes are square (32x32), we'll pass 32 twice.</p>
+
+    <div class="comparison">
+        <div class="comparison-item">
+            <h4>Before (using size)</h4>
+            <div class="code-block no-copy">
+                <pre>function init_eyes()
+  eye_rotation = 0
+
+  left_eye = create_box(0, 0, 32, 0.7, 0.57575, "#FF00FF")
+
+  right_eye = create_box(0, 0, 32, -0.6, 0.37575, "#00FFFF")
+end</pre>
+            </div>
+        </div>
+        <div class="comparison-item">
+            <h4>After (using width and height)</h4>
+            <div class="code-block no-copy">
+                <pre>function init_eyes()
+  eye_rotation = 0
+
+  left_eye = create_box(0, 0, 32, 32, 0.7, 0.57575, "#FF00FF")
+
+  right_eye = create_box(0, 0, 32, 32, -0.6, 0.37575, "#00FFFF")
+end</pre>
+            </div>
+        </div>
+    </div>
+
+    <h3>Step 3: Update <code>init_player()</code></h3>
+    <p>Update the player creation. The player is also square (25x25).</p>
+
+    <div class="comparison">
+        <div class="comparison-item">
+            <h4>Before (using size)</h4>
+            <div class="code-block no-copy">
+                <pre>function init_player()
+  player = create_box(0, -80, 25, 0, 0, "#00FF00")
+
+  rotation = 0
+end</pre>
+            </div>
+        </div>
+        <div class="comparison-item">
+            <h4>After (using width and height)</h4>
+            <div class="code-block no-copy">
+                <pre>function init_player()
+  player = create_box(0, -80, 25, 25, 0, 0, "#00FF00")
+
+  rotation = 0
+end</pre>
+            </div>
+        </div>
+    </div>
+
+    <h3>Step 4: Update <code>create_laser()</code></h3>
+    <p>Update laser creation. Lasers are also square (8x8).</p>
+
+    <div class="comparison">
+        <div class="comparison-item">
+            <h4>Before (using size)</h4>
+            <div class="code-block no-copy">
+                <pre>function create_laser()
+  return create_box(0, 200, 8, 0, 2, "#FF0000")
+end</pre>
+            </div>
+        </div>
+        <div class="comparison-item">
+            <h4>After (using width and height)</h4>
+            <div class="code-block no-copy">
+                <pre>function create_laser()
+  return create_box(0, 200, 8, 8, 0, 2, "#FF0000")
+end</pre>
+            </div>
+        </div>
+    </div>
+
+    <h3>Step 5: Update <code>draw_eyes()</code></h3>
+    <p>Update the drawing code to use <code>width</code> and <code>height</code> instead of <code>size</code>.</p>
+
+    <div class="comparison">
+        <div class="comparison-item">
+            <h4>Before (using size)</h4>
+            <div class="code-block no-copy">
+                <pre>function draw_eyes()
+  screen:setColor(left_eye.color)
+  screen:fillRect(left_eye.x, left_eye.y, left_eye.size, left_eye.size)
+
+  screen:setColor(right_eye.color)
+  screen:fillRect(right_eye.x, right_eye.y, right_eye.size, right_eye.size)
+
+  screen:setDrawScale(1, 1)
+  screen:setDrawRotation(eye_rotation)
+  screen:drawSprite("googlya", left_eye.x, left_eye.y, 32, 32)
+  screen:setDrawRotation(-eye_rotation)
+  screen:drawSprite("googlyb", right_eye.x, right_eye.y, 32, 32)
+end</pre>
+            </div>
+        </div>
+        <div class="comparison-item">
+            <h4>After (using width and height)</h4>
+            <div class="code-block no-copy">
+                <pre>function draw_eyes()
+  screen:setColor(left_eye.color)
+  screen:fillRect(left_eye.x, left_eye.y, left_eye.width, left_eye.height)
+
+  screen:setColor(right_eye.color)
+  screen:fillRect(right_eye.x, right_eye.y, right_eye.width, right_eye.height)
+
+  screen:setDrawScale(1, 1)
+  screen:setDrawRotation(eye_rotation)
+  screen:drawSprite("googlya", left_eye.x, left_eye.y, 32, 32)
+  screen:setDrawRotation(-eye_rotation)
+  screen:drawSprite("googlyb", right_eye.x, right_eye.y, 32, 32)
+end</pre>
+            </div>
+        </div>
+    </div>
+
+    <h3>Step 6: Update <code>draw_player()</code></h3>
+    <p>Update the player drawing code.</p>
+
+    <div class="comparison">
+        <div class="comparison-item">
+            <h4>Before (using size)</h4>
+            <div class="code-block no-copy">
+                <pre>function draw_player()
+  screen:setDrawRotation(0)
+
+  screen:setColor(player.color)
+  screen:fillRect(player.x, player.y, player.size, player.size)
+
+  screen:setDrawRotation(rotation)
+  screen:drawSprite("player", player.x, player.y, 99*0.25, 75*0.25)
+  screen:setDrawRotation(0)
+end</pre>
+            </div>
+        </div>
+        <div class="comparison-item">
+            <h4>After (using width and height)</h4>
+            <div class="code-block no-copy">
+                <pre>function draw_player()
+  screen:setDrawRotation(0)
+
+  screen:setColor(player.color)
+  screen:fillRect(player.x, player.y, player.width, player.height)
+
+  screen:setDrawRotation(rotation)
+  screen:drawSprite("player", player.x, player.y, 99*0.25, 75*0.25)
+  screen:setDrawRotation(0)
+end</pre>
+            </div>
+        </div>
+    </div>
+
+    <h3>Step 7: Update <code>draw_lasers()</code></h3>
+    <p>Finally, update the laser drawing code.</p>
+
+    <div class="comparison">
+        <div class="comparison-item">
+            <h4>Before (using size)</h4>
+            <div class="code-block no-copy">
+                <pre>function draw_lasers()
+  for ix, laser in pairs(lasers) do
+    screen:setColor(lasers[ix].color)
+    screen:fillRect(lasers[ix].x, lasers[ix].y, lasers[ix].size, lasers[ix].size)
+
+    screen:drawSprite("laser", lasers[ix].x, lasers[ix].y, 9*0.25, 37*0.25)
+  end
+end</pre>
+            </div>
+        </div>
+        <div class="comparison-item">
+            <h4>After (using width and height)</h4>
+            <div class="code-block no-copy">
+                <pre>function draw_lasers()
+  for ix, laser in pairs(lasers) do
+    screen:setColor(lasers[ix].color)
+    screen:fillRect(lasers[ix].x, lasers[ix].y, lasers[ix].width, lasers[ix].height)
+
+    screen:drawSprite("laser", lasers[ix].x, lasers[ix].y, 9*0.25, 37*0.25)
+  end
+end</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-box">
+        <h3>✅ Testing Your Refactoring</h3>
+        <p>After making your changes, run your game and verify:</p>
+        <ul>
+            <li>✅ No error messages appear</li>
+            <li>✅ The game looks exactly the same as before</li>
+            <li>✅ All bounding boxes are still visible</li>
+            <li>✅ Eyes bounce around correctly</li>
+            <li>✅ Player moves correctly</li>
+            <li>✅ Lasers fire and move correctly</li>
+            <li>✅ All sprites render properly</li>
+        </ul>
+        <p><strong>Remember:</strong> Good refactoring doesn't change behavior - it only improves code structure!</p>
+    </div>
+
+    <div class="info-box">
+        <h3>📋 Summary of Changes</h3>
+        <p>Here's a quick checklist of all the functions you updated:</p>
+        <ul>
+            <li>✅ <code>create_box()</code> - Changed signature and properties (1 function, 2 changes)</li>
+            <li>✅ <code>init_eyes()</code> - Updated 2 create_box calls</li>
+            <li>✅ <code>init_player()</code> - Updated 1 create_box call</li>
+            <li>✅ <code>create_laser()</code> - Updated 1 create_box call</li>
+            <li>✅ <code>draw_eyes()</code> - Updated 2 fillRect calls</li>
+            <li>✅ <code>draw_player()</code> - Updated 1 fillRect call</li>
+            <li>✅ <code>draw_lasers()</code> - Updated 1 fillRect call</li>
+        </ul>
+        <p><strong>Total changes:</strong> 7 functions, 10 total modifications</p>
+    </div>
+
+    <div class="warning-box">
+        <h3>💡 Pro Tips</h3>
+        <ul>
+            <li><strong>Tip 1:</strong> When refactoring, make one change at a time and test frequently!</li>
+            <li><strong>Tip 2:</strong> Use Find & Replace carefully - search for <code>.size</code> to find all uses</li>
+            <li><strong>Tip 3:</strong> For now, all our boxes are square (width = height). Later, you could make them rectangular!</li>
+            <li><strong>Tip 4:</strong> This refactoring prepares us for collision detection in the next lesson</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h3>🎓 What You Learned</h3>
+        <ul>
+            <li>How to refactor existing code systematically</li>
+            <li>The importance of width/height over a single size property</li>
+            <li>How to update function signatures and all their call sites</li>
+            <li>Industry best practices for bounding boxes</li>
+        </ul>
+    </div>
+
+    <p><strong>Congratulations! You've successfully refactored your bounding box system. Your code is now more flexible and ready for collision detection. Click "Next" to finish!</strong></p>
+</div>

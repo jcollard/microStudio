@@ -1,0 +1,122 @@
+<h2>Step 8: Challenge - Add Bounding Boxes to Lasers</h2>
+<div class="step-content">
+    <p>Great job! Now for the final step: adding bounding boxes to the lasers. This is a bit different because lasers are created dynamically during gameplay, not just at initialization.</p>
+
+    <div class="diagram">
+        <h3 style="margin-bottom: 15px;">What Your Final Result Should Look Like:</h3>
+        <iframe src="https://microstudio.io/jocolloman/addboxstep5222/2GNAYYH9/"
+                width="100%"
+                height="500"
+                style="border: 2px solid rgba(102, 126, 234, 0.5); border-radius: 10px; background: #000;">
+        </iframe>
+        <p style="margin-top: 10px; color: #a0a0a0; font-size: 0.9em;">
+            Each laser should now have its own colored bounding box!<br>
+            Notice: The boxes move upward with the lasers as they fire.
+        </p>
+    </div>
+
+    <div class="challenge">
+        <h3>🎯 Your Challenge</h3>
+        <p>Transform the lasers to use bounding boxes! Lasers are unique because they're created on-the-fly when you press SPACE, not just at initialization.</p>
+    </div>
+
+    <div class="info-box">
+        <h3>💡 Key Difference: Dynamic Creation</h3>
+        <p>Unlike the player and eyes which are created once, lasers are created during gameplay:</p>
+        <ul>
+            <li>Each time you fire, a laser is created or reused from the pool</li>
+            <li>The <code>create_laser()</code> function is called during gameplay</li>
+            <li>Each laser needs its own bounding box with its own properties</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚠️ Important Values for Lasers</h3>
+        <p>Each laser has these values:</p>
+        <ul>
+            <li><strong>Starting position:</strong> x = 0, y = 200 (off-screen at top, will be repositioned when fired)</li>
+            <li><strong>Size:</strong> 8 (approximately the laser's width)</li>
+            <li><strong>Velocity X:</strong> 0 (lasers only move vertically)</li>
+            <li><strong>Velocity Y:</strong> 2 (lasers move upward at 2 pixels per frame)</li>
+            <li><strong>Color:</strong> Pick a bright color! Try <code>"#FF0000"</code> (red) or <code>"#FFA500"</code> (orange)</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h3>📋 Step-by-Step Checklist</h3>
+        <p>Follow these steps in order:</p>
+        <ol>
+            <li>
+                <strong>Update <code>create_laser()</code></strong>
+                <ul>
+                    <li>This function creates a new laser object</li>
+                    <li>Instead of creating a table with x, y, and vy, use <code>create_box()</code></li>
+                    <li>Return the box: <code>return create_box(0, 200, 8, 0, 2, your_color)</code></li>
+                    <li><strong>Note:</strong> x=0, y=200 (off-screen), size=8, vx=0, vy=2</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Update <code>move_lasers()</code></strong>
+                <ul>
+                    <li>Find the line that updates the laser's y position</li>
+                    <li>It should already work! The code uses <code>lasers[ix].y</code> and <code>lasers[ix].vy</code></li>
+                    <li>If you see <code>laser.y</code> and <code>laser.vy</code>, it's already using the box properties correctly</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Update <code>fire_laser()</code></strong>
+                <ul>
+                    <li>Find the line that checks if a laser is off-screen: <code>lasers[ix].y > 300</code></li>
+                    <li>This should already work! The code accesses <code>.y</code> which exists on our box</li>
+                    <li>The lines setting <code>fired_laser.y</code> and <code>fired_laser.x</code> should also work</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Update <code>draw_lasers()</code></strong>
+                <ul>
+                    <li>Add bounding box visualization BEFORE drawing the sprite</li>
+                    <li>For each laser, add:
+                        <ul>
+                            <li><code>screen:setColor(lasers[ix].color)</code></li>
+                            <li><code>screen:fillRect(lasers[ix].x, lasers[ix].y, lasers[ix].size, lasers[ix].size)</code></li>
+                        </ul>
+                    </li>
+                    <li>The sprite drawing line should already use <code>lasers[ix].x</code> and <code>lasers[ix].y</code></li>
+                </ul>
+            </li>
+            <li>
+                <strong>Test your code!</strong>
+                <ul>
+                    <li>Fire several lasers and watch them fly upward</li>
+                    <li>Each laser should have its own colored box</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="success-box">
+        <h3>✅ Testing Your Code</h3>
+        <p>After making your changes, run your game and verify:</p>
+        <ul>
+            <li>✅ No error messages appear</li>
+            <li>✅ Lasers fire when you press SPACE</li>
+            <li>✅ Each laser has a colored bounding box</li>
+            <li>✅ The bounding boxes move upward with the lasers</li>
+            <li>✅ Multiple lasers can exist at once, each with its own box</li>
+            <li>✅ Old lasers are reused when they go off-screen (pooling still works)</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>💡 Hints</h3>
+        <p>Stuck? Here are some hints:</p>
+        <ul>
+            <li><strong>Hint 1:</strong> Most of the existing code should work without changes! Only <code>create_laser()</code> and <code>draw_lasers()</code> need updates.</li>
+            <li><strong>Hint 2:</strong> In <code>draw_lasers()</code>, add the two bounding box lines BEFORE the existing sprite drawing line.</li>
+            <li><strong>Hint 3:</strong> The laser pooling system reuses old lasers, so when you update <code>create_laser()</code>, new lasers automatically become boxes.</li>
+            <li><strong>Hint 4:</strong> Make sure to use <code>lasers[ix].color</code> and <code>lasers[ix].size</code> - they're part of the box now!</li>
+        </ul>
+    </div>
+
+    <p><strong>Once you've completed the challenge and your game matches the preview above, click "Next" to continue!</strong></p>
+</div>

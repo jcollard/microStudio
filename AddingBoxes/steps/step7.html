@@ -1,0 +1,123 @@
+<h2>Step 7: Challenge - Add a Bounding Box to the Player Ship</h2>
+<div class="step-content">
+    <p>Excellent work on the eyes! Now let's add a bounding box to the player ship. This follows the same pattern, but with one key difference: the ship doesn't have automatic velocity like the eyes do.</p>
+
+    <div class="diagram">
+        <h3 style="margin-bottom: 15px;">What Your Final Result Should Look Like:</h3>
+        <iframe src="https://microstudio.io/jocolloman/addboxstep522/HP2944BB/"
+                width="100%"
+                height="500"
+                style="border: 2px solid rgba(102, 126, 234, 0.5); border-radius: 10px; background: #000;">
+        </iframe>
+        <p style="margin-top: 10px; color: #a0a0a0; font-size: 0.9em;">
+            The player ship should now have a colored bounding box at the bottom of the screen!<br>
+            Notice: The box moves with the ship as you press LEFT and RIGHT, and stays upright while the sprite tilts.
+        </p>
+    </div>
+
+    <div class="challenge">
+        <h3>🎯 Your Challenge</h3>
+        <p>Transform the player ship to use a bounding box! The ship is simpler than the eyes because it doesn't move automatically - it only moves when you press keys.</p>
+    </div>
+
+    <div class="info-box">
+        <h3>💡 Key Difference: No Automatic Velocity</h3>
+        <p>Unlike the eyes that bounce around automatically, the ship only moves when you press LEFT or RIGHT. This means:</p>
+        <ul>
+            <li>The ship doesn't need <code>vx</code> or <code>vy</code> for automatic movement</li>
+            <li>We'll use <code>0</code> for both velocities when calling <code>create_box()</code></li>
+            <li>The keyboard input code will directly modify <code>player.x</code></li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚠️ Important Values for the Player</h3>
+        <p>The player ship has these values:</p>
+        <ul>
+            <li><strong>Starting position:</strong> x = 0, y = -80 (bottom center of screen)</li>
+            <li><strong>Size:</strong> 25 (approximately the ship's width)</li>
+            <li><strong>Velocity X:</strong> 0 (no automatic movement)</li>
+            <li><strong>Velocity Y:</strong> 0 (no automatic movement)</li>
+            <li><strong>Color:</strong> Pick a unique color! Try <code>"#00FF00"</code> (green) or <code>"#FFFF00"</code> (yellow)</li>
+            <li><strong>Note:</strong> Keep <code>rotation</code> as a separate variable (not part of the box)</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h3>📋 Step-by-Step Checklist</h3>
+        <p>Follow these steps in order:</p>
+        <ol>
+            <li>
+                <strong>Update <code>init_player()</code></strong>
+                <ul>
+                    <li>Find the variables: <code>x</code>, <code>y</code>, <code>rotation</code></li>
+                    <li>Replace <code>x</code> and <code>y</code> with: <code>player = create_box(0, -80, 25, 0, 0, your_color)</code></li>
+                    <li>Keep <code>rotation = 0</code> as a separate variable</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Update <code>update_player()</code></strong>
+                <ul>
+                    <li>Find all references to <code>x</code> (there are 6 total in this function)</li>
+                    <li>Change each <code>x</code> to <code>player.x</code></li>
+                    <li>Keep <code>rotation</code> unchanged (it's not part of the box)</li>
+                    <li><strong>Tip:</strong> There are 2 lines that move x, and 2 boundary checks</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Update <code>fire_laser()</code></strong>
+                <ul>
+                    <li>Find the lines that set <code>fired_laser.x</code> and <code>fired_laser.y</code></li>
+                    <li>Change <code>x</code> to <code>player.x</code> and <code>y</code> to <code>player.y</code></li>
+                    <li>This ensures lasers fire from the player's position</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Update <code>draw_player()</code></strong>
+                <ul>
+                    <li>Add <code>screen:setDrawRotation(0)</code> at the very beginning (before drawing the box)</li>
+                    <li>Add two lines to draw the player's bounding box</li>
+                    <li>Update the sprite drawing to use <code>player.x</code> and <code>player.y</code></li>
+                    <li>The existing rotation code for the sprite stays the same</li>
+                    <li><strong>Important:</strong> Set rotation to 0 BEFORE the box so it doesn't rotate!</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Test your code!</strong>
+                <ul>
+                    <li>Run the game and make sure everything works</li>
+                    <li>Try firing lasers - they should come from the ship's position</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="success-box">
+        <h3>✅ Testing Your Code</h3>
+        <p>After making your changes, run your game and verify:</p>
+        <ul>
+            <li>✅ No error messages appear</li>
+            <li>✅ The ship has a colored bounding box at the bottom</li>
+            <li>✅ The ship moves left and right with arrow keys</li>
+            <li>✅ The bounding box moves with the ship</li>
+            <li>✅ The bounding box stays upright (doesn't rotate)</li>
+            <li>✅ The ship sprite still tilts when moving (rotation works)</li>
+            <li>✅ The ship stays within screen boundaries</li>
+            <li>✅ Lasers fire from the ship's position (press SPACE)</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>💡 Hints</h3>
+        <p>Stuck? Here are some hints:</p>
+        <ul>
+            <li><strong>Hint 1:</strong> In <code>update_player()</code>, every place you see <code>x</code> should become <code>player.x</code> - but <code>rotation</code> stays the same!</li>
+            <li><strong>Hint 2:</strong> The pattern for drawing the bounding box is the same as the eyes: <code>screen:setColor()</code> then <code>screen:fillRect()</code></li>
+            <li><strong>Hint 3:</strong> Make sure to call <code>screen:setDrawRotation(0)</code> BEFORE drawing the bounding box, otherwise the box will rotate with the ship!</li>
+            <li><strong>Hint 4:</strong> Draw the bounding box BEFORE drawing the sprite, so the sprite appears on top</li>
+            <li><strong>Hint 5:</strong> The y position is constant at -80, so you don't need to worry about vertical movement</li>
+        </ul>
+    </div>
+
+    <p><strong>Once you've completed the challenge and your game matches the preview above, click "Next" to continue!</strong></p>
+</div>

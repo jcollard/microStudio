@@ -1,0 +1,177 @@
+<h2>Step 5: Update draw_eyes and Add Bounding Box Visualization</h2>
+<div class="step-content">
+    <p>Almost done! Now we need to update the <code>draw_eyes()</code> function to use our new <code>left_eye</code> box structure. Plus, we'll add a visual representation of the bounding box so you can see exactly where collision detection will happen!</p>
+
+    <div class="info-box">
+        <h3>🔍 The Problem</h3>
+        <p>The <code>draw_eyes()</code> function is still trying to use <code>left_eye_x</code> and <code>left_eye_y</code>, but those don't exist anymore! We need to use <code>left_eye.x</code> and <code>left_eye.y</code> instead.</p>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚠️ Only Update the Left Eye!</h3>
+        <p><strong>Remember:</strong> We're only working on the left eye right now. Leave the right eye sprite drawing unchanged (it still uses <code>right_eye_x</code> and <code>right_eye_y</code>)!</p>
+    </div>
+
+    <div class="info-box">
+        <h3>📍 Step 1: Find Your draw_eyes Function</h3>
+        <p><strong>Locate</strong> the <code>draw_eyes()</code> function in your code.</p>
+    </div>
+
+    <div class="code-block no-copy">
+        <pre><span class="comment">-- Your current draw_eyes function</span>
+<span class="keyword">function</span> draw_eyes()
+  screen:setDrawScale(<span class="number">1</span>, <span class="number">1</span>)
+  screen:setDrawRotation(eye_rotation)
+  screen:drawSprite(<span class="string">"googlya"</span>, left_eye_x, left_eye_y, <span class="number">32</span>, <span class="number">32</span>)
+  screen:setDrawRotation(-eye_rotation)
+  screen:drawSprite(<span class="string">"googlyb"</span>, right_eye_x, right_eye_y, <span class="number">32</span>, <span class="number">32</span>)
+<span class="keyword">end</span></pre>
+    </div>
+
+    <div class="info-box">
+        <h3>🎨 Step 2: Add Bounding Box Visualization (NEW CODE!)</h3>
+        <p><strong>Add these 2 NEW lines at the TOP of your <code>draw_eyes()</code> function</strong> (before the existing drawing code):</p>
+    </div>
+
+    <div class="code-block no-badge">
+        <pre><span class="comment">-- Draw bounding box for debugging (ADD THESE LINES FIRST)</span>
+screen:setColor(left_eye.color)
+screen:fillRect(left_eye.x, left_eye.y, left_eye.size, left_eye.size)</pre>
+    </div>
+
+    <div class="warning-box">
+        <h3>💡 Drawing Order Matters!</h3>
+        <p>These lines must go at the <strong>beginning</strong> of the function, BEFORE the sprite drawing code!</p>
+        <pre style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; margin-top: 10px;">
+<span class="number">1.</span> Draw colored rectangle (bounding box) - NEW!
+<span class="number">2.</span> Draw eye sprites on top - EXISTING
+
+Result: Sprite appears in front of the box!</pre>
+        <p>If we drew the sprite first, the rectangle would cover it up!</p>
+    </div>
+
+    <div class="info-box">
+        <h3>🔄 Step 3: Update the Left Eye Sprite Drawing</h3>
+        <p>Now find the line that draws the left eye sprite and update it:</p>
+    </div>
+
+    <div class="comparison">
+        <div class="comparison-side old">
+            <h4>❌ Old Way - Replace This Line</h4>
+            <div class="code-block no-copy">
+                <pre>screen:drawSprite(<span class="string">"googlya"</span>, left_eye_x, left_eye_y, <span class="number">32</span>, <span class="number">32</span>)</pre>
+            </div>
+        </div>
+
+        <div class="comparison-side new">
+            <h4>✅ New Way - Type This</h4>
+            <div class="code-block no-badge">
+                <pre>screen:drawSprite(<span class="string">"googlya"</span>, left_eye.x, left_eye.y, <span class="number">32</span>, <span class="number">32</span>)</pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <h3>📝 What Your draw_eyes Should Look Like Now</h3>
+        <p>After making all the changes, your function should look like this:</p>
+    </div>
+
+    <div class="code-block no-copy">
+        <pre><span class="comment">-- Custom function to draw the googly eyes</span>
+<span class="keyword">function</span> draw_eyes()
+  <span class="comment">-- Draw bounding box (NEW!)</span>
+  screen:setColor(left_eye.color)
+  screen:fillRect(left_eye.x, left_eye.y, left_eye.size, left_eye.size)
+
+  <span class="comment">-- Draw the actual eye sprites</span>
+  screen:setDrawScale(<span class="number">1</span>, <span class="number">1</span>)
+  screen:setDrawRotation(eye_rotation)
+  screen:drawSprite(<span class="string">"googlya"</span>, left_eye.x, left_eye.y, <span class="number">32</span>, <span class="number">32</span>)  <span class="comment">-- UPDATED!</span>
+  screen:setDrawRotation(-eye_rotation)
+  screen:drawSprite(<span class="string">"googlyb"</span>, right_eye_x, right_eye_y, <span class="number">32</span>, <span class="number">32</span>)  <span class="comment">-- UNCHANGED</span>
+<span class="keyword">end</span></pre>
+    </div>
+
+    <div class="success-box">
+        <h3>✅ Check Your Work</h3>
+        <p>Your <code>draw_eyes()</code> function should now have:</p>
+        <ul>
+            <li>✅ Two NEW lines at the top to draw the left eye bounding box</li>
+            <li>✅ Updated left eye sprite line using <code>left_eye.x</code> and <code>left_eye.y</code></li>
+            <li>✅ Right eye sprite line <strong>unchanged</strong> (still uses <code>right_eye_x</code> and <code>right_eye_y</code>)</li>
+            <li>✅ All the <code>screen:setDrawScale</code> and <code>screen:setDrawRotation</code> lines unchanged</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h3>🎯 Summary of Changes</h3>
+        <p>You made <strong>3 changes total</strong>:</p>
+        <ol>
+            <li>Added <code>screen:setColor(left_eye.color)</code> - NEW line</li>
+            <li>Added <code>screen:fillRect(...)</code> - NEW line</li>
+            <li>Updated sprite drawing: <code>left_eye_x</code> → <code>left_eye.x</code> and <code>left_eye_y</code> → <code>left_eye.y</code></li>
+        </ol>
+    </div>
+
+    <div class="success-box">
+        <h3>✅ Test Your Code</h3>
+        <p>Run your game now! You should see:</p>
+        <ul>
+            <li>A <strong>magenta (#FF00FF)</strong> box behind the left eye</li>
+            <li>The left eye bouncing around with its colored box</li>
+            <li>The right eye bouncing around normally (no colored box yet)</li>
+            <li><strong>Everything working without errors!</strong></li>
+        </ul>
+    </div>
+
+    <div class="diagram">
+        <h3 style="margin-bottom: 15px;">What You Should See:</h3>
+        <iframe src="https://microstudio.io/jocolloman/addboxstep5/"
+                width="100%"
+                height="500"
+                style="border: 2px solid rgba(102, 126, 234, 0.5); border-radius: 10px; background: #000;">
+        </iframe>
+        <p style="margin-top: 10px; color: #a0a0a0; font-size: 0.9em;">
+            The magenta box shows where collision detection will happen for the left eye!<br>
+            Notice: Left eye has a colored box, right eye doesn't (yet).
+        </p>
+    </div>
+
+    <div class="info-box">
+        <h3>🔍 Why Visualize Bounding Boxes?</h3>
+        <p>Drawing the bounding boxes is super helpful because:</p>
+        <ul>
+            <li><strong>Debugging</strong> - You can see exactly where collisions will be detected</li>
+            <li><strong>Tuning</strong> - Adjust the size if the box is too big or too small</li>
+            <li><strong>Testing</strong> - Verify that the box matches the sprite properly</li>
+            <li><strong>Learning</strong> - Understand how collision detection works visually</li>
+        </ul>
+        <p>Later, when your game is finished, you can remove the rectangle drawing code to hide the boxes!</p>
+    </div>
+
+    <div class="challenge">
+        <h3>🎯 Experiment Time!</h3>
+        <div>
+            <p>Try these experiments to see how the bounding box works:</p>
+            <ol>
+                <li><strong>Change the box size</strong> - In <code>init_eyes()</code>, try changing the left eye size from 32 to 40. What happens?</li>
+                <li><strong>Change the color</strong> - Try <code>"#FF0000"</code> (red) or <code>"#00FF00"</code> (green) in <code>init_eyes()</code></li>
+                <li><strong>Make it transparent</strong> - Add <code>screen:setAlpha(0.5)</code> before <code>screen:fillRect</code> to make the box semi-transparent!</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="success-box">
+        <h3>🎉 Congratulations!</h3>
+        <p>You've successfully refactored the left eye to use bounding boxes! Your left eye is now ready for collision detection.</p>
+        <p><strong>What you've accomplished:</strong></p>
+        <ul>
+            <li>✅ Added the <code>create_box</code> function</li>
+            <li>✅ Converted the left eye from separate variables to a box object</li>
+            <li>✅ Updated <code>init_eyes()</code>, <code>update_eyes()</code>, and <code>draw_eyes()</code></li>
+            <li>✅ Added visual debugging for the left eye's bounding box</li>
+        </ul>
+    </div>
+
+    <p><strong>Great work! Your left eye now has a complete bounding box. Ready for the challenge? Click "Next" to add a bounding box to the right eye on your own!</strong></p>
+</div>

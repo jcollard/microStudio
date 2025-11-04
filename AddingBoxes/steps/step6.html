@@ -1,0 +1,107 @@
+<h2>Step 6: Challenge - Add a Bounding Box to the Right Eye</h2>
+<div class="step-content">
+    <p>Now it's your turn! You've successfully added a bounding box to the left eye. Can you apply the same pattern to the right eye on your own?</p>
+
+    <div class="diagram">
+        <h3 style="margin-bottom: 15px;">What Your Final Result Should Look Like:</h3>
+        <iframe src="https://microstudio.io/jocolloman/addboxstep52/WRBPZ9VW/"
+                width="100%"
+                height="500"
+                style="border: 2px solid rgba(102, 126, 234, 0.5); border-radius: 10px; background: #000;">
+        </iframe>
+        <p style="margin-top: 10px; color: #a0a0a0; font-size: 0.9em;">
+            Both eyes should now have colored bounding boxes!<br>
+            Notice: Each eye has its own unique color and they both bounce independently.
+        </p>
+    </div>
+
+    <div class="challenge">
+        <h3>🎯 Your Challenge</h3>
+        <p>Transform the right eye to use a bounding box, just like you did for the left eye! You'll follow the exact same steps, but this time you're doing it independently.</p>
+    </div>
+
+    <div class="info-box">
+        <h3>💡 What You Already Know</h3>
+        <p>You've already done this once! The process is exactly the same:</p>
+        <ul>
+            <li>✅ You know how to use <code>create_box()</code></li>
+            <li>✅ You know how to refactor variables to box properties</li>
+            <li>✅ You know how to update movement and boundary checks</li>
+            <li>✅ You know how to draw bounding boxes for visualization</li>
+        </ul>
+        <p><strong>You've got this!</strong></p>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚠️ Important Values for the Right Eye</h3>
+        <p>The right eye has slightly different values than the left eye. Here's what you need to know:</p>
+        <ul>
+            <li><strong>Starting position:</strong> x = 0, y = 0 (same as left eye)</li>
+            <li><strong>Size:</strong> 32 (same as left eye)</li>
+            <li><strong>Velocity X:</strong> -0.6 (different from left eye's 0.7)</li>
+            <li><strong>Velocity Y:</strong> 0.37575 (different from left eye's 0.57575)</li>
+            <li><strong>Color:</strong> Pick a different color! Try <code>"#00FFFF"</code> (cyan) or choose your own hex color</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h3>📋 Step-by-Step Checklist</h3>
+        <p>Follow these steps in order. Check them off as you complete each one:</p>
+        <ol>
+            <li>
+                <strong>Update <code>init_eyes()</code></strong>
+                <ul>
+                    <li>Find the four right eye variables: <code>right_eye_x</code>, <code>right_eye_y</code>, <code>right_eye_vx</code>, <code>right_eye_vy</code></li>
+                    <li>Replace them with a single call to <code>create_box()</code></li>
+                    <li>Use the values from the "Important Values" section above</li>
+                    <li>Store the result in a variable called <code>right_eye</code></li>
+                </ul>
+            </li>
+            <li>
+                <strong>Update <code>update_eyes()</code></strong>
+                <ul>
+                    <li>Find all the right eye movement and boundary checking code</li>
+                    <li>Change <code>right_eye_x</code> to <code>right_eye.x</code></li>
+                    <li>Change <code>right_eye_y</code> to <code>right_eye.y</code></li>
+                    <li>Change <code>right_eye_vx</code> to <code>right_eye.vx</code></li>
+                    <li>Change <code>right_eye_vy</code> to <code>right_eye.vy</code></li>
+                    <li>Remember: You'll need to update 6 places total (2 movement lines + 4 boundary checks)</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Update <code>draw_eyes()</code></strong>
+                <ul>
+                    <li>Add two lines to draw the right eye bounding box (use <code>right_eye.color</code> and <code>right_eye.size</code>)</li>
+                    <li>Put these lines AFTER the left eye bounding box but BEFORE the sprite drawing</li>
+                    <li>Update the right eye sprite drawing to use <code>right_eye.x</code> and <code>right_eye.y</code></li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="success-box">
+        <h3>✅ Testing Your Code</h3>
+        <p>After making your changes, run your game and verify:</p>
+        <ul>
+            <li>✅ No error messages appear</li>
+            <li>✅ Both eyes have colored bounding boxes</li>
+            <li>✅ The left eye has a magenta box</li>
+            <li>✅ The right eye has your chosen color box</li>
+            <li>✅ Both eyes bounce around the screen properly</li>
+            <li>✅ Both eyes stay within the screen boundaries</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>💡 Hints</h3>
+        <p>Stuck? Here are some hints to help you:</p>
+        <ul>
+            <li><strong>Hint 1:</strong> Look at what you did for the left eye in steps 3, 4, and 5. The right eye follows the exact same pattern!</li>
+            <li><strong>Hint 2:</strong> The order matters in <code>draw_eyes()</code>! Draw both bounding boxes first, then draw both sprites.</li>
+            <li><strong>Hint 3:</strong> Use Find & Replace in your editor! Search for <code>right_eye_</code> and think about what each one should become.</li>
+            <li><strong>Hint 4:</strong> If you get errors about "undefined", you probably missed updating a variable reference somewhere.</li>
+        </ul>
+    </div>
+
+    <p><strong>Once you've completed the challenge and your game matches the preview above, click "Next" to continue!</strong></p>
+</div>

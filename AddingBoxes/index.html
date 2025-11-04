@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adding Bounding Boxes - MicroStudio Lua Tutorial</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📦 Adding Bounding Boxes</h1>
+            <p class="subtitle">Apply collision detection to your Space Game!</p>
+        </header>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="step-indicator">
+            <span id="stepNumber">Step 0</span> of <span id="totalSteps">5</span>
+        </div>
+
+        <div class="step-dots" id="stepDots"></div>
+
+        <!-- Step content will be loaded here -->
+        <div id="step-content">
+            <div class="loading">Loading...</div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn prev" id="prevBtn" onclick="previousStep()">← Previous</button>
+            <button class="nav-btn next" id="nextBtn" onclick="nextStep()">Next →</button>
+        </div>
+    </div>
+
+    <script src="navigation.js"></script>
+</body>
+</html>

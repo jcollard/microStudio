@@ -1,0 +1,171 @@
+<h2>Step 3: Refactor the Left Eye to Use a Box</h2>
+<div class="step-content">
+    <p>Now comes the exciting part! We're going to transform how the <strong>left eye</strong> is stored. Instead of having separate variables for each property, we'll use our <code>create_box</code> function to make a proper box object.</p>
+
+    <div class="warning-box">
+        <h3>⚠️ This Will Break Your Code (Temporarily!)</h3>
+        <p>When you make this change, your game will stop working properly. <strong>This is expected!</strong> We'll fix it in the next steps. This is a normal part of refactoring code.</p>
+    </div>
+
+    <div class="info-box">
+        <h3>📍 Step 1: Find Your init_eyes Function</h3>
+        <p><strong>Locate</strong> the <code>init_eyes()</code> function in your code. It should look like this:</p>
+    </div>
+
+    <div class="code-block no-copy">
+        <pre><span class="comment">-- Custom function to initialize the googly eyes</span>
+<span class="keyword">function</span> init_eyes()
+  eye_rotation = <span class="number">0</span>
+
+  left_eye_x = <span class="number">0</span>
+  left_eye_y = <span class="number">0</span>
+  left_eye_vx = <span class="number">0.7</span>
+  left_eye_vy = <span class="number">0.57575</span>
+
+  right_eye_x = <span class="number">0</span>
+  right_eye_y = <span class="number">0</span>
+  right_eye_vx = <span class="number">-0.6</span>
+  right_eye_vy = <span class="number">0.37575</span>
+<span class="keyword">end</span></pre>
+    </div>
+
+    <div class="info-box">
+        <h3>🔄 Step 2: Replace the Left Eye Variables</h3>
+        <p>We're going to change ONLY the left eye variables. Here's what you need to do:</p>
+    </div>
+
+    <div class="comparison">
+        <div class="comparison-side old">
+            <h4>❌ Old Way - Delete These Lines</h4>
+            <div class="code-block no-copy">
+                <pre>left_eye_x = <span class="number">0</span>
+left_eye_y = <span class="number">0</span>
+left_eye_vx = <span class="number">0.7</span>
+left_eye_vy = <span class="number">0.57575</span></pre>
+            </div>
+            <p style="text-align: center; margin-top: 10px; color: #f093fb; font-size: 0.9em;">
+                Four separate variables
+            </p>
+        </div>
+
+        <div class="comparison-side new">
+            <h4>✅ New Way - Add This Line</h4>
+            <div class="code-block no-badge">
+                <pre>left_eye = create_box(<span class="number">0</span>, <span class="number">0</span>, <span class="number">32</span>, <span class="number">0.7</span>, <span class="number">0.57575</span>, <span class="string">"#FF00FF"</span>)</pre>
+            </div>
+            <p style="text-align: center; margin-top: 10px; color: #4caf50; font-size: 0.9em;">
+                One box object with all properties
+            </p>
+        </div>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚠️ IMPORTANT: Don't Touch the Right Eye Yet!</h3>
+        <p><strong>Leave the right eye variables unchanged for now!</strong> We'll update the right eye in a later lesson.</p>
+        <p>Keep these lines exactly as they are:</p>
+        <pre style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; margin-top: 10px;">
+right_eye_x = <span class="number">0</span>
+right_eye_y = <span class="number">0</span>
+right_eye_vx = <span class="number">-0.6</span>
+right_eye_vy = <span class="number">0.37575</span></pre>
+    </div>
+
+    <div class="info-box">
+        <h3>📝 What Your init_eyes Should Look Like Now</h3>
+        <p>After making the change, your function should look like this:</p>
+    </div>
+
+    <div class="code-block no-copy">
+        <pre><span class="comment">-- Custom function to initialize the googly eyes</span>
+<span class="keyword">function</span> init_eyes()
+  eye_rotation = <span class="number">0</span>
+
+  <span class="comment">-- Create a box for the left eye</span>
+  left_eye = create_box(<span class="number">0</span>, <span class="number">0</span>, <span class="number">32</span>, <span class="number">0.7</span>, <span class="number">0.57575</span>, <span class="string">"#FF00FF"</span>)
+
+  <span class="comment">-- Right eye - UNCHANGED (we'll update this later)</span>
+  right_eye_x = <span class="number">0</span>
+  right_eye_y = <span class="number">0</span>
+  right_eye_vx = <span class="number">-0.6</span>
+  right_eye_vy = <span class="number">0.37575</span>
+<span class="keyword">end</span></pre>
+    </div>
+
+    <div class="info-box">
+        <h3>🔍 Understanding the Parameters</h3>
+        <p>Let's break down what each parameter means in <code>create_box(0, 0, 32, 0.7, 0.57575, "#FF00FF")</code>:</p>
+        <ul>
+            <li><code>0</code> - Starting x position (center)</li>
+            <li><code>0</code> - Starting y position (center)</li>
+            <li><code>32</code> - Size of the box (width and height)</li>
+            <li><code>0.7</code> - Horizontal velocity (same as old <code>left_eye_vx</code>)</li>
+            <li><code>0.57575</code> - Vertical velocity (same as old <code>left_eye_vy</code>)</li>
+            <li><code>"#FF00FF"</code> - Magenta color (we'll use this for debugging!)</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>💡 Why Size = 32?</h3>
+        <p>If you look at the <code>draw_eyes()</code> function, you'll see the eyes are drawn with a size of 32:</p>
+        <pre style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; margin-top: 10px;">
+screen:drawSprite(<span class="string">"googlya"</span>, left_eye_x, left_eye_y, <span class="number">32</span>, <span class="number">32</span>)</pre>
+        <p>The bounding box needs to match the sprite size for accurate collision detection!</p>
+    </div>
+
+    <div class="info-box">
+        <h3>🔄 What Changed?</h3>
+        <p>We replaced four separate variables with one box object:</p>
+        <table style="width: 100%; margin: 15px 0; border-collapse: collapse;">
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.2);">
+                <th style="padding: 10px; text-align: left; color: #f093fb;">Old Variable</th>
+                <th style="padding: 10px; text-align: left; color: #4caf50;">New Box Property</th>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <td style="padding: 8px;"><code>left_eye_x</code></td>
+                <td style="padding: 8px;"><code>left_eye.x</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <td style="padding: 8px;"><code>left_eye_y</code></td>
+                <td style="padding: 8px;"><code>left_eye.y</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <td style="padding: 8px;"><code>left_eye_vx</code></td>
+                <td style="padding: 8px;"><code>left_eye.vx</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <td style="padding: 8px;"><code>left_eye_vy</code></td>
+                <td style="padding: 8px;"><code>left_eye.vy</code></td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <td style="padding: 8px;"><em>(didn't exist)</em></td>
+                <td style="padding: 8px;"><code>left_eye.size</code> = 32</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px;"><em>(didn't exist)</em></td>
+                <td style="padding: 8px;"><code>left_eye.color</code> = "#FF00FF"</td>
+            </tr>
+        </table>
+        <p>The new way groups all related data together and adds <code>size</code> and <code>color</code> which we'll need for collision detection!</p>
+    </div>
+
+    <div class="success-box">
+        <h3>✅ Check Your Work</h3>
+        <p>Your <code>init_eyes()</code> function should now have:</p>
+        <ul>
+            <li>✅ The <code>eye_rotation</code> variable (unchanged)</li>
+            <li>✅ A call to <code>create_box</code> that creates <code>left_eye</code></li>
+            <li>✅ The right eye variables <strong>unchanged</strong> (left_eye_x, right_eye_y, etc.)</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>🐛 Expected Errors</h3>
+        <p>If you run your code now, you'll see errors like:</p>
+        <pre style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 5px; margin-top: 10px;">
+attempting to read property of undefined: left_eye_x</pre>
+        <p><strong>This is normal!</strong> We changed how the left eye is stored, but we haven't updated the code that uses it yet. We'll fix this in the next step!</p>
+        <p>The error happens because we deleted <code>left_eye_x</code>, <code>left_eye_y</code>, etc., but the <code>update_eyes()</code> and <code>draw_eyes()</code> functions are still trying to use them.</p>
+    </div>
+
+    <p><strong>Once you've updated the left eye in <code>init_eyes()</code>, click "Next" to fix the errors!</strong></p>
+</div>
