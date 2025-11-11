@@ -1,0 +1,70 @@
+<h2>Step 6: Add the `boxes_colliding()` Function</h2>
+<div class="step-content">
+    <p>You've already learned AABB collision detection in the Collision Challenge! Now we'll use that knowledge here.</p>
+
+    <div class="info-box">
+        <h3>📐 Quick Recap</h3>
+        <p>The <code>boxes_colliding(box1, box2)</code> function checks if two boxes overlap. You learned this before, but boxes have changed!</p>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚠️ Key Difference: Width and Height</h3>
+        <p><strong>In the Collision Challenge:</strong> Boxes used a single <code>size</code> property for square boxes</p>
+        <p><strong>In the Adding Boxes lesson:</strong> You refactored to separate <code>width</code> and <code>height</code> properties</p>
+        <p><strong>The collision algorithm adapts:</strong> It now uses <code>box.width</code> and <code>box.height</code> instead of <code>box.size</code></p>
+    </div>
+
+    <h3>Your Task: Add the Function</h3>
+    <p><strong>Add this function at the TOP of your code (near your other helper functions like <code>create_box()</code> and <code>draw_box()</code>):</strong></p>
+
+    <div class="code-block">
+        <pre><span class="comment">-- Check if two boxes are colliding</span>
+<span class="keyword">function</span> boxes_colliding(box1, box2)
+  <span class="comment">-- Calculate edges of box1</span>
+  <span class="keyword">local</span> box1_left = box1.x - box1.width / <span class="number">2</span>
+  <span class="keyword">local</span> box1_right = box1.x + box1.width / <span class="number">2</span>
+  <span class="keyword">local</span> box1_bottom = box1.y - box1.height / <span class="number">2</span>
+  <span class="keyword">local</span> box1_top = box1.y + box1.height / <span class="number">2</span>
+
+  <span class="comment">-- Calculate edges of box2</span>
+  <span class="keyword">local</span> box2_left = box2.x - box2.width / <span class="number">2</span>
+  <span class="keyword">local</span> box2_right = box2.x + box2.width / <span class="number">2</span>
+  <span class="keyword">local</span> box2_bottom = box2.y - box2.height / <span class="number">2</span>
+  <span class="keyword">local</span> box2_top = box2.y + box2.height / <span class="number">2</span>
+
+  <span class="comment">-- Check if boxes overlap on both axes</span>
+  <span class="keyword">if</span> box1_right > box2_left <span class="keyword">and</span>
+     box1_left < box2_right <span class="keyword">and</span>
+     box1_top > box2_bottom <span class="keyword">and</span>
+     box1_bottom < box2_top <span class="keyword">then</span>
+    <span class="keyword">return</span> <span class="keyword">true</span>  <span class="comment">-- Boxes are colliding!</span>
+  <span class="keyword">end</span>
+
+  <span class="keyword">return</span> <span class="keyword">false</span>  <span class="comment">-- No collision</span>
+<span class="keyword">end</span></pre>
+    </div>
+
+    <div class="info-box">
+        <h3>📝 What This Function Does</h3>
+        <ul>
+            <li>Takes two boxes as parameters</li>
+            <li>Returns <code>true</code> if they're colliding</li>
+            <li>Returns <code>false</code> if they're not touching</li>
+            <li>Uses the new <code>width</code> and <code>height</code> properties (not <code>size</code>)</li>
+        </ul>
+    </div>
+
+    <h3>🧪 Test Your Code</h3>
+    <p>After adding the function, run your game - nothing should change yet. The function is just there, waiting to be used!</p>
+
+    <div class="success-box">
+        <h3>✅ Success Criteria</h3>
+        <ul>
+            <li>✅ Function added at the top of your code</li>
+            <li>✅ No console errors</li>
+            <li>✅ Game runs normally</li>
+        </ul>
+    </div>
+
+    <p><strong>Once the function is added and there are no errors, click "Next"!</strong></p>
+</div>

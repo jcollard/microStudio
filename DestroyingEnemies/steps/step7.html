@@ -1,0 +1,92 @@
+<h2>Step 7: Detect Laser-Eye Collisions and Mark Eyes as Destroyed</h2>
+<div class="step-content">
+    <p>Here's where everything comes together! We'll create a collision detection function that marks eyes as destroyed when lasers hit them.</p>
+
+    <div class="info-box">
+        <h3>🎯 How It Works</h3>
+        <p>When a laser hits an eye:</p>
+        <ol>
+            <li>Collision detection finds the impact</li>
+            <li>We set <code>eye.isDestroyed = true</code></li>
+            <li>The update function skips movement (from Steps 3 & 4)</li>
+            <li>The draw function skips drawing (from Steps 5 & 5b)</li>
+            <li>The eye is gone! No deletion needed, just state management.</li>
+        </ol>
+    </div>
+
+    <h3>Your Task: Add Collision Detection</h3>
+    <p><strong>Add this NEW function after your other helper functions:</strong></p>
+
+    <div class="code-block">
+        <pre><span class="keyword">function</span> check_collisions()
+  <span class="comment">-- Check each laser against each eye</span>
+  <span class="keyword">for</span> laser_idx, laser <span class="keyword">in</span> <span class="keyword">pairs</span>(lasers) <span class="keyword">do</span>
+    <span class="comment">-- Check laser against left eye</span>
+    <span class="keyword">if</span> <span class="keyword">not</span> left_eye.isDestroyed <span class="keyword">then</span>
+      <span class="keyword">if</span> boxes_colliding(laser, left_eye) <span class="keyword">then</span>
+        left_eye.isDestroyed = <span class="keyword">true</span>  <span class="comment">-- Mark as destroyed</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">-- Check laser against right eye</span>
+    <span class="keyword">if</span> <span class="keyword">not</span> right_eye.isDestroyed <span class="keyword">then</span>
+      <span class="keyword">if</span> boxes_colliding(laser, right_eye) <span class="keyword">then</span>
+        right_eye.isDestroyed = <span class="keyword">true</span>  <span class="comment">-- Mark as destroyed</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+    </div>
+
+    <h3>Update the `update()` Function</h3>
+    <p><strong>Find your main <code>update()</code> function and add ONE line to call this new function:</strong></p>
+
+    <div class="code-block">
+        <pre><span class="keyword">update</span> = <span class="keyword">function</span>()
+  update_stars()
+  update_player()
+  update_eyes()
+  move_lasers()
+  fire_laser()
+  check_collisions()  <span class="comment">-- NEW: Check for collisions after all movement</span>
+<span class="keyword">end</span></pre>
+    </div>
+
+    <div class="info-box">
+        <h3>📝 What's Happening</h3>
+        <ul>
+            <li><code>check_collisions()</code> runs after all movement and firing</li>
+            <li>It loops through all lasers</li>
+            <li>For each laser, it checks against both eyes (if they're not destroyed)</li>
+            <li>If a collision is detected, it marks the eye as destroyed</li>
+            <li>The movement and drawing logic automatically handles the destroyed state</li>
+        </ul>
+    </div>
+
+    <h3>🧪 Test Your Code</h3>
+    <p>After adding the function and updating the update() call:</p>
+
+    <div class="success-box">
+        <ol>
+            <li>Run your game</li>
+            <li>Press SPACE to fire a laser at an eye</li>
+            <li>Watch the eye stop moving</li>
+            <li>Watch the eye disappear from the screen</li>
+            <li>Try hitting both eyes</li>
+        </ol>
+    </div>
+
+    <div class="success-box">
+        <h3>✅ Success Criteria</h3>
+        <ul>
+            <li>✅ Fire laser at left eye → eye stops and disappears</li>
+            <li>✅ Fire laser at right eye → eye stops and disappears</li>
+            <li>✅ Can hit both eyes</li>
+            <li>✅ After being hit, eyes don't move or draw</li>
+            <li>✅ Lasers can pass through multiple times without error</li>
+            <li>✅ No console errors</li>
+        </ul>
+    </div>
+
+    <p><strong>Once you can destroy both eyes by firing lasers, click "Next"!</strong></p>
+</div>

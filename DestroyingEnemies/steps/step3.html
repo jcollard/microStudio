@@ -1,0 +1,80 @@
+<h2>Step 3: Skip Movement for Destroyed Eyes (Part 1 - Left Eye)</h2>
+<div class="step-content">
+    <p>Now we'll use the <code>isDestroyed</code> property to control behavior. When an eye is destroyed, it should stop moving and stop bouncing.</p>
+
+    <div class="info-box">
+        <h3>💡 The Power of State</h3>
+        <p>By checking <code>if not left_eye.isDestroyed then</code> before updating movement, we can control the entire behavior with one property!</p>
+    </div>
+
+    <h3>Your Task: Wrap Left Eye Movement</h3>
+    <p><strong>Find your <code>update_eyes()</code> function and wrap all the left eye movement code:</strong></p>
+
+    <div class="code-block">
+        <pre><span class="keyword">function</span> update_eyes()
+  eye_rotation = eye_rotation + <span class="number">12</span>
+
+  <span class="comment">-- Left eye - ONLY UPDATE IF NOT DESTROYED</span>
+  <span class="keyword">if</span> <span class="keyword">not</span> left_eye.isDestroyed <span class="keyword">then</span>
+    <span class="comment">-- Move the eye</span>
+    left_eye.x = left_eye.x + left_eye.vx
+    left_eye.y = left_eye.y + left_eye.vy
+
+    <span class="comment">-- Boundary checks</span>
+    <span class="keyword">if</span> left_eye.x < <span class="number">-100</span> <span class="keyword">then</span> left_eye.vx = <span class="number">0.7</span> <span class="keyword">end</span>
+    <span class="keyword">if</span> left_eye.x > <span class="number">100</span> <span class="keyword">then</span> left_eye.vx = <span class="number">-0.7</span> <span class="keyword">end</span>
+    <span class="keyword">if</span> left_eye.y < <span class="number">-100</span> <span class="keyword">then</span> left_eye.vy = <span class="number">0.57575</span> <span class="keyword">end</span>
+    <span class="keyword">if</span> left_eye.y > <span class="number">100</span> <span class="keyword">then</span> left_eye.vy = <span class="number">-0.57575</span> <span class="keyword">end</span>
+  <span class="keyword">end</span>
+
+  <span class="comment">-- Right eye (unchanged for now)</span>
+  right_eye.x = right_eye.x + right_eye.vx
+  right_eye.y = right_eye.y + right_eye.vy
+  <span class="comment">-- ... rest of right eye code ...</span>
+<span class="keyword">end</span></pre>
+    </div>
+
+    <div class="info-box">
+        <h3>📝 What You're Doing</h3>
+        <ul>
+            <li>Adding an <code>if not left_eye.isDestroyed then</code> check</li>
+            <li>Moving all left eye movement code inside this check</li>
+            <li>The right eye stays unchanged (we'll update it in the next step)</li>
+            <li>Indentation is important for readability!</li>
+        </ul>
+    </div>
+
+    <h3>🧪 Test Your Code</h3>
+    <p>After making the change, test it in the console:</p>
+
+    <div class="code-block copyable">
+        <pre>left_eye.isDestroyed = true</pre>
+    </div>
+
+    <p>Watch what happens:</p>
+    <ul>
+        <li>The left eye should stop moving immediately</li>
+        <li>It won't bounce off the boundaries anymore</li>
+        <li>The right eye keeps moving normally</li>
+    </ul>
+
+    <p>Now try:</p>
+
+    <div class="code-block copyable">
+        <pre>left_eye.isDestroyed = false</pre>
+    </div>
+
+    <p>The left eye should start bouncing again!</p>
+
+    <div class="success-box">
+        <h3>✅ Success Criteria</h3>
+        <ul>
+            <li>✅ Left eye stops moving when <code>isDestroyed = true</code></li>
+            <li>✅ Left eye resumes bouncing when <code>isDestroyed = false</code></li>
+            <li>✅ Right eye unaffected by left eye's state</li>
+            <li>✅ No console errors</li>
+        </ul>
+    </div>
+
+    <p><strong>Once you can toggle the left eye's movement, click "Next"!</strong></p>
+</div>

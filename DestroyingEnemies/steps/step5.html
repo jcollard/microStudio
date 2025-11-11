@@ -1,0 +1,77 @@
+<h2>Step 5: Stop Drawing Destroyed Eyes (Part 1 - Left Eye)</h2>
+<div class="step-content">
+    <p>Right now, destroyed eyes still appear on screen (they just don't move). Let's fix that - destroyed eyes should be invisible!</p>
+
+    <div class="info-box">
+        <h3>💡 The Same Pattern</h3>
+        <p>We'll use the exact same pattern in the <code>draw_eyes()</code> function:</p>
+        <p><code>if not eye.isDestroyed then</code> before drawing code</p>
+    </div>
+
+    <h3>Your Task: Wrap Left Eye Drawing</h3>
+    <p><strong>Find your <code>draw_eyes()</code> function and wrap all the left eye drawing code:</strong></p>
+
+    <div class="code-block">
+        <pre><span class="keyword">function</span> draw_eyes()
+  <span class="comment">-- Left eye - ONLY DRAW IF NOT DESTROYED</span>
+  <span class="keyword">if</span> <span class="keyword">not</span> left_eye.isDestroyed <span class="keyword">then</span>
+    draw_box(left_eye)
+    screen:setDrawScale(<span class="number">1</span>, <span class="number">1</span>)
+    screen:setDrawRotation(eye_rotation)
+    screen:drawSprite(<span class="string">"googlya"</span>, left_eye.x, left_eye.y, <span class="number">32</span>, <span class="number">32</span>)
+  <span class="keyword">end</span>
+
+  <span class="comment">-- Right eye (unchanged for now)</span>
+  screen:setDrawRotation(-eye_rotation)
+  screen:drawSprite(<span class="string">"googlyb"</span>, right_eye.x, right_eye.y, <span class="number">32</span>, <span class="number">32</span>)
+
+  screen:setDrawRotation(<span class="number">0</span>)
+<span class="keyword">end</span></pre>
+    </div>
+
+    <div class="info-box">
+        <h3>📝 What You're Doing</h3>
+        <ul>
+            <li>Wrapping the left eye's bounding box drawing</li>
+            <li>Wrapping the left eye's sprite drawing</li>
+            <li>Leaving the right eye unchanged for now</li>
+            <li>Both drawing operations are protected by the same check</li>
+        </ul>
+    </div>
+
+    <h3>🧪 Test Your Code</h3>
+    <p>After making the change, test it in the console:</p>
+
+    <div class="code-block copyable">
+        <pre>left_eye.isDestroyed = true</pre>
+    </div>
+
+    <p>Watch what happens:</p>
+    <ul>
+        <li>The left eye completely disappears from the screen</li>
+        <li>No bounding box visible</li>
+        <li>No sprite visible</li>
+        <li>The right eye remains fully visible</li>
+    </ul>
+
+    <p>Now try:</p>
+
+    <div class="code-block copyable">
+        <pre>left_eye.isDestroyed = false</pre>
+    </div>
+
+    <p>The left eye should reappear!</p>
+
+    <div class="success-box">
+        <h3>✅ Success Criteria</h3>
+        <ul>
+            <li>✅ Left eye disappears when <code>isDestroyed = true</code></li>
+            <li>✅ Left eye reappears when <code>isDestroyed = false</code></li>
+            <li>✅ Right eye is not affected</li>
+            <li>✅ Both bounding box and sprite disappear completely</li>
+            <li>✅ No console errors</li>
+        </ul>
+    </div>
+
+    <p><strong>Once the left eye can disappear and reappear, click "Next"!</strong></p>
+</div>

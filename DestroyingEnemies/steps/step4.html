@@ -1,0 +1,57 @@
+<h2>Step 4: Skip Movement for Destroyed Eyes (Part 2 - Right Eye Challenge)</h2>
+<div class="step-content">
+    <p>Now it's your turn! Apply the same pattern to the right eye.</p>
+
+    <div class="info-box">
+        <h3>🎯 Your Challenge</h3>
+        <p>Update the right eye in your <code>update_eyes()</code> function with the same pattern you just learned in Step 3.</p>
+        <p><strong>Wrap all right eye movement code in:</strong> <code>if not right_eye.isDestroyed then ... end</code></p>
+    </div>
+
+    <div class="warning-box">
+        <h3>💡 Hints</h3>
+        <ul>
+            <li>Look at how you did it for the left eye in Step 3</li>
+            <li>Copy that exact pattern for the right eye</li>
+            <li>Remember to change <code>left_eye</code> to <code>right_eye</code></li>
+            <li>The right eye velocity values are: 0.6 and 0.37575</li>
+            <li>Pay attention to indentation - it should match the left eye pattern!</li>
+        </ul>
+    </div>
+
+    <h3>🧪 Test Your Code</h3>
+    <p>Test all these scenarios in the console:</p>
+
+    <div class="code-block copyable">
+        <pre>right_eye.isDestroyed = true</pre>
+    </div>
+    <p>→ Right eye stops, left eye keeps moving</p>
+
+    <div class="code-block copyable">
+        <pre>left_eye.isDestroyed = true</pre>
+    </div>
+    <p>→ Left eye stops, right eye keeps moving</p>
+
+    <div class="code-block copyable">
+        <pre>left_eye.isDestroyed = false</pre>
+    </div>
+    <p>→ Left eye bounces again</p>
+
+    <div class="code-block copyable">
+        <pre>right_eye.isDestroyed = false</pre>
+    </div>
+    <p>→ Right eye bounces again</p>
+
+    <div class="success-box">
+        <h3>✅ Success Criteria</h3>
+        <ul>
+            <li>✅ Both eyes can independently stop and start moving</li>
+            <li>✅ Setting <code>isDestroyed = true</code> stops movement</li>
+            <li>✅ Setting <code>isDestroyed = false</code> resumes movement</li>
+            <li>✅ Eyes can be controlled independently</li>
+            <li>✅ No console errors</li>
+        </ul>
+    </div>
+
+    <p><strong>Once both eyes respond to the <code>isDestroyed</code> property, click "Next"!</strong></p>
+</div>

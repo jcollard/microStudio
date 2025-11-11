@@ -1,0 +1,67 @@
+<h2>Step 5b: Stop Drawing Destroyed Eyes (Part 2 - Right Eye Challenge)</h2>
+<div class="step-content">
+    <p>Now apply the same drawing logic to the right eye!</p>
+
+    <div class="info-box">
+        <h3>🎯 Challenge</h3>
+        <p>Update the right eye in your <code>draw_eyes()</code> function:</p>
+        <p>Wrap all right eye drawing code in: <code>if not right_eye.isDestroyed then ... end</code></p>
+    </div>
+
+    <h3>Here's What It Should Look Like:</h3>
+
+    <div class="code-block">
+        <pre><span class="comment">-- Right eye - NOW WITH THE SAME CHECK!</span>
+<span class="keyword">if</span> <span class="keyword">not</span> right_eye.isDestroyed <span class="keyword">then</span>
+  draw_box(right_eye)  <span class="comment">-- Draw the bounding box too!</span>
+  screen:setDrawRotation(-eye_rotation)
+  screen:drawSprite(<span class="string">"googlyb"</span>, right_eye.x, right_eye.y, <span class="number">32</span>, <span class="number">32</span>)
+<span class="keyword">end</span>
+
+screen:setDrawRotation(<span class="number">0</span>)</pre>
+    </div>
+
+    <div class="warning-box">
+        <h3>💡 Important!</h3>
+        <p>Don't forget to add the bounding box drawing for the right eye!</p>
+        <p>In the original code, only the left eye draws its bounding box. Update the right eye to draw it too.</p>
+    </div>
+
+    <h3>🧪 Test Your Code</h3>
+    <p>Test these scenarios in the console:</p>
+
+    <div class="code-block copyable">
+        <pre>right_eye.isDestroyed = true</pre>
+    </div>
+    <p>→ Right eye disappears, left eye visible</p>
+
+    <div class="code-block copyable">
+        <pre>left_eye.isDestroyed = true</pre>
+    </div>
+    <p>→ Left eye disappears, right eye visible</p>
+
+    <div class="code-block copyable">
+        <pre>left_eye.isDestroyed = true
+right_eye.isDestroyed = true</pre>
+    </div>
+    <p>→ Both eyes disappear completely</p>
+
+    <div class="code-block copyable">
+        <pre>left_eye.isDestroyed = false
+right_eye.isDestroyed = false</pre>
+    </div>
+    <p>→ Both eyes reappear</p>
+
+    <div class="success-box">
+        <h3>✅ Success Criteria</h3>
+        <ul>
+            <li>✅ Both eyes can independently disappear and reappear</li>
+            <li>✅ Both bounding boxes are drawn (for both eyes)</li>
+            <li>✅ Both sprites are drawn (for both eyes)</li>
+            <li>✅ Eyes can be controlled completely independently</li>
+            <li>✅ No console errors</li>
+        </ul>
+    </div>
+
+    <p><strong>Once both eyes can disappear independently, click "Next"!</strong></p>
+</div>

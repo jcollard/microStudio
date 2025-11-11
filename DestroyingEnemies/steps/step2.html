@@ -1,0 +1,55 @@
+<h2>Step 2: Add `isDestroyed` Property to Eyes</h2>
+<div class="step-content">
+    <p>To implement object destruction, we need a way to track whether an eye has been destroyed. We'll add an <code>isDestroyed</code> property to each eye.</p>
+
+    <div class="info-box">
+        <h3>🔍 Understanding Object State</h3>
+        <p>An object's <strong>state</strong> is a collection of properties that describe how it is right now. We can use state to control behavior:</p>
+        <ul>
+            <li>If <code>isDestroyed = false</code> → the eye is alive and moves normally</li>
+            <li>If <code>isDestroyed = true</code> → the eye is destroyed (we'll skip updating and drawing it)</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>💡 Why Not Just Delete the Eye?</h3>
+        <p>You might think we should just remove the eye from the game when it's destroyed. But that's dangerous!</p>
+        <p>If we delete during a loop (like collision checks), the loop breaks. Instead, we "mark as destroyed" and skip it in loops. This is called <strong>lazy removal</strong>.</p>
+    </div>
+
+    <h3>Your Task: Add isDestroyed Properties</h3>
+    <p><strong>Find your <code>init_eyes()</code> function and add one line to each eye:</strong></p>
+
+    <div class="code-block">
+        <pre><span class="keyword">function</span> init_eyes()
+  eye_rotation = <span class="number">0</span>
+
+  left_eye = create_box(<span class="number">0</span>, <span class="number">0</span>, <span class="number">28</span>, <span class="number">28</span>, <span class="number">0.7</span>, <span class="number">0.57575</span>, <span class="string">"#FF00FF"</span>)
+  left_eye.isDestroyed = <span class="keyword">false</span>  <span class="comment">-- NEW: Track if destroyed</span>
+
+  right_eye = create_box(<span class="number">0</span>, <span class="number">0</span>, <span class="number">28</span>, <span class="number">28</span>, <span class="number">-0.6</span>, <span class="number">0.37575</span>, <span class="string">"#00FFFF"</span>)
+  right_eye.isDestroyed = <span class="keyword">false</span>  <span class="comment">-- NEW: Track if destroyed</span>
+<span class="keyword">end</span></pre>
+    </div>
+
+    <div class="info-box">
+        <h3>📝 What You're Doing</h3>
+        <ul>
+            <li>Adding a property to track state</li>
+            <li>Initializing it to <code>false</code> (eyes start alive)</li>
+            <li>This property will be checked in update and draw functions</li>
+        </ul>
+    </div>
+
+    <div class="success-box">
+        <h3>✅ Test Your Code</h3>
+        <p>After adding the properties:</p>
+        <ul>
+            <li>Run your game - it should work exactly the same as before</li>
+            <li>The properties don't change anything yet (we'll use them in the next steps)</li>
+            <li>No console errors</li>
+        </ul>
+    </div>
+
+    <p><strong>Once you've added the properties and verified the game still works, click "Next"!</strong></p>
+</div>
