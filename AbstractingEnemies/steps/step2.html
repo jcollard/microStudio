@@ -1,0 +1,85 @@
+<h2>Step 2: Initialize Enemies 🎮</h2>
+<div class="step-content">
+    <p>Now that we have a factory function, let's create the <code>init_enemies()</code> function to set up one enemy.</p>
+
+    <div class="info-box">
+        <h3>🎯 What We're Building</h3>
+        <p>We're replacing the old hardcoded enemy system with a table-driven system:</p>
+        <ul>
+            <li><strong>Old way:</strong> Individual variables like <code>left_eye</code> and <code>right_eye</code></li>
+            <li><strong>New way:</strong> Enemies stored in an <code>enemies</code> table, accessed by index or loop</li>
+        </ul>
+    </div>
+
+    <h3>📋 Task: Create <code>init_enemies()</code></h3>
+    <p>Create a function that initializes the enemies table and adds one enemy:</p>
+
+    <div class="code-block no-copy"><pre>function init_enemies()
+  enemies = {}  -- Start with an empty table
+
+  -- Create ONE enemy (the enemy_ship sprite)
+  local enemy = create_enemy("enemy_ship", 32, 32)
+
+  -- Customize it
+  enemy.x = 50
+  enemy.y = 50
+  enemy.vx = 0.5
+  enemy.vy = 0.3
+
+  -- create_enemy() already added it to the enemies table!
+end</pre></div>
+
+    <div class="info-box">
+        <h3>🔍 Breaking It Down</h3>
+        <ul>
+            <li><strong><code>enemies = {}</code></strong> - Reset the enemies table (in case this runs multiple times)</li>
+            <li><strong><code>create_enemy("enemy_ship", 32, 32)</code></strong> - Create an enemy using our factory function
+                <ul>
+                    <li>Uses sprite "enemy_ship"</li>
+                    <li>32x32 size</li>
+                    <li>Automatically inserted into <code>enemies</code> table</li>
+                </ul>
+            </li>
+            <li><strong>Customize the enemy</strong> - Set position and velocity</li>
+            <li><strong>No manual table insertion</strong> - Our factory function already handled it!</li>
+        </ul>
+    </div>
+
+    <h3>🔄 Update Your Main Functions</h3>
+    <p>Now update your <code>init()</code> function to call <code>init_enemies()</code>:</p>
+
+    <div class="code-block no-copy"><pre>init = function()
+  init_stars()
+  init_player()
+  init_enemies()  -- NEW: Initialize enemies table with one enemy
+  init_eyes()
+  init_lasers()
+end</pre></div>
+
+    <h3>🧪 Verify Your Enemies Table</h3>
+    <p>Once your game loads, use the console to verify that the enemies table contains your enemy. Run these commands:</p>
+
+    <div class="code-block no-copy"><pre>print(#enemies)          -- Should print: 1
+print(enemies[1].x)      -- Should print: 50
+print(enemies[1].y)      -- Should print: 50
+print(enemies[1].vx)     -- Should print: 0.5
+print(enemies[1].vy)     -- Should print: 0.3
+print(enemies[1].width)  -- Should print: 32
+print(enemies[1].height) -- Should print: 32</pre></div>
+
+    <div class="info-box">
+        <h3>💡 What These Do</h3>
+        <ul>
+            <li><strong><code>#enemies</code></strong> - The <code>#</code> symbol is the "length" operator. It tells you how many items are in the table. We added 1 enemy, so it should be 1!</li>
+            <li><strong><code>enemies[1].x</code></strong> - Access the first enemy's x position (we set it to 50)</li>
+            <li><strong><code>enemies[1].y</code></strong> - Access the first enemy's y position (we set it to 50)</li>
+            <li>And so on for velocity and size!</li>
+        </ul>
+    </div>
+
+    <div class="success-box">
+        <h3>✨ Key Insight</h3>
+        <p>Notice how simple <code>init_enemies()</code> is? That's the power of the factory function! Instead of setting individual properties on each enemy manually, <code>create_enemy()</code> handles the boilerplate setup.</p>
+        <p>In the next steps, we're going to add TWO enemies to this function, and you'll see the repetition - which will lead us to loops!</p>
+    </div>
+</div>

@@ -5,5 +5,17 @@
     ],
     "deny": [],
     "ask": []
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/hooks/add-prompt-context.py"
+          }
+        ]
+      }
+    ]
   }
 }

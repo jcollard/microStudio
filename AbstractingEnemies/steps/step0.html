@@ -1,0 +1,59 @@
+<h2>Welcome! 🚀</h2>
+<div class="step-content">
+    <p>Congratulations on completing the "Destroying Enemies" challenge! You've built a space game with collision detection and object state management.</p>
+
+    <p>But now we're going to tackle a bigger problem: <strong>your code has hardcoded individual enemies</strong>. You have separate functions for left eye and right eye. What happens if you want 3 eyes? 10 enemies? 100 enemies?</p>
+
+    <div class="warning-box">
+        <h3>🔴 The Hardcoding Problem</h3>
+        <p>Currently, your game has:</p>
+        <ul>
+            <li><code>left_eye</code> with <code>init_eyes()</code>, <code>update_eyes()</code>, <code>draw_eyes()</code></li>
+            <li><code>right_eye</code> mixed into the same functions</li>
+            <li>If you add a 3rd eye: MORE code, MORE duplication, MORE bugs</li>
+            <li>If you want 100 enemies: You'd need 100 separate variables and 100 conditional statements!</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h3>💡 The Solution: Abstraction</h3>
+        <p>Instead of hardcoded individual enemies, we'll create a <strong>scalable, data-driven enemy system</strong>:</p>
+        <ul>
+            <li>Create an <strong>enemies table</strong> to store all enemies in one place</li>
+            <li>Create a <strong><code>create_enemy()</code> factory function</strong> to make enemies with sensible defaults</li>
+            <li>Create <strong>generic functions</strong> (<code>init_enemies()</code>, <code>update_enemies()</code>, <code>draw_enemies()</code>) that work with ANY number of enemies</li>
+            <li>Use <strong>loops</strong> to process all enemies in one elegant function</li>
+        </ul>
+        <p><strong>Result:</strong> Add 100 enemies with the SAME code! This is how real game engines work.</p>
+    </div>
+
+    <div class="info-box">
+        <h3>🎯 What You'll Build</h3>
+        <p>By the end of this challenge, you will:</p>
+        <ul>
+            <li><strong>Step 1:</strong> Create a <code>create_enemy()</code> factory function</li>
+            <li><strong>Step 2:</strong> Create <code>init_enemies()</code> that builds one enemy</li>
+            <li><strong>Step 3:</strong> Create <code>draw_enemies()</code> that draws one enemy</li>
+            <li><strong>Step 4:</strong> Create <code>update_enemies()</code> that updates one enemy</li>
+            <li><strong>Step 5:</strong> Add a second enemy (and see the duplication problem!)</li>
+            <li><strong>Step 6:</strong> Refactor to use loops (and watch the duplication disappear!)</li>
+            <li><strong>Step 7:</strong> Migrate your eyes to the new enemy system</li>
+            <li><strong>Step 8:</strong> Demonstrate scalability with 5+ random enemies</li>
+            <li><strong>Step 9:</strong> Celebration and next steps!</li>
+        </ul>
+    </div>
+
+    <div class="success-box">
+        <h3>📚 Key Concepts You'll Learn</h3>
+        <ul>
+            <li><strong>Factory Pattern:</strong> Create objects with sensible defaults using a function</li>
+            <li><strong>Table-Driven Design:</strong> Store all similar objects in a table, let data drive behavior</li>
+            <li><strong>Generic Functions:</strong> Write one function that works with any number of objects</li>
+            <li><strong>Loops:</strong> Recognize duplication and convert it to loops</li>
+            <li><strong>Abstraction:</strong> Hide complexity behind simple interfaces</li>
+            <li><strong>Scalability:</strong> Build systems that grow with your game</li>
+        </ul>
+    </div>
+
+    <p><strong>Ready to learn how to scale your game? Click "Next" to begin!</strong></p>
+</div>

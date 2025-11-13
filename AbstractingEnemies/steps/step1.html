@@ -1,0 +1,73 @@
+<h2>Step 1: Create a Factory Function 🏭</h2>
+<div class="step-content">
+    <p>The foundation of our abstraction is a <strong>factory function</strong> - a function that creates objects with sensible defaults.</p>
+
+    <div class="info-box">
+        <h3>🎯 What's a Factory Function?</h3>
+        <p>A factory function is a function that creates and returns objects. Instead of manually creating enemies with all their properties, we have one function that does it for us with smart defaults.</p>
+        <p><strong>Think of it like a factory on an assembly line:</strong> Every car that comes off the line has the same basic parts - you just customize what you need!</p>
+    </div>
+
+    <h3>📋 Task: Create the <code>create_enemy()</code> Function</h3>
+    <p>You'll create a function that takes just 3 required parameters and provides sensible defaults for the rest:</p>
+
+    <div class="code-block no-copy"><pre>function create_enemy(sprite_name, width, height)
+  local enemy = create_box(0, 0, width, height, 0, 0, "#FF0000")
+  enemy.sprite = sprite_name
+  enemy.rotation = 0
+  enemy.rotation_speed = 0
+  enemy.isDestroyed = false
+  table.insert(enemies, enemy)  -- Automatically add to the enemies table!
+  return enemy
+end</pre></div>
+
+    <div class="info-box">
+        <h3>🔍 Let's Break This Down</h3>
+        <ul>
+            <li><strong>Parameters:</strong>
+                <ul>
+                    <li><code>sprite_name</code> - Which sprite to draw (e.g., "enemy_ship", "googlya")</li>
+                    <li><code>width</code>, <code>height</code> - Size of the enemy</li>
+                </ul>
+            </li>
+            <li><strong>Defaults (set automatically):</strong>
+                <ul>
+                    <li><code>x = 0, y = 0</code> - Position at origin (customize after creation)</li>
+                    <li><code>vx = 0, vy = 0</code> - No velocity (customize after creation)</li>
+                    <li><code>color = "#FF0000"</code> - Red bounding box (customize after creation)</li>
+                    <li><code>rotation = 0</code> - Not rotating (customize after creation)</li>
+                    <li><code>rotation_speed = 0</code> - Not spinning (eyes set this to 12!)</li>
+                    <li><code>isDestroyed = false</code> - Enemy is alive</li>
+                </ul>
+            </li>
+            <li><strong><code>table.insert(enemies, enemy)</code></strong> - The key insight! The function automatically adds the new enemy to the <code>enemies</code> table. No manual insertion needed!</li>
+            <li><strong>Returns the enemy</strong> - So you can customize it after creation</li>
+        </ul>
+    </div>
+
+    <h3>📝 Create the Enemies Table in Your Init</h3>
+    <p>Before calling <code>create_enemy()</code>, you need to initialize an empty <code>enemies</code> table. Add this to your <code>init()</code> function:</p>
+
+    <div class="code-block no-copy"><pre>enemies = {}  -- Empty table to hold all enemies</pre></div>
+
+    <h3>🧪 Test Your Factory Function</h3>
+    <p>Once you've added the <code>create_enemy()</code> function and initialized <code>enemies = {}</code>, test it using the console:</p>
+
+    <div class="code-block no-copy"><pre>test_enemy = create_enemy("enemy_ship", 16, 24)</pre></div>
+
+    <p>Now inspect what the factory created by checking properties:</p>
+
+    <div class="code-block no-copy"><pre>print(test_enemy.width)    -- Should print: 16
+print(test_enemy.height)   -- Should print: 24
+print(test_enemy.sprite)   -- Should print: enemy_ship
+print(test_enemy.x)        -- Should print: 0
+print(test_enemy.isDestroyed)  -- Should print: false</pre></div>
+
+    <p>If all these print statements work without errors, your factory function is working correctly! The factory is creating enemies with the right defaults.</p>
+
+    <div class="success-box">
+        <h3>✨ Key Insight</h3>
+        <p>The beauty of this factory function is that <strong>it always does the same setup every time</strong>. Whether you create 1 enemy or 1,000 enemies, they all get the same defaults. Then you customize just what's different about each one.</p>
+        <p>This is how professional game developers build scalable systems!</p>
+    </div>
+</div>

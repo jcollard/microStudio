@@ -1,0 +1,69 @@
+<h2>Step 7b: Refactor update_enemies() 🔄</h2>
+<div class="step-content">
+    <p>Let's apply the loop pattern to your <code>update_enemies()</code> function!</p>
+
+    <h3>🔴 Current Code (With Duplication)</h3>
+    <p>Your current <code>update_enemies()</code> manually handles both enemies:</p>
+
+    <div class="code-block no-copy"><pre>function update_enemies()
+  -- FIRST ENEMY
+  local enemy = enemies[1]
+  if not enemy.isDestroyed then
+    enemy.x = enemy.x + enemy.vx
+    enemy.y = enemy.y + enemy.vy
+
+    if enemy.x < -100 then enemy.vx = -enemy.vx end
+    if enemy.x > 100 then enemy.vx = -enemy.vx end
+    if enemy.y < -100 then enemy.vy = -enemy.vy end
+    if enemy.y > 100 then enemy.vy = -enemy.vy end
+  end
+
+  -- SECOND ENEMY - Exact same code, just [2]
+  enemy = enemies[2]
+  if not enemy.isDestroyed then
+    enemy.x = enemy.x + enemy.vx
+    enemy.y = enemy.y + enemy.vy
+
+    if enemy.x < -100 then enemy.vx = -enemy.vx end
+    if enemy.x > 100 then enemy.vx = -enemy.vx end
+    if enemy.y < -100 then enemy.vy = -enemy.vy end
+    if enemy.y > 100 then enemy.vy = -enemy.vy end
+  end
+end</pre></div>
+
+    <h3>📋 Task: Replace with Loop Version</h3>
+    <p>Replace your <code>update_enemies()</code> function with this loop-based version:</p>
+
+    <div class="code-block no-copy"><pre>function update_enemies()
+  for ix, enemy in pairs(enemies) do
+    if not enemy.isDestroyed then
+      enemy.x = enemy.x + enemy.vx
+      enemy.y = enemy.y + enemy.vy
+
+      if enemy.x < -100 then enemy.vx = -enemy.vx end
+      if enemy.x > 100 then enemy.vx = -enemy.vx end
+      if enemy.y < -100 then enemy.vy = -enemy.vy end
+      if enemy.y > 100 then enemy.vy = -enemy.vy end
+    end
+  end
+end</pre></div>
+
+    <div class="info-box">
+        <h3>🔍 What Changed?</h3>
+        <ul>
+            <li><strong>Removed duplication</strong> - We deleted the manual [1] and [2] blocks</li>
+            <li><strong>Added a loop</strong> - <code>for ix, enemy in pairs(enemies) do</code></li>
+            <li><strong>Kept the logic</strong> - The update code inside the loop is identical to what we had before</li>
+            <li><strong>Result</strong> - The same logic now runs for EVERY enemy in the table automatically!</li>
+        </ul>
+    </div>
+
+    <h3>🎬 Test It Out</h3>
+    <p>Run your game! Both enemies should still move and bounce around just like before, but now with cleaner code.</p>
+
+    <div class="warning-box">
+        <h3>⚠️ Notice: Rotation Isn't Working Yet!</h3>
+        <p>If you have enemies that should rotate (like googly eyes), you'll notice they're not rotating yet. Even though your <code>create_enemy()</code> function sets up <code>rotation</code> and <code>rotation_speed</code> values, we're not actually using them in <code>update_enemies()</code>!</p>
+        <p>Don't worry - we'll fix this in the next step!</p>
+    </div>
+</div>

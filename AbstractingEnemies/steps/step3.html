@@ -1,0 +1,73 @@
+<h2>Step 3: Draw Enemies 🎨</h2>
+<div class="step-content">
+    <p>Now let's create the <code>draw_enemies()</code> function that draws all enemies from the table.</p>
+
+    <div class="info-box">
+        <h3>🎯 What We're Doing</h3>
+        <p>We're replacing the hardcoded drawing of individual eyes with a function that draws any enemy from the table using table indexing.</p>
+    </div>
+
+    <h3>📋 Task: Create <code>draw_enemies()</code></h3>
+    <p>Create a function that draws the first enemy by getting it from the <code>enemies</code> table:</p>
+
+    <div class="code-block no-copy"><pre>function draw_enemies()
+  local enemy = enemies[1]  -- Get the first enemy from the table
+  draw_box(enemy)  -- Draw the bounding box
+  screen:drawSprite(enemy.sprite, enemy.x, enemy.y, enemy.width, enemy.height)
+end</pre></div>
+
+    <div class="info-box">
+        <h3>🔍 Breaking It Down</h3>
+        <ul>
+            <li><strong><code>enemies[1]</code></strong> - Access the first enemy in the table by index
+                <ul>
+                    <li>In Lua, tables are indexed starting at 1 (not 0!)</li>
+                    <li>This is the first enemy we created</li>
+                </ul>
+            </li>
+            <li><strong><code>draw_box(enemy)</code></strong> - Draw the bounding box (same as before)</li>
+            <li><strong><code>screen:drawSprite(...)</code></strong> - Draw the sprite
+                <ul>
+                    <li><code>enemy.sprite</code> - Which sprite ("enemy_ship")</li>
+                    <li><code>enemy.x, enemy.y</code> - Position</li>
+                    <li><code>enemy.width, enemy.height</code> - Size (use enemy's size, not hardcoded!)</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <h3>🔄 Update Your Draw Function</h3>
+    <p>Update your <code>draw()</code> function to call <code>draw_enemies()</code>:</p>
+
+    <div class="code-block no-copy"><pre>draw = function()
+  screen:clear("rgb(0, 0, 20)")
+
+  draw_stars()
+  draw_enemies()  -- NEW: Draw the enemies from the table
+  draw_player()
+  draw_lasers()
+  draw_eyes()
+end</pre></div>
+
+    <div class="info-box">
+        <h3>🎬 What You Should See</h3>
+        <p>Run your game now! You should see your new enemy drawn on the screen at position (50, 50) with a red bounding box. However, it won't move yet - it stays in one place.</p>
+        <p><strong>That's okay!</strong> Movement is coming in Step 4 when you write the <code>update_enemies()</code> function.</p>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚠️ Important: Don't Use Hardcoded Sprite Sizes!</h3>
+        <p>Notice we use <code>enemy.width</code> and <code>enemy.height</code> instead of hardcoded 32, 32:</p>
+        <ul>
+            <li>✅ Good: <code>screen:drawSprite(enemy.sprite, enemy.x, enemy.y, enemy.width, enemy.height)</code></li>
+            <li>❌ Bad: <code>screen:drawSprite(enemy.sprite, enemy.x, enemy.y, 32, 32)</code></li>
+        </ul>
+        <p>This way, eyes (28x28) can be different sizes than ships (32x32)!</p>
+    </div>
+
+    <div class="success-box">
+        <h3>✨ Key Insight</h3>
+        <p>Instead of hardcoded <code>draw_eyes()</code>, we now have a generic <code>draw_enemies()</code> that can draw ANY enemy! The enemy's properties (sprite, position, size) control how it's drawn.</p>
+        <p>This is table-driven design: the DATA (stored in the enemy object) drives the BEHAVIOR (how we draw it)!</p>
+    </div>
+</div>

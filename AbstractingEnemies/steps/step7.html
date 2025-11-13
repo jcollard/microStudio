@@ -1,0 +1,119 @@
+<h2>Step 7: Refactor with Loops 🎯</h2>
+<div class="step-content">
+    <p>This is the big moment! We're going to see how loops eliminate ALL that duplication from Step 6.</p>
+
+    <div class="success-box">
+        <h3>✨ The Key Insight</h3>
+        <p>When you see code that's identical except for a changing index (1, 2, 3...), that's when you use a <strong>loop</strong>!</p>
+    </div>
+
+    <h3>🔴 The Problem (from Step 6)</h3>
+    <p>Look at your current <code>update_enemies()</code>:</p>
+
+    <div class="code-block no-copy"><pre>function update_enemies()
+  -- IDENTICAL CODE FOR ENEMY 1
+  local enemy = enemies[1]
+  if not enemy.isDestroyed then
+    enemy.x = enemy.x + enemy.vx
+    enemy.y = enemy.y + enemy.vy
+    if enemy.x < -100 then enemy.vx = -enemy.vx end
+    if enemy.x > 100 then enemy.vx = -enemy.vx end
+    if enemy.y < -100 then enemy.vy = -enemy.vy end
+    if enemy.y > 100 then enemy.vy = -enemy.vy end
+  end
+
+  -- IDENTICAL CODE FOR ENEMY 2 - Just change [1] to [2]
+  enemy = enemies[2]
+  if not enemy.isDestroyed then
+    enemy.x = enemy.x + enemy.vx
+    enemy.y = enemy.y + enemy.vy
+    if enemy.x < -100 then enemy.vx = -enemy.vx end
+    if enemy.x > 100 then enemy.vx = -enemy.vx end
+    if enemy.y < -100 then enemy.vy = -enemy.vy end
+    if enemy.y > 100 then enemy.vy = -enemy.vy end
+  end
+end</pre></div>
+
+    <div class="warning-box">
+        <h3>🔴 This Is Code Duplication!</h3>
+        <p>The ENTIRE update block is repeated twice. The only thing that changes is [1] vs [2]. This violates the <strong>DRY principle</strong> (Don't Repeat Yourself).</p>
+        <p>What if you needed 10 enemies? Would you copy-paste this 10 times? No way!</p>
+    </div>
+
+    <h3>💚 The Solution: Loops!</h3>
+    <p>Here's how to replace BOTH repeated blocks with ONE elegant loop:</p>
+
+    <div class="code-block no-copy"><pre>function update_enemies()
+  for ix, enemy in pairs(enemies) do
+    if not enemy.isDestroyed then
+      enemy.x = enemy.x + enemy.vx
+      enemy.y = enemy.y + enemy.vy
+
+      if enemy.x < -100 then enemy.vx = -enemy.vx end
+      if enemy.x > 100 then enemy.vx = -enemy.vx end
+      if enemy.y < -100 then enemy.vy = -enemy.vy end
+      if enemy.y > 100 then enemy.vy = -enemy.vy end
+    end
+  end
+end</pre></div>
+
+    <div class="info-box">
+        <h3>🔍 How This Loop Works</h3>
+        <ul>
+            <li><strong><code>for ix, enemy in pairs(enemies) do</code></strong>
+                <ul>
+                    <li><code>for</code> - Start a loop</li>
+                    <li><code>ix</code> - The index (1, 2, 3...)</li>
+                    <li><code>enemy</code> - The actual enemy object</li>
+                    <li><code>pairs(enemies)</code> - Loop through every item in the enemies table</li>
+                </ul>
+            </li>
+            <li><strong>Loop body</strong> - The code inside runs ONCE FOR EACH ENEMY!</li>
+            <li><strong><code>do ... end</code></strong> - Marks the start and end of the loop block</li>
+        </ul>
+    </div>
+
+    <div class="comparison">
+        <div class="comparison-side old">
+            <h4>❌ Without Loop (Step 5)</h4>
+            <div class="code-block no-copy"><pre>-- Handle enemy 1
+enemy = enemies[1]
+if not enemy.isDestroyed then
+  -- ... update logic
+end
+
+-- Handle enemy 2
+enemy = enemies[2]
+if not enemy.isDestroyed then
+  -- ... update logic
+end
+
+-- Handle enemy 3?
+-- Copy-paste again!</pre></div>
+        </div>
+        <div class="comparison-arrow">➡️</div>
+        <div class="comparison-side new">
+            <h4>✅ With Loop (Step 6)</h4>
+            <div class="code-block no-copy"><pre>-- Handle ALL enemies!
+for ix, enemy in pairs(enemies) do
+  if not enemy.isDestroyed then
+    -- ... update logic
+  end
+end
+
+-- Works for 1, 2, 3,
+-- 100, 1000 enemies!</pre></div>
+        </div>
+    </div>
+
+    <div class="success-box">
+        <h3>✨ The Power Unlock</h3>
+        <p><strong>With this loop pattern, your code can work for ANY number of enemies!</strong></p>
+        <ul>
+            <li>2 enemies? ✅ Loop handles it</li>
+            <li>10 enemies? ✅ Loop handles it</li>
+            <li>100 enemies? ✅ Loop handles it</li>
+        </ul>
+        <p>In the next steps, we'll apply this pattern to all your duplicated functions!</p>
+    </div>
+</div>

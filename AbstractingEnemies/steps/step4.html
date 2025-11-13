@@ -1,0 +1,59 @@
+<h2>Step 4: Update Enemies 🔄</h2>
+<div class="step-content">
+    <p>Now it's time for you to write your own function! Create <code>update_enemies()</code> based on what you've learned.</p>
+
+    <div class="info-box">
+        <h3>🎯 What We Need</h3>
+        <p>We need to update enemy positions and handle boundary bouncing, just like we did with the eyes before.</p>
+    </div>
+
+    <h3>📋 Task: Create <code>update_enemies()</code></h3>
+    <p>Create a function that updates the first enemy by getting it from the table and applying movement and boundary bouncing:</p>
+
+    <div class="code-block no-copy"><pre>function update_enemies()
+  local enemy = enemies[1]  -- Get the first enemy from the table
+  if not enemy.isDestroyed then
+    enemy.x = enemy.x + enemy.vx
+    enemy.y = enemy.y + enemy.vy
+
+    if enemy.x < -100 then enemy.vx = -enemy.vx end
+    if enemy.x > 100 then enemy.vx = -enemy.vx end
+    if enemy.y < -100 then enemy.vy = -enemy.vy end
+    if enemy.y > 100 then enemy.vy = -enemy.vy end
+  end
+end</pre></div>
+
+    <div class="info-box">
+        <h3>🔍 Breaking It Down</h3>
+        <ul>
+            <li><strong><code>local enemy = enemies[1]</code></strong> - Get the first enemy from the table</li>
+            <li><strong><code>if not enemy.isDestroyed then</code></strong> - Only update if not destroyed (the lazy deletion pattern)</li>
+            <li><strong>Position update</strong> - Add velocity to position each frame (movement)</li>
+            <li><strong>Boundary bouncing</strong> - If the enemy goes beyond ±100, reverse its velocity</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚡ This Is Almost Identical to <code>update_eyes()</code>!</h3>
+        <p>Notice how similar this is to your old eye update code? The only real difference is:</p>
+        <ul>
+            <li>❌ Old: <code>left_eye.x = left_eye.x + left_eye.vx</code> (hardcoded variable names)</li>
+            <li>✅ New: <code>enemy.x = enemy.x + enemy.vx</code> (using a variable that refers to an object in a table)</li>
+        </ul>
+        <p>This shows the power of abstraction! We've replaced hardcoded eye objects with a flexible table-based system that works the same way!</p>
+    </div>
+
+    <h3>🔄 Update Your Update Function</h3>
+    <p>Also update your <code>update()</code> function:</p>
+
+    <div class="code-block no-copy"><pre>update = function()
+  update_stars()
+  update_player()
+  update_enemies()  -- NEW: Update the enemies from the table
+  move_lasers()
+  fire_laser()
+  check_collisions()
+  update_eyes()
+end</pre></div>
+
+</div>

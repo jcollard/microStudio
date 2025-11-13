@@ -1,0 +1,122 @@
+<h2>Step 6: Add a Second Enemy 👯</h2>
+<div class="step-content">
+    <p>Now we're going to add a second enemy. This step will introduce you to the duplication problem that leads to loops!</p>
+
+    <h3>📋 Task 1: Update <code>init_enemies()</code></h3>
+    <p>Add a second enemy to your <code>init_enemies()</code> function:</p>
+
+    <div class="code-block no-copy"><pre>function init_enemies()
+  enemies = {}
+
+  -- FIRST ENEMY
+  local enemy1 = create_enemy("enemy_ship", 32, 32)
+  enemy1.x = 50
+  enemy1.y = 50
+  enemy1.vx = 0.5
+  enemy1.vy = 0.3
+
+  -- SECOND ENEMY (NEW!)
+  local enemy2 = create_enemy("enemy_ship", 32, 32)
+  enemy2.x = -50
+  enemy2.y = -50
+  enemy2.vx = -0.4
+  enemy2.vy = -0.4
+end</pre></div>
+
+    <h3>📋 Task 2: Update <code>update_enemies()</code></h3>
+    <p>Now your <code>update_enemies()</code> needs to handle BOTH enemies:</p>
+
+    <div class="code-block no-copy"><pre>function update_enemies()
+  -- FIRST ENEMY
+  local enemy = enemies[1]
+  if not enemy.isDestroyed then
+    enemy.x = enemy.x + enemy.vx
+    enemy.y = enemy.y + enemy.vy
+
+    if enemy.x < -100 then enemy.vx = -enemy.vx end
+    if enemy.x > 100 then enemy.vx = -enemy.vx end
+    if enemy.y < -100 then enemy.vy = -enemy.vy end
+    if enemy.y > 100 then enemy.vy = -enemy.vy end
+  end
+
+  -- SECOND ENEMY (NEW!) - Exact same code, just [2]
+  enemy = enemies[2]
+  if not enemy.isDestroyed then
+    enemy.x = enemy.x + enemy.vx
+    enemy.y = enemy.y + enemy.vy
+
+    if enemy.x < -100 then enemy.vx = -enemy.vx end
+    if enemy.x > 100 then enemy.vx = -enemy.vx end
+    if enemy.y < -100 then enemy.vy = -enemy.vy end
+    if enemy.y > 100 then enemy.vy = -enemy.vy end
+  end
+end</pre></div>
+
+    <h3>📋 Task 3: Update <code>draw_enemies()</code></h3>
+    <p>And your <code>draw_enemies()</code> needs to draw BOTH enemies:</p>
+
+    <div class="code-block no-copy"><pre>function draw_enemies()
+  -- FIRST ENEMY
+  local enemy = enemies[1]
+  draw_box(enemy)
+  screen:drawSprite(enemy.sprite, enemy.x, enemy.y, enemy.width, enemy.height)
+
+  -- SECOND ENEMY (NEW!) - Exact same code, just [2]
+  enemy = enemies[2]
+  draw_box(enemy)
+  screen:drawSprite(enemy.sprite, enemy.x, enemy.y, enemy.width, enemy.height)
+end</pre></div>
+
+    <h3>📋 Task 4: Update <code>check_collisions()</code></h3>
+    <p>Your <code>check_collisions()</code> function also needs to check BOTH enemies. Add collision detection for the second enemy inside your existing laser loop:</p>
+
+    <div class="code-block no-copy"><pre>function check_collisions()
+  for ix, laser in pairs(lasers) do
+    -- Check collisions between lasers and eyes
+    if not left_eye.isDestroyed then
+      if boxes_colliding(laser, left_eye) then
+        left_eye.isDestroyed = true
+      end
+    end
+
+    if not right_eye.isDestroyed then
+      if boxes_colliding(laser, right_eye) then
+        right_eye.isDestroyed = true
+      end
+    end
+
+    -- Check collisions with FIRST enemy
+    local enemy = enemies[1]
+    if not enemy.isDestroyed then
+      if boxes_colliding(laser, enemy) then
+        enemy.isDestroyed = true
+      end
+    end
+
+    -- Check collisions with SECOND enemy (NEW!) - Exact same code, just [2]
+    enemy = enemies[2]
+    if not enemy.isDestroyed then
+      if boxes_colliding(laser, enemy) then
+        enemy.isDestroyed = true
+      end
+    end
+  end
+end</pre></div>
+
+    <div class="warning-box">
+        <h3>🔴 Notice the Pattern?</h3>
+        <p>Look at your updated functions. The code for enemy[1] and enemy[2] is IDENTICAL. The only thing that changes is the index!</p>
+        <ul>
+            <li>In <code>update_enemies()</code>: The same update logic repeats twice</li>
+            <li>In <code>draw_enemies()</code>: The same drawing logic repeats twice</li>
+            <li>In <code>check_collisions()</code>: The same collision logic repeats twice</li>
+        </ul>
+        <p><strong>Question:</strong> What if you needed to add a 3rd enemy? A 10th enemy? Would you copy-paste the code 10 times? That would be terrible!</p>
+    </div>
+
+    <div class="info-box">
+        <h3>💡 This Is the Problem Loops Solve!</h3>
+        <p>When you see code that repeats with only ONE thing changing (the index: 1, 2, 3...), that's a red flag! This is exactly where loops shine.</p>
+        <p>In Step 7, you'll learn how to convert this repetitive code into one elegant loop. Prepare to be amazed! ✨</p>
+    </div>
+</div>

@@ -1,0 +1,105 @@
+<h2>Step 8b: Add Enemy Rotation 🔄</h2>
+<div class="step-content">
+    <p>Your <code>create_enemy()</code> function sets up rotation values, but they're not being used yet! Let's fix that.</p>
+
+    <h3>🔴 The Problem</h3>
+    <p>When you created enemies with <code>create_enemy()</code>, each enemy got these properties:</p>
+    <div class="code-block no-copy"><pre>enemy.rotation = 0
+enemy.rotation_speed = 0</pre></div>
+    <p>But your <code>update_enemies()</code> and <code>draw_enemies()</code> functions aren't using them!</p>
+
+    <h3>📋 Task 1: Update Rotation in <code>update_enemies()</code></h3>
+    <p>Add this line inside your <code>update_enemies()</code> loop to make enemies rotate:</p>
+
+    <div class="code-block no-copy"><pre>function update_enemies()
+  for ix, enemy in pairs(enemies) do
+    if not enemy.isDestroyed then
+      enemy.x = enemy.x + enemy.vx
+      enemy.y = enemy.y + enemy.vy
+
+      enemy.rotation = enemy.rotation + enemy.rotation_speed  -- NEW!
+
+      if enemy.x < -100 then enemy.vx = -enemy.vx end
+      if enemy.x > 100 then enemy.vx = -enemy.vx end
+      if enemy.y < -100 then enemy.vy = -enemy.vy end
+      if enemy.y > 100 then enemy.vy = -enemy.vy end
+    end
+  end
+end</pre></div>
+
+    <h3>📋 Task 2: Use Rotation in <code>draw_enemies()</code></h3>
+    <p>Now update your <code>draw_enemies()</code> loop to use the rotation value when drawing. Add <code>screen:setDrawRotation(enemy.rotation)</code> before drawing each sprite:</p>
+
+    <div class="code-block no-copy"><pre>function draw_enemies()
+  for ix, enemy in pairs(enemies) do
+    if not enemy.isDestroyed then
+      draw_box(enemy)
+      screen:setDrawRotation(enemy.rotation)  -- NEW!
+      screen:drawSprite(enemy.sprite, enemy.x, enemy.y, enemy.width, enemy.height)
+    end
+  end
+  screen:setDrawRotation(0)  -- NEW! Reset rotation after loop
+end</pre></div>
+
+    <h3>📋 Task 3: Set Rotation Speeds for Eyes</h3>
+    <p>Update your <code>init_enemies()</code> to set rotation speeds for the googly eyes:</p>
+
+    <div class="code-block no-copy"><pre>function init_enemies()
+  enemies = {}
+
+  -- LEFT EYE - Now with rotation!
+  local left_eye = create_enemy("googlya", 28, 28)
+  left_eye.x = 0
+  left_eye.y = 0
+  left_eye.vx = 0.7
+  left_eye.vy = 0.57575
+  left_eye.color = "#FF00FF"
+  left_eye.rotation_speed = 12  -- NEW! Makes it spin
+
+  -- RIGHT EYE - Now with rotation!
+  local right_eye = create_enemy("googlyb", 28, 28)
+  right_eye.x = 0
+  right_eye.y = 0
+  right_eye.vx = -0.6
+  right_eye.vy = 0.37575
+  right_eye.color = "#00FFFF"
+  right_eye.rotation_speed = -12  -- NEW! Spins the opposite direction
+
+  -- Keep your other enemies...
+  local enemy1 = create_enemy("enemy_ship", 32, 32)
+  enemy1.x = 50
+  enemy1.y = 50
+  enemy1.vx = 0.5
+  enemy1.vy = 0.3
+
+  local enemy2 = create_enemy("enemy_ship", 32, 32)
+  enemy2.x = -50
+  enemy2.y = -50
+  enemy2.vx = -0.4
+  enemy2.vy = -0.4
+end</pre></div>
+
+    <div class="info-box">
+        <h3>🔍 What Changed?</h3>
+        <ul>
+            <li><strong>Update rotation</strong> - Added <code>enemy.rotation = enemy.rotation + enemy.rotation_speed</code> in update loop</li>
+            <li><strong>Apply rotation when drawing</strong> - Added <code>screen:setDrawRotation(enemy.rotation)</code> before drawing sprite</li>
+            <li><strong>Reset rotation</strong> - Added <code>screen:setDrawRotation(0)</code> after the loop to reset for other drawing</li>
+            <li><strong>Works for ALL enemies</strong> - No special code for specific sprites! Each enemy uses its own rotation values</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚡ Setting Rotation Speed</h3>
+        <p>You can set different rotation speeds when initializing any enemy:</p>
+        <div class="code-block no-copy"><pre>local enemy1 = create_enemy("enemy_ship", 32, 32)
+enemy1.rotation_speed = 5  -- Rotates quickly
+
+local enemy2 = create_enemy("googlya", 32, 32)
+enemy2.rotation_speed = 12  -- Rotates even faster!</pre></div>
+        <p>If <code>rotation_speed</code> is 0, the enemy won't rotate. If it's positive, it rotates clockwise. If it's negative, it rotates counter-clockwise!</p>
+    </div>
+
+    <h3>🎬 Test It Out</h3>
+    <p>Run your game! The googly eye enemies should now spin as they move!</p>
+</div>

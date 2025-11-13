@@ -1,0 +1,112 @@
+<h2>Step 8: Migrate the Eyes 👀</h2>
+<div class="step-content">
+    <p>Now for the big refactoring: we're going to take the old hardcoded eyes and add them to the new enemy system!</p>
+
+    <div class="info-box">
+        <h3>🎯 What We're Doing</h3>
+        <p>We're removing the old <code>init_eyes()</code>, <code>update_eyes()</code>, and <code>draw_eyes()</code> functions entirely and instead treating eyes as just another type of enemy in the enemies table.</p>
+    </div>
+
+    <h3>📋 Task 1: Update <code>init_enemies()</code></h3>
+    <p>Add the eyes to the enemies table as enemies:</p>
+
+    <div class="code-block no-copy"><pre>function init_enemies()
+  enemies = {}
+
+  -- LEFT EYE - Now an enemy!
+  local left_eye = create_enemy("googlya", 28, 28)
+  left_eye.x = 0
+  left_eye.y = 0
+  left_eye.vx = 0.7
+  left_eye.vy = 0.57575
+  left_eye.color = "#FF00FF"
+
+  -- RIGHT EYE - Now an enemy!
+  local right_eye = create_enemy("googlyb", 28, 28)
+  right_eye.x = 0
+  right_eye.y = 0
+  right_eye.vx = -0.6
+  right_eye.vy = 0.37575
+  right_eye.color = "#00FFFF"
+
+  -- KEEP THE OTHER ENEMIES
+  local enemy1 = create_enemy("enemy_ship", 32, 32)
+  enemy1.x = 50
+  enemy1.y = 50
+  enemy1.vx = 0.5
+  enemy1.vy = 0.3
+
+  local enemy2 = create_enemy("enemy_ship", 32, 32)
+  enemy2.x = -50
+  enemy2.y = -50
+  enemy2.vx = -0.4
+  enemy2.vy = -0.4
+end</pre></div>
+
+    <h3>📋 Task 2: Remove Old Eye Functions</h3>
+    <p>Delete these three functions entirely - we don't need them anymore:</p>
+    <ul>
+        <li>❌ Delete <code>init_eyes()</code></li>
+        <li>❌ Delete <code>update_eyes()</code></li>
+        <li>❌ Delete <code>draw_eyes()</code></li>
+    </ul>
+
+    <h3>📋 Task 3: Update Main Functions</h3>
+    <p>Remove the calls to the old eye functions:</p>
+
+    <div class="code-block no-copy"><pre>init = function()
+  init_stars()
+  init_player()
+  init_enemies()   -- Now initializes eyes too!
+  init_lasers()
+end
+
+update = function()
+  update_stars()
+  update_player()
+  update_enemies() -- Now updates eyes too!
+  move_lasers()
+  fire_laser()
+  check_collisions()
+end
+
+draw = function()
+  screen:clear("rgb(0, 0, 20)")
+  draw_stars()
+  draw_enemies()   -- Now draws eyes too!
+  draw_player()
+  draw_lasers()
+end</pre></div>
+
+    <div class="info-box">
+        <h3>🔍 How This Works</h3>
+        <ul>
+            <li><strong>Eyes are enemies:</strong> They're added to the enemies table using <code>create_enemy()</code></li>
+            <li><strong>Generic update:</strong> The loop in <code>update_enemies()</code> updates eyes the same way as ships</li>
+            <li><strong>Generic drawing:</strong> The loop in <code>draw_enemies()</code> draws eyes like any other enemy</li>
+            <li><strong>No special code needed:</strong> Eyes use the exact same system as regular enemies!</li>
+        </ul>
+    </div>
+
+    <h3>🎬 Test It Out</h3>
+    <p>Run your game! All four enemies (2 eyes + 2 ships) should move around and be destroyable by lasers.</p>
+
+    <div class="warning-box">
+        <h3>⚠️ Notice: Eye Rotation Isn't Working!</h3>
+        <p>You'll notice the googly eye sprites aren't rotating anymore. That's because we removed the <code>eye_rotation</code> variable and the special rotation code.</p>
+        <p>Don't worry - in the next step (Step 8b), we'll add a proper generic rotation system using <code>enemy.rotation</code> and <code>enemy.rotation_speed</code> that will work for ALL enemies, not just eyes!</p>
+    </div>
+
+    <div class="success-box">
+        <h3>✨ Major Achievement!</h3>
+        <p>You've successfully migrated the eyes into the enemy system! Now your game has:</p>
+        <ul>
+            <li>🎯 A <code>create_enemy()</code> factory function for flexible enemy creation</li>
+            <li>📊 An enemies table that stores ALL enemies (including eyes!)</li>
+            <li>🔄 Generic loops that handle all enemies automatically</li>
+            <li>💥 Collision detection that works for all enemies</li>
+            <li>🧹 Cleaner code with no duplicated eye-specific functions</li>
+        </ul>
+        <p>This is exactly how professional game developers structure their code! 🚀</p>
+    </div>
+</div>

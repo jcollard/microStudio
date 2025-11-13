@@ -1,0 +1,86 @@
+<h2>Step 5: Collision Detection 💥</h2>
+<div class="step-content">
+    <p>Now let's make our enemy destructible! We'll add collision detection so the player's lasers can destroy enemies.</p>
+
+    <div class="info-box">
+        <h3>🎯 What We're Doing</h3>
+        <p>We're going to update the <code>check_collisions()</code> function to detect when a laser hits an enemy from our enemies table, and mark it as destroyed using the <code>isDestroyed</code> flag we created earlier.</p>
+    </div>
+
+    <h3>📋 Task: Update <code>check_collisions()</code></h3>
+    <p>Your starter code already has a <code>boxes_colliding()</code> helper function and a <code>check_collisions()</code> function for the eyes. Now add collision detection for the first enemy. Add this code to your <code>check_collisions()</code> function (after the eye collision checks):</p>
+
+    <div class="code-block no-copy"><pre>-- Check collisions between lasers and the first enemy (NEW!)
+for ix, laser in pairs(lasers) do
+  local enemy = enemies[1]
+  if not enemy.isDestroyed then
+    if boxes_colliding(laser, enemy) then
+      enemy.isDestroyed = true
+    end
+  end
+end</pre></div>
+
+    <h3>📋 Your Complete Function</h3>
+    <p>Here's what your entire <code>check_collisions()</code> function should look like after adding the new enemy code:</p>
+
+    <div class="code-block no-copy"><pre>function check_collisions()
+  for ix, laser in pairs(lasers) do
+    -- Check collisions between lasers and eyes
+    if not left_eye.isDestroyed then
+      if boxes_colliding(laser, left_eye) then
+        left_eye.isDestroyed = true
+      end
+    end
+
+    if not right_eye.isDestroyed then
+      if boxes_colliding(laser, right_eye) then
+        right_eye.isDestroyed = true
+      end
+    end
+
+    -- Check collisions between lasers and the first enemy (NEW!)
+    local enemy = enemies[1]
+    if not enemy.isDestroyed then
+      if boxes_colliding(laser, enemy) then
+        enemy.isDestroyed = true
+      end
+    end
+  end
+end</pre></div>
+
+    <div class="info-box">
+        <h3>🔍 Breaking It Down</h3>
+        <ul>
+            <li><strong>Loop through lasers</strong> - Use the same laser loop pattern from your eye collision checks</li>
+            <li><strong>Get the first enemy</strong> - Use direct indexing: <code>enemies[1]</code></li>
+            <li><strong>Check if enemy is alive</strong> - Only check collisions if <code>not enemy.isDestroyed</code></li>
+            <li><strong>Use the helper function</strong> - Call <code>boxes_colliding(laser, enemy)</code> (same function you already use for eyes!)</li>
+            <li><strong>Mark as destroyed</strong> - When collision is detected, set <code>enemy.isDestroyed = true</code></li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚡ Reusing Code</h3>
+        <p>Notice how we reuse the <code>boxes_colliding()</code> helper function that was already in your starter code? We're not writing collision detection from scratch - we're applying the same pattern that already works for eyes to our new enemies table!</p>
+        <p>This is smart code reuse!</p>
+    </div>
+
+    <div class="warning-box">
+        <h3>💡 Using the isDestroyed Flag</h3>
+        <p>Remember the <code>isDestroyed</code> flag we added in the <code>create_enemy()</code> factory function? This is the "lazy deletion" pattern!</p>
+        <ul>
+            <li>When an enemy is hit, we set <code>enemy.isDestroyed = true</code></li>
+            <li>We don't actually delete it from the table</li>
+            <li>In <code>update_enemies()</code> and <code>draw_enemies()</code>, we skip objects where <code>isDestroyed == true</code></li>
+            <li>This is more efficient than removing from tables!</li>
+        </ul>
+    </div>
+
+    <h3>🎬 Test It Out</h3>
+    <p>Run your game now! You should be able to:</p>
+    <ul>
+        <li>See the enemy move around on the screen</li>
+        <li>Fire a laser and hit the enemy</li>
+        <li>Watch the enemy disappear when hit</li>
+    </ul>
+</div>

@@ -1,0 +1,67 @@
+<h2>Step 9: Create a Random Enemy Function 🎲</h2>
+<div class="step-content">
+    <p>Let's create a helper function that spawns enemies with random positions and velocities!</p>
+
+    <h3>🎯 What We're Building</h3>
+    <p>You're going to write a <code>random_enemy()</code> function that creates an enemy with random properties. This will be super useful later for adding variety to your game!</p>
+
+    <h3>📋 Task: Create the random_enemy() Function</h3>
+    <p>Add this function to your code (you can put it right after your <code>create_enemy()</code> function):</p>
+
+    <div class="code-block no-copy"><pre>function random_enemy()
+  local enemy = create_enemy("enemy_ship", 32, 32)
+
+  -- Random position anywhere on screen
+  enemy.x = (math.random() - 0.5) * 200
+  enemy.y = (math.random() - 0.5) * 200
+
+  -- Random velocity
+  enemy.vx = (math.random() - 0.5) * 2
+  enemy.vy = (math.random() - 0.5) * 2
+
+  return enemy
+end</pre></div>
+
+    <div class="info-box">
+        <h3>🔍 How This Works</h3>
+        <ul>
+            <li><strong>math.random()</strong> - Returns a random number between 0 and 1</li>
+            <li><strong>(math.random() - 0.5)</strong> - Shifts range to -0.5 to 0.5 (both positive and negative)</li>
+            <li><strong>* 200</strong> - Scales position to cover the screen (-100 to 100)</li>
+            <li><strong>* 2</strong> - Scales velocity to -1 to 1 for movement speed</li>
+            <li><strong>return enemy</strong> - Returns the newly created random enemy</li>
+        </ul>
+    </div>
+
+    <h3>🧪 Testing Your Function</h3>
+    <p>To test your <code>random_enemy()</code> function, open the console in microStudio (click the console icon or press F12) and type:</p>
+
+    <div class="code-block no-copy"><pre>random_enemy()</pre></div>
+
+    <p>Each time you run this command, you should see a new enemy appear at a random position moving in a random direction!</p>
+
+    <div class="warning-box">
+        <h3>⚠️ Console Testing Tips</h3>
+        <ul>
+            <li>Make sure your game is running first</li>
+            <li>The console is at the bottom of the microStudio interface</li>
+            <li>You can run <code>random_enemy()</code> multiple times to spawn multiple enemies</li>
+            <li>Watch them bounce around the screen!</li>
+        </ul>
+    </div>
+
+    <h3>🎬 What to Expect</h3>
+    <p>When you test your function:</p>
+    <ul>
+        <li>✅ A new enemy should appear somewhere on screen</li>
+        <li>✅ It should be moving in a random direction</li>
+        <li>✅ It should bounce off the edges like other enemies</li>
+        <li>✅ You can shoot it with lasers!</li>
+    </ul>
+
+    <div class="success-box">
+        <h3>✨ Coming Up Next...</h3>
+        <p>You've just created a powerful tool for spawning enemies! In a future lesson, we'll use this function to make your game even more exciting by spawning new enemies automatically after you've destroyed all the current ones.</p>
+        <p>Imagine: destroy all enemies → new wave spawns → infinite gameplay! 🚀</p>
+    </div>
+</div>
