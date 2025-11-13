@@ -10,7 +10,7 @@
     <h3>📋 Task: Create <code>draw_enemies()</code></h3>
     <p>Create a function that draws the first enemy by getting it from the <code>enemies</code> table:</p>
 
-    <div class="code-block no-copy"><pre>function draw_enemies()
+    <div class="code-block"><pre>function draw_enemies()
   local enemy = enemies[1]  -- Get the first enemy from the table
   draw_box(enemy)  -- Draw the bounding box
   screen:drawSprite(enemy.sprite, enemy.x, enemy.y, enemy.width, enemy.height)
@@ -39,7 +39,7 @@ end</pre></div>
     <h3>🔄 Update Your Draw Function</h3>
     <p>Update your <code>draw()</code> function to call <code>draw_enemies()</code>:</p>
 
-    <div class="code-block no-copy"><pre>draw = function()
+    <div class="code-block"><pre>draw = function()
   screen:clear("rgb(0, 0, 20)")
 
   draw_stars()

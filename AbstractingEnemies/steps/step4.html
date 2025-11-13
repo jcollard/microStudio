@@ -10,7 +10,7 @@
     <h3>📋 Task: Create <code>update_enemies()</code></h3>
     <p>Create a function that updates the first enemy by getting it from the table and applying movement and boundary bouncing:</p>
 
-    <div class="code-block no-copy"><pre>function update_enemies()
+    <div class="code-block"><pre>function update_enemies()
   local enemy = enemies[1]  -- Get the first enemy from the table
   if not enemy.isDestroyed then
     enemy.x = enemy.x + enemy.vx
@@ -46,7 +46,7 @@ end</pre></div>
     <h3>🔄 Update Your Update Function</h3>
     <p>Also update your <code>update()</code> function:</p>
 
-    <div class="code-block no-copy"><pre>update = function()
+    <div class="code-block"><pre>update = function()
   update_stars()
   update_player()
   update_enemies()  -- NEW: Update the enemies from the table

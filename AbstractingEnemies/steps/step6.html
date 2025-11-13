@@ -5,7 +5,7 @@
     <h3>📋 Task 1: Update <code>init_enemies()</code></h3>
     <p>Add a second enemy to your <code>init_enemies()</code> function:</p>
 
-    <div class="code-block no-copy"><pre>function init_enemies()
+    <div class="code-block"><pre>function init_enemies()
   enemies = {}
 
   -- FIRST ENEMY
@@ -26,7 +26,7 @@ end</pre></div>
     <h3>📋 Task 2: Update <code>update_enemies()</code></h3>
     <p>Now your <code>update_enemies()</code> needs to handle BOTH enemies:</p>
 
-    <div class="code-block no-copy"><pre>function update_enemies()
+    <div class="code-block"><pre>function update_enemies()
   -- FIRST ENEMY
   local enemy = enemies[1]
   if not enemy.isDestroyed then
@@ -55,7 +55,7 @@ end</pre></div>
     <h3>📋 Task 3: Update <code>draw_enemies()</code></h3>
     <p>And your <code>draw_enemies()</code> needs to draw BOTH enemies:</p>
 
-    <div class="code-block no-copy"><pre>function draw_enemies()
+    <div class="code-block"><pre>function draw_enemies()
   -- FIRST ENEMY
   local enemy = enemies[1]
   draw_box(enemy)
@@ -70,7 +70,7 @@ end</pre></div>
     <h3>📋 Task 4: Update <code>check_collisions()</code></h3>
     <p>Your <code>check_collisions()</code> function also needs to check BOTH enemies. Add collision detection for the second enemy inside your existing laser loop:</p>
 
-    <div class="code-block no-copy"><pre>function check_collisions()
+    <div class="code-block"><pre>function check_collisions()
   for ix, laser in pairs(lasers) do
     -- Check collisions between lasers and eyes
     if not left_eye.isDestroyed then

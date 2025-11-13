@@ -34,7 +34,7 @@ end</pre></div>
     <h3>📋 Task: Replace with Loop Version</h3>
     <p>Replace your <code>update_enemies()</code> function with this loop-based version:</p>
 
-    <div class="code-block no-copy"><pre>function update_enemies()
+    <div class="code-block"><pre>function update_enemies()
   for ix, enemy in pairs(enemies) do
     if not enemy.isDestroyed then
       enemy.x = enemy.x + enemy.vx

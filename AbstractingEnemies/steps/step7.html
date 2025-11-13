@@ -43,7 +43,7 @@ end</pre></div>
     <h3>💚 The Solution: Loops!</h3>
     <p>Here's how to replace BOTH repeated blocks with ONE elegant loop:</p>
 
-    <div class="code-block no-copy"><pre>function update_enemies()
+    <div class="code-block"><pre>function update_enemies()
   for ix, enemy in pairs(enemies) do
     if not enemy.isDestroyed then
       enemy.x = enemy.x + enemy.vx

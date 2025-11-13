@@ -11,7 +11,7 @@
     <h3>📋 Task: Create the <code>create_enemy()</code> Function</h3>
     <p>You'll create a function that takes just 3 required parameters and provides sensible defaults for the rest:</p>
 
-    <div class="code-block no-copy"><pre>function create_enemy(sprite_name, width, height)
+    <div class="code-block"><pre>function create_enemy(sprite_name, width, height)
   local enemy = create_box(0, 0, width, height, 0, 0, "#FF0000")
   enemy.sprite = sprite_name
   enemy.rotation = 0
@@ -48,7 +48,7 @@ end</pre></div>
     <h3>📝 Create the Enemies Table in Your Init</h3>
     <p>Before calling <code>create_enemy()</code>, you need to initialize an empty <code>enemies</code> table. Add this to your <code>init()</code> function:</p>
 
-    <div class="code-block no-copy"><pre>enemies = {}  -- Empty table to hold all enemies</pre></div>
+    <div class="code-block"><pre>enemies = {}  -- Empty table to hold all enemies</pre></div>
 
     <h3>🧪 Test Your Factory Function</h3>
     <p>Once you've added the <code>create_enemy()</code> function and initialized <code>enemies = {}</code>, test it using the console:</p>

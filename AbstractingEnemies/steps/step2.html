@@ -14,7 +14,7 @@
     <h3>📋 Task: Create <code>init_enemies()</code></h3>
     <p>Create a function that initializes the enemies table and adds one enemy:</p>
 
-    <div class="code-block no-copy"><pre>function init_enemies()
+    <div class="code-block"><pre>function init_enemies()
   enemies = {}  -- Start with an empty table
 
   -- Create ONE enemy (the enemy_ship sprite)
@@ -48,7 +48,7 @@ end</pre></div>
     <h3>🔄 Update Your Main Functions</h3>
     <p>Now update your <code>init()</code> function to call <code>init_enemies()</code>:</p>
 
-    <div class="code-block no-copy"><pre>init = function()
+    <div class="code-block"><pre>init = function()
   init_stars()
   init_player()
   init_enemies()  -- NEW: Initialize enemies table with one enemy

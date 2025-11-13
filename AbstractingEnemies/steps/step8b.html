@@ -11,7 +11,7 @@ enemy.rotation_speed = 0</pre></div>
     <h3>📋 Task 1: Update Rotation in <code>update_enemies()</code></h3>
     <p>Add this line inside your <code>update_enemies()</code> loop to make enemies rotate:</p>
 
-    <div class="code-block no-copy"><pre>function update_enemies()
+    <div class="code-block"><pre>function update_enemies()
   for ix, enemy in pairs(enemies) do
     if not enemy.isDestroyed then
       enemy.x = enemy.x + enemy.vx
@@ -30,7 +30,7 @@ end</pre></div>
     <h3>📋 Task 2: Use Rotation in <code>draw_enemies()</code></h3>
     <p>Now update your <code>draw_enemies()</code> loop to use the rotation value when drawing. Add <code>screen:setDrawRotation(enemy.rotation)</code> before drawing each sprite:</p>
 
-    <div class="code-block no-copy"><pre>function draw_enemies()
+    <div class="code-block"><pre>function draw_enemies()
   for ix, enemy in pairs(enemies) do
     if not enemy.isDestroyed then
       draw_box(enemy)
@@ -44,7 +44,7 @@ end</pre></div>
     <h3>📋 Task 3: Set Rotation Speeds for Eyes</h3>
     <p>Update your <code>init_enemies()</code> to set rotation speeds for the googly eyes:</p>
 
-    <div class="code-block no-copy"><pre>function init_enemies()
+    <div class="code-block"><pre>function init_enemies()
   enemies = {}
 
   -- LEFT EYE - Now with rotation!
@@ -92,7 +92,7 @@ end</pre></div>
     <div class="warning-box">
         <h3>⚡ Setting Rotation Speed</h3>
         <p>You can set different rotation speeds when initializing any enemy:</p>
-        <div class="code-block no-copy"><pre>local enemy1 = create_enemy("enemy_ship", 32, 32)
+        <div class="code-block"><pre>local enemy1 = create_enemy("enemy_ship", 32, 32)
 enemy1.rotation_speed = 5  -- Rotates quickly
 
 local enemy2 = create_enemy("googlya", 32, 32)
