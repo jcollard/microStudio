@@ -1,8 +1,8 @@
 -- ============================================
--- SOLUTION FOR STEP 10: REFACTOR check_collisions() WITH NESTED LOOP
+-- SOLUTION FOR STEP 7d: REFACTOR check_collisions() WITH NESTED LOOP
 -- ============================================
--- This step refactors all three functions to use loops
--- All duplication has been eliminated!
+-- This step refactors check_collisions() to use a nested loop
+-- Eyes are NOT migrated yet, all duplication in enemy functions is eliminated!
 
 enemies = {}
 
@@ -34,24 +34,28 @@ function init_enemies()
   enemy2.vy = -0.4
 end
 
--- ===== REFACTORED WITH LOOP =====
+-- ===== REFACTORED WITH LOOP AND ROTATION =====
 
 function draw_enemies()
   for ix, enemy in pairs(enemies) do
     if not enemy.isDestroyed then
       draw_box(enemy)
+      screen:setDrawRotation(enemy.rotation)
       screen:drawSprite(enemy.sprite, enemy.x, enemy.y, enemy.width, enemy.height)
     end
   end
+  screen:setDrawRotation(0)
 end
 
--- ===== REFACTORED WITH LOOP =====
+-- ===== REFACTORED WITH LOOP AND ROTATION ADDED =====
 
 function update_enemies()
   for ix, enemy in pairs(enemies) do
     if not enemy.isDestroyed then
       enemy.x = enemy.x + enemy.vx
       enemy.y = enemy.y + enemy.vy
+
+      enemy.rotation = enemy.rotation + enemy.rotation_speed
 
       if enemy.x < -100 then enemy.vx = -enemy.vx end
       if enemy.x > 100 then enemy.vx = -enemy.vx end
@@ -116,7 +120,7 @@ function check_collisions()
       end
     end
 
-    -- Check collisions with ALL enemies using a loop (NEW!)
+    -- Check collisions with ALL enemies using a loop
     for jx, enemy in pairs(enemies) do
       if not enemy.isDestroyed then
         if boxes_colliding(laser, enemy) then

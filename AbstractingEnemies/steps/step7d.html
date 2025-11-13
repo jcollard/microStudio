@@ -1,0 +1,78 @@
+<h2>Step 7d: Refactor check_collisions() 💥</h2>
+<div class="step-content">
+    <p>Finally, let's apply the loop pattern to your <code>check_collisions()</code> function!</p>
+
+    <h3>🔴 Current Code (With Duplication)</h3>
+    <p>Your current <code>check_collisions()</code> manually checks both enemies:</p>
+
+    <div class="code-block no-copy"><pre>function check_collisions()
+  for ix, laser in pairs(lasers) do
+    -- Check collisions between lasers and eyes
+    if not left_eye.isDestroyed then
+      if boxes_colliding(laser, left_eye) then
+        left_eye.isDestroyed = true
+      end
+    end
+
+    if not right_eye.isDestroyed then
+      if boxes_colliding(laser, right_eye) then
+        right_eye.isDestroyed = true
+      end
+    end
+
+    -- Check collisions with FIRST enemy
+    local enemy = enemies[1]
+    if not enemy.isDestroyed then
+      if boxes_colliding(laser, enemy) then
+        enemy.isDestroyed = true
+      end
+    end
+
+    -- Check collisions with SECOND enemy - Exact same code, just [2]
+    enemy = enemies[2]
+    if not enemy.isDestroyed then
+      if boxes_colliding(laser, enemy) then
+        enemy.isDestroyed = true
+      end
+    end
+  end
+end</pre></div>
+
+    <h3>🎯 Your Challenge</h3>
+    <p>Replace the manual enemy collision checks (<code>enemies[1]</code> and <code>enemies[2]</code>) with a loop!</p>
+
+    <div class="info-box">
+        <h3>💡 Hints</h3>
+        <ul>
+            <li>You need a <strong>nested loop</strong> - a loop inside the existing laser loop</li>
+            <li>Use: <code>for jx, enemy in pairs(enemies) do</code> (use <code>jx</code> instead of <code>ix</code> to avoid conflicts)</li>
+            <li>Keep the eye collision checks as-is - only replace the enemy collision blocks</li>
+            <li>The collision logic stays the same: <code>if not enemy.isDestroyed then</code> and <code>boxes_colliding(laser, enemy)</code></li>
+            <li>Remove the manual <code>enemies[1]</code> and <code>enemies[2]</code> blocks entirely</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚠️ Nested Loops Explained</h3>
+        <p>This function will have TWO loops working together:</p>
+        <ul>
+            <li><strong>Outer loop</strong> - Already exists! Iterates through each laser (<code>for ix, laser in pairs(lasers)</code>)</li>
+            <li><strong>Inner loop</strong> - You need to add this! For each laser, check against ALL enemies (<code>for jx, enemy in pairs(enemies)</code>)</li>
+        </ul>
+        <p>This is called a <strong>nested loop</strong> - a loop inside another loop. It checks every combination of laser-enemy pairs!</p>
+    </div>
+
+    <h3>✅ How to Know You're Done</h3>
+    <p>Run your game! Fire lasers at both enemies. They should both be destroyed when hit. If the collision detection works the same as before, you've successfully refactored it!</p>
+
+    <div class="success-box">
+        <h3>✨ You've Eliminated ALL Duplication!</h3>
+        <p>Once you complete this step, you'll have refactored all three functions with loops:</p>
+        <ul>
+            <li>✅ <code>update_enemies()</code> - Uses a loop</li>
+            <li>✅ <code>draw_enemies()</code> - Uses a loop</li>
+            <li>✅ <code>check_collisions()</code> - Uses a nested loop</li>
+        </ul>
+        <p>Your code will be clean, scalable, and ready to handle ANY number of enemies!</p>
+    </div>
+</div>

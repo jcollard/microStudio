@@ -2,6 +2,12 @@ let currentStep = 0;
 const totalSteps = 14;
 const STORAGE_KEY = 'abstractingEnemies_currentStep';
 
+// Map step indices to actual filenames
+const stepFiles = [
+    'step0', 'step1', 'step2', 'step3', 'step4', 'step5', 'step6', 'step7',
+    'step7b', 'step7c', 'step7d', 'step8', 'step8b', 'step9', 'step10'
+];
+
 // Initialize step dots
 function initStepDots() {
     const dotsContainer = document.getElementById('stepDots');
@@ -17,7 +23,8 @@ function initStepDots() {
 // Load step content dynamically
 async function loadStep(stepNum) {
     try {
-        const response = await fetch(`steps/step${stepNum}.html`);
+        const stepFile = stepFiles[stepNum];
+        const response = await fetch(`steps/${stepFile}.html`);
         if (!response.ok) throw new Error('Step not found');
         const content = await response.text();
         document.getElementById('step-content').innerHTML = content;

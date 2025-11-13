@@ -1,8 +1,8 @@
 -- ============================================
--- SOLUTION FOR STEP 8: REFACTOR update_enemies() WITH LOOP
+-- SOLUTION FOR STEP 8: MIGRATE THE EYES (WITHOUT ROTATION)
 -- ============================================
--- This step refactors update_enemies() to use a loop
--- draw_enemies() and check_collisions() still have duplication
+-- This step adds eyes to the enemy system
+-- Eyes are now managed like regular enemies, but rotation doesn't work yet!
 
 enemies = {}
 
@@ -19,6 +19,22 @@ end
 function init_enemies()
   enemies = {}
 
+  -- LEFT EYE - Now an enemy!
+  local left_eye = create_enemy("googlya", 28, 28)
+  left_eye.x = 0
+  left_eye.y = 0
+  left_eye.vx = 0.7
+  left_eye.vy = 0.57575
+  left_eye.color = "#FF00FF"
+
+  -- RIGHT EYE - Now an enemy!
+  local right_eye = create_enemy("googlyb", 28, 28)
+  right_eye.x = 0
+  right_eye.y = 0
+  right_eye.vx = -0.6
+  right_eye.vy = 0.37575
+  right_eye.color = "#00FFFF"
+
   -- FIRST ENEMY
   local enemy1 = create_enemy("enemy_ship", 32, 32)
   enemy1.x = 50
@@ -26,7 +42,7 @@ function init_enemies()
   enemy1.vx = 0.5
   enemy1.vy = 0.3
 
-  -- SECOND ENEMY (NEW!)
+  -- SECOND ENEMY
   local enemy2 = create_enemy("enemy_ship", 32, 32)
   enemy2.x = -50
   enemy2.y = -50
@@ -34,19 +50,16 @@ function init_enemies()
   enemy2.vy = -0.4
 end
 
+-- ===== REFACTORED WITH LOOP (NO ROTATION YET) =====
+
 function draw_enemies()
-  -- FIRST ENEMY
-  local enemy = enemies[1]
-  draw_box(enemy)
-  screen:drawSprite(enemy.sprite, enemy.x, enemy.y, enemy.width, enemy.height)
-
-  -- SECOND ENEMY (NEW!) - Exact same code, just [2]
-  enemy = enemies[2]
-  draw_box(enemy)
-  screen:drawSprite(enemy.sprite, enemy.x, enemy.y, enemy.width, enemy.height)
+  for ix, enemy in pairs(enemies) do
+    if not enemy.isDestroyed then
+      draw_box(enemy)
+      screen:drawSprite(enemy.sprite, enemy.x, enemy.y, enemy.width, enemy.height)
+    end
+  end
 end
-
--- ===== REFACTORED WITH LOOP =====
 
 function update_enemies()
   for ix, enemy in pairs(enemies) do
@@ -100,6 +113,8 @@ function boxes_colliding(box1, box2)
   return false
 end
 
+-- ===== REFACTORED WITH NESTED LOOP =====
+
 function check_collisions()
   for ix, laser in pairs(lasers) do
     -- Check collisions between lasers and eyes
@@ -115,19 +130,12 @@ function check_collisions()
       end
     end
 
-    -- Check collisions with FIRST enemy
-    local enemy = enemies[1]
-    if not enemy.isDestroyed then
-      if boxes_colliding(laser, enemy) then
-        enemy.isDestroyed = true
-      end
-    end
-
-    -- Check collisions with SECOND enemy (NEW!) - Exact same code, just [2]
-    enemy = enemies[2]
-    if not enemy.isDestroyed then
-      if boxes_colliding(laser, enemy) then
-        enemy.isDestroyed = true
+    -- Check collisions with ALL enemies using a loop
+    for jx, enemy in pairs(enemies) do
+      if not enemy.isDestroyed then
+        if boxes_colliding(laser, enemy) then
+          enemy.isDestroyed = true
+        end
       end
     end
   end

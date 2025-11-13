@@ -1,8 +1,8 @@
 -- ============================================
--- SOLUTION FOR STEP 13 (Step 9): CREATE random_enemy() FUNCTION
+-- SOLUTION FOR STEP 8b: ADD ENEMY ROTATION
 -- ============================================
--- This step adds a helper function to create enemies with random properties
--- This will be used later for spawning new waves of enemies
+-- This step adds generic rotation to all enemies
+-- Eyes now rotate using their rotation_speed values!
 
 enemies = {}
 
@@ -16,26 +16,10 @@ function create_enemy(sprite_name, width, height)
   return enemy
 end
 
--- ===== NEW RANDOM ENEMY FUNCTION =====
-
-function random_enemy()
-  local enemy = create_enemy("enemy_ship", 32, 32)
-
-  -- Random position anywhere on screen
-  enemy.x = (math.random() - 0.5) * 200
-  enemy.y = (math.random() - 0.5) * 200
-
-  -- Random velocity
-  enemy.vx = (math.random() - 0.5) * 2
-  enemy.vy = (math.random() - 0.5) * 2
-
-  return enemy
-end
-
 function init_enemies()
   enemies = {}
 
-  -- LEFT EYE
+  -- LEFT EYE - Now with rotation!
   local left_eye = create_enemy("googlya", 28, 28)
   left_eye.x = 0
   left_eye.y = 0
@@ -44,7 +28,7 @@ function init_enemies()
   left_eye.color = "#FF00FF"
   left_eye.rotation_speed = 12
 
-  -- RIGHT EYE
+  -- RIGHT EYE - Now with rotation!
   local right_eye = create_enemy("googlyb", 28, 28)
   right_eye.x = 0
   right_eye.y = 0
@@ -80,8 +64,6 @@ function draw_enemies()
   end
   screen:setDrawRotation(0)
 end
-
--- ===== REFACTORED WITH LOOP AND ROTATION ADDED =====
 
 function update_enemies()
   for ix, enemy in pairs(enemies) do

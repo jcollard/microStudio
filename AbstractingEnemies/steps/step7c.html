@@ -1,0 +1,40 @@
+<h2>Step 7c: Refactor draw_enemies() 🎨</h2>
+<div class="step-content">
+    <p>Now let's apply the same loop pattern to your <code>draw_enemies()</code> function!</p>
+
+    <h3>🔴 Current Code (With Duplication)</h3>
+    <p>Your current <code>draw_enemies()</code> manually draws both enemies:</p>
+
+    <div class="code-block no-copy"><pre>function draw_enemies()
+  -- FIRST ENEMY
+  local enemy = enemies[1]
+  draw_box(enemy)
+  screen:drawSprite(enemy.sprite, enemy.x, enemy.y, enemy.width, enemy.height)
+
+  -- SECOND ENEMY - Exact same code, just [2]
+  enemy = enemies[2]
+  draw_box(enemy)
+  screen:drawSprite(enemy.sprite, enemy.x, enemy.y, enemy.width, enemy.height)
+end</pre></div>
+
+    <h3>🎯 Your Challenge</h3>
+    <p>Refactor <code>draw_enemies()</code> to use a loop instead of duplicated code!</p>
+
+    <div class="info-box">
+        <h3>💡 Hints</h3>
+        <ul>
+            <li>Use the same loop pattern from <code>update_enemies()</code>: <code>for ix, enemy in pairs(enemies) do</code></li>
+            <li>Keep the same drawing code: <code>draw_box(enemy)</code> and <code>screen:drawSprite(...)</code></li>
+            <li>Don't forget to add an <code>if not enemy.isDestroyed then</code> check so you don't draw destroyed enemies!</li>
+            <li>Remove the manual <code>enemies[1]</code> and <code>enemies[2]</code> blocks entirely</li>
+        </ul>
+    </div>
+
+    <div class="warning-box">
+        <h3>⚠️ Important: Check for Destroyed Enemies!</h3>
+        <p>Unlike <code>update_enemies()</code>, you need to add the <code>if not enemy.isDestroyed then</code> check in <code>draw_enemies()</code>. This ensures you don't draw enemies that have been destroyed by lasers!</p>
+    </div>
+
+    <h3>✅ How to Know You're Done</h3>
+    <p>Run your game! You should still see both enemies rendered on screen, and they should disappear when hit by lasers. If it works the same as before, you've successfully refactored it!</p>
+</div>
