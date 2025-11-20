@@ -47,63 +47,28 @@ end`;
         renderCodeBlock('all-enemies-destroyed-code', allEnemiesDestroyedCode, 'lua');
     </script>
 
-    <div class="info-box">
-        <h3>How It Works</h3>
-        <p>This function uses a clever pattern called <strong>"early return"</strong>:</p>
-        <ol>
-            <li><strong>Loop through all enemies</strong> - Check each one</li>
-            <li><strong>If any enemy is NOT destroyed</strong> - Immediately return false and stop checking</li>
-            <li><strong>If loop completes</strong> - We checked every enemy and none were alive, so return true</li>
-        </ol>
-        <p><strong>Key insight:</strong> We only need to find ONE living enemy to know that NOT all are destroyed. This makes the function efficient - it stops as soon as it finds evidence that contradicts "all destroyed".</p>
-    </div>
+    <p><strong>Early return pattern:</strong> The function stops as soon as it finds one living enemy. If the loop completes without finding any, all are destroyed.</p>
 
-    <h3>Testing Your Implementation</h3>
+    <h3>Testing</h3>
 
-    <p>Test the function using the console to see how it responds to different game states:</p>
+    <p>Test with: <code>print(all_enemies_destroyed())</code> — returns <code>false</code> with enemies alive, <code>true</code> when all destroyed.</p>
 
     <div id="test-commands"></div>
 
     <script>
-        const testCommands = `// Test 1: With enemies on screen
-print(all_enemies_destroyed())  // Should print: false
+        const testCommands = `// With enemies on screen
+print(all_enemies_destroyed())  // false
 
-// Test 2: Destroy all enemies by shooting them
-// (Play the game and destroy all visible enemies)
-
-// Then test again
-print(all_enemies_destroyed())  // Should print: true
-
-// Test 3: Spawn a new enemy
-spawn_enemy()
-
-// Check again
-print(all_enemies_destroyed())  // Should print: false`;
+// After destroying all
+print(all_enemies_destroyed())  // true`;
 
         renderCodeBlock('test-commands', testCommands, 'lua');
     </script>
 
-    <p><strong>What you should observe:</strong></p>
-    <ul>
-        <li>When enemies are visible → function returns <code>false</code></li>
-        <li>After destroying all enemies → function returns <code>true</code></li>
-        <li>After spawning new enemies → function returns <code>false</code> again</li>
-    </ul>
-
     <div class="success-box">
-        <h3>Professional Game Design Pattern</h3>
-        <p>You've just implemented a <strong>state checking function</strong>, one of the most fundamental patterns in game programming.</p>
-        <p><strong>Why this matters:</strong></p>
-        <ul>
-            <li><strong>Event triggering</strong> - Detect when conditions are met to trigger new events</li>
-            <li><strong>UI updates</strong> - Show victory messages, unlock buttons, display completion status</li>
-            <li><strong>Game flow control</strong> - Transition between game states (playing → victory → next level)</li>
-            <li><strong>Wave systems</strong> - Detect when to spawn the next wave of enemies</li>
-        </ul>
-        <p><strong>This pattern is everywhere:</strong> Achievement systems, quest completion, multiplayer win conditions, boss phase transitions, puzzle solutions - they all use state checking functions.</p>
+        <h3>State Checking Functions</h3>
+        <p>You've implemented a fundamental pattern used for event triggering, UI updates, game flow control, achievements, quest completion, and wave systems—essential for responsive gameplay.</p>
     </div>
-
-    <p><strong>Next:</strong> In Step 6, you'll use this function to create an auto-spawn system that continuously spawns enemies when all are destroyed.</p>
 </div>
 
 <style>

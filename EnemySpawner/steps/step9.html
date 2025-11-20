@@ -19,49 +19,13 @@
     <h3>Professional Techniques You Mastered</h3>
 
     <div class="info-box">
-        <h3>Factory Pattern</h3>
-        <p><strong>What you learned:</strong> <code>spawn_enemy()</code> abstracts the complex process of enemy creation</p>
-        <p><strong>Why it matters:</strong> Used in professional games to create objects without exposing creation logic</p>
-        <p><strong>Real-world use:</strong> Spawning bullets, enemies, power-ups, particles - any object that appears dynamically</p>
+        <ul>
+            <li><strong>Factory Pattern</strong> - <code>spawn_enemy()</code> abstracts object creation (used for bullets, enemies, power-ups, particles)</li>
+            <li><strong>Object Pooling</strong> - Reusing destroyed enemies prevents memory bloat (essential for bullet hell games, endless runners)</li>
+            <li><strong>Event-Driven Architecture</strong> - Game reacts automatically to conditions (AI behavior, achievements, state management)</li>
+            <li><strong>Wave Mechanics</strong> - Progressive difficulty through escalating enemy counts (survival games, tower defense, roguelikes)</li>
+        </ul>
     </div>
-
-    <div class="info-box">
-        <h3>Object Pooling</h3>
-        <p><strong>What you learned:</strong> Reusing destroyed enemies instead of creating new ones</p>
-        <p><strong>Why it matters:</strong> Prevents memory bloat and performance degradation during long gameplay sessions</p>
-        <p><strong>Real-world use:</strong> Bullet hell games, endless runners, particle systems - essential for games with frequent object creation</p>
-    </div>
-
-    <div class="info-box">
-        <h3>Event-Driven Architecture</h3>
-        <p><strong>What you learned:</strong> Game reacts to conditions automatically without manual triggers</p>
-        <p><strong>Why it matters:</strong> Creates responsive, dynamic gameplay that feels alive</p>
-        <p><strong>Real-world use:</strong> AI behavior, game state management, achievement systems - the foundation of modern game design</p>
-    </div>
-
-    <div class="info-box">
-        <h3>Wave Mechanics</h3>
-        <p><strong>What you learned:</strong> Escalating difficulty through progressive enemy counts</p>
-        <p><strong>Why it matters:</strong> Keeps players challenged and engaged over time</p>
-        <p><strong>Real-world use:</strong> Survival games, tower defense, roguelikes - any game with progressive challenge</p>
-    </div>
-
-    <h3>Step-by-Step Journey</h3>
-
-    <p>Let's reflect on how you built this system piece by piece:</p>
-
-    <ol>
-        <li><strong>Step 1:</strong> Random enemy generation - learned randomization and sprite variation</li>
-        <li><strong>Step 2:</strong> Created <code>spawn_enemy()</code> - abstracted enemy creation into a reusable function</li>
-        <li><strong>Step 3:</strong> Refactored <code>init_enemies()</code> - simplified initialization with factory pattern</li>
-        <li><strong>Step 4:</strong> Implemented object pooling - optimized memory by reusing destroyed enemies</li>
-        <li><strong>Step 5:</strong> Created <code>all_enemies_destroyed()</code> - added state checking capability</li>
-        <li><strong>Step 6:</strong> Added auto-spawn - created event-driven gameplay loop</li>
-        <li><strong>Step 7:</strong> Built <code>spawn_enemy_wave()</code> - implemented wave spawning formula</li>
-        <li><strong>Step 8:</strong> Complete wave system - one line change transformed the entire game</li>
-    </ol>
-
-    <p>Each step built on the previous one, creating a sophisticated system through composable functions.</p>
 
     <h3>Play Your Creation</h3>
 
@@ -88,53 +52,25 @@
 
     <h3>What's Next?</h3>
 
-    <p>Now that you have a dynamic spawning system, you can expand your game in exciting directions:</p>
-
+    <p><strong>Extension Ideas:</strong></p>
     <ul>
-        <li><strong>Different enemy types</strong> - Add enemies with unique behaviors and movement patterns</li>
-        <li><strong>Power-ups</strong> - Spawn collectible items that enhance the player</li>
-        <li><strong>Boss waves</strong> - Every 5th wave could spawn a special boss enemy</li>
-        <li><strong>Difficulty curves</strong> - Experiment with exponential or multiplicative wave formulas</li>
-        <li><strong>Spawn patterns</strong> - Create formation spawning (V-shapes, circles, etc.)</li>
+        <li><strong>Different enemy types</strong> - Add enemies with unique behaviors</li>
+        <li><strong>Boss waves</strong> - Every 5th wave spawns a special boss</li>
+        <li><strong>Difficulty curves</strong> - Try exponential formulas (<code>n * 1.5</code>)</li>
+        <li><strong>Spawn patterns</strong> - Create V-shapes or circle formations</li>
         <li><strong>Wave announcements</strong> - Display "Wave 5" text between spawns</li>
-        <li><strong>Score system</strong> - Award points that scale with wave number</li>
     </ul>
 
-    <div class="info-box">
-        <h3>Challenge Ideas</h3>
-        <p>Ready to extend your skills? Try these challenges:</p>
-        <ol>
-            <li><strong>Double Spawn:</strong> Modify <code>spawn_enemy_wave()</code> to spawn 2 more enemies per wave instead of 1</li>
-            <li><strong>Size Progression:</strong> Make enemies gradually larger as waves progress</li>
-            <li><strong>Speed Increase:</strong> Each wave's enemies move slightly faster</li>
-            <li><strong>Delay Between Waves:</strong> Add a 3-second countdown before spawning new wave</li>
-            <li><strong>Random Wave Size:</strong> Sometimes spawn 3 enemies, sometimes 5, sometimes 7</li>
-        </ol>
-    </div>
-
-    <h3>You're Ready for More!</h3>
-
-    <p>You've proven you can build professional game systems by breaking complex problems into simple, composable functions. This is exactly how professional game developers work!</p>
-
-    <p><strong>Key mindset you've developed:</strong></p>
+    <p><strong>Challenge Yourself:</strong></p>
     <ul>
-        <li><strong>Decomposition</strong> - Breaking big problems into small functions</li>
-        <li><strong>Reusability</strong> - Writing code that works in multiple contexts</li>
-        <li><strong>Optimization</strong> - Thinking about memory and performance</li>
-        <li><strong>Systems thinking</strong> - Understanding how components interact</li>
+        <li>Modify <code>spawn_enemy_wave()</code> to spawn 2 more enemies per wave</li>
+        <li>Make enemies gradually larger or faster as waves progress</li>
+        <li>Add a 3-second countdown delay between waves</li>
     </ul>
 
     <div class="success-box">
         <h3>Congratulations, Game Developer!</h3>
-        <p>You've completed a significant milestone in your game development journey. The spawning system you built demonstrates real understanding of:</p>
-        <ul>
-            <li>Factory patterns and object creation</li>
-            <li>Memory management and optimization</li>
-            <li>Event-driven architecture and reactive systems</li>
-            <li>Game design through progressive difficulty</li>
-        </ul>
-        <p><strong>Keep building, keep learning, and most importantly - keep having fun!</strong></p>
+        <p>You've mastered factory patterns, object pooling, event-driven architecture, and progressive difficulty systems—the same techniques used in professional game engines.</p>
+        <p><strong>Next Lesson:</strong> <strong>Collision Detection</strong> - implement enemy-player collisions, health systems, and game over states.</p>
     </div>
-
-    <p><strong>Next Lesson Preview:</strong> In the upcoming <strong>Collision Detection</strong> tutorial, you'll learn how to implement enemy-player collisions, health systems, and game over states - essential mechanics for any action game!</p>
 </div>

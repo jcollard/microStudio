@@ -4,28 +4,10 @@
     <p>Your <code>spawn_enemy()</code> function works great, but there's a hidden problem. Every time you call it, a new enemy is added to the <code>enemies</code> table. After spawning and destroying hundreds of enemies during gameplay, the table fills with destroyed enemies that just sit there taking up memory.</p>
 
     <div class="info-box">
-        <h3>The Problem: Memory Waste</h3>
-        <p>Consider what happens during a typical game session:</p>
-        <ul>
-            <li>You spawn 100 enemies over 5 minutes of gameplay</li>
-            <li>The player destroys 95 of them</li>
-            <li>The <code>enemies</code> table now has 100 entries: 95 destroyed, 5 active</li>
-            <li>Those 95 destroyed enemies are still in memory, doing nothing</li>
-            <li>Every frame, loops must iterate over all 100 enemies (even the destroyed ones)</li>
-        </ul>
-        <p><strong>Result:</strong> Wasted memory and slower performance as the table grows.</p>
-    </div>
-
-    <div class="info-box">
-        <h3>The Solution: Object Pooling</h3>
-        <p><strong>Object pooling</strong> is a professional game optimization technique where you reuse objects instead of constantly creating and destroying them.</p>
-        <p><strong>How it works:</strong></p>
-        <ol>
-            <li>Before creating a new enemy, check if any destroyed enemies exist in the table</li>
-            <li>If found: "Resurrect" it by resetting its properties (<code>isDestroyed = false</code>, new position, new velocity)</li>
-            <li>If not found: Create a new enemy (the original behavior)</li>
-        </ol>
-        <p><strong>Benefit:</strong> The <code>enemies</code> table stabilizes at a reasonable size instead of growing infinitely.</p>
+        <h3>Object Pooling</h3>
+        <p><strong>Problem:</strong> Spawning 100 enemies over 5 minutes creates 95 destroyed entries sitting in memory, wasting resources.</p>
+        <p><strong>Solution:</strong> Before creating a new enemy, check for destroyed ones and reuse them by resetting properties (<code>isDestroyed = false</code>, new position, velocity).</p>
+        <p><strong>Benefit:</strong> Table stabilizes at a reasonable size instead of growing infinitely.</p>
     </div>
 
     <h3>Your Task</h3>
@@ -92,58 +74,31 @@ end`;
         renderDiffBlock('spawn-enemy-diff', oldSpawn, newSpawn, 'Add object pooling to spawn_enemy()');
     </script>
 
-    <div class="info-box">
-        <h3>How Object Pooling Works</h3>
-        <p>Let's trace through what happens:</p>
-        <ol>
-            <li><strong>First spawn:</strong> No destroyed enemies exist → creates new enemy → table size = 1</li>
-            <li><strong>Player destroys enemy:</strong> Enemy marked <code>isDestroyed = true</code> → table size still 1</li>
-            <li><strong>Second spawn:</strong> Finds destroyed enemy → resets it → table size still 1 (reused!)</li>
-            <li><strong>Third spawn (before destroying):</strong> No destroyed enemies → creates new → table size = 2</li>
-        </ol>
-        <p><strong>Key insight:</strong> The table only grows when all enemies are active. Once some are destroyed, future spawns reuse them.</p>
-    </div>
 
-    <h3>Testing Your Implementation</h3>
+    <h3>Testing</h3>
 
-    <p>Test the object pooling optimization using the console. You can verify that destroyed enemies are being reused:</p>
+    <p>Verify pooling: <code>print(#enemies)</code> before and after spawning. Table size should stabilize as destroyed enemies get reused.</p>
 
     <div id="test-commands"></div>
 
     <script>
-        const testCommands = `// Check how many enemies exist
-print(#enemies)  // Should print a small number
+        const testCommands = `// Check enemy count
+print(#enemies)
 
-// Destroy some enemies by shooting them
-// Then spawn more enemies
-spawn_enemy()
+// Destroy some, then spawn more
 spawn_enemy()
 spawn_enemy()
 
-// Check table size again
-print(#enemies)  // Should be similar or same!
-
-// The destroyed enemies were reused instead of creating new ones`;
+// Check again - should be similar
+print(#enemies)`;
 
         renderCodeBlock('test-commands', testCommands, 'lua');
     </script>
 
-    <p><strong>What you should observe:</strong> The <code>enemies</code> table size stabilizes instead of growing infinitely. Destroyed enemies get "recycled" back into the game with new properties.</p>
-
     <div class="success-box">
-        <h3>Professional Optimization Technique</h3>
-        <p>You've just implemented <strong>object pooling</strong>, a technique used in professional game engines like Unity, Unreal Engine, and every major AAA game.</p>
-        <p><strong>Why it matters:</strong></p>
-        <ul>
-            <li><strong>Memory efficiency</strong> - Prevents memory from growing unbounded</li>
-            <li><strong>Performance</strong> - Creating objects is expensive; reusing them is fast</li>
-            <li><strong>Garbage collection</strong> - Fewer objects created means less work for the garbage collector</li>
-            <li><strong>Scalability</strong> - Your game can handle thousands of enemies without slowing down</li>
-        </ul>
-        <p><strong>Real-world applications:</strong> Bullets, particles, enemies, sound effects, UI elements - any game object that spawns and despawns frequently benefits from pooling.</p>
+        <h3>Object Pooling</h3>
+        <p>You've implemented a professional optimization technique used in Unity, Unreal Engine, and AAA games. Object pooling prevents memory bloat, improves performance, and enables scalability for bullets, particles, enemies, and any frequently spawned objects.</p>
     </div>
-
-    <p><strong>Next:</strong> In Step 5, you'll create a function to detect when all enemies are destroyed, setting up the wave system.</p>
 </div>
 
 <style>

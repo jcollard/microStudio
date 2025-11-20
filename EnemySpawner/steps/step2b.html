@@ -24,17 +24,28 @@
         <p><strong>Rule:</strong> Always use the same value for both width and height (e.g., 24x24, 32x32, 48x48).</p>
     </div>
 
-    <p>Modify your <code>spawn_enemy()</code> function to use a random size. Here's one approach:</p>
+    <p>Modify your <code>spawn_enemy()</code> function to use a random size:</p>
 
-    <div id="random-size-code"></div>
+    <div id="random-size-diff"></div>
 
     <script>
-        const randomSizeCode = `-- Global table for size options
+        const oldSpawnStep2 = `function spawn_enemy()
+  local enemy = create_enemy("enemy_ship", 32, 32)
+
+  -- Spawn at top of screen with random x position
+  enemy.x = math.random(-100, 100)
+  enemy.y = 100
+
+  -- Give it random downward velocity
+  enemy.vx = math.random(-10, 10) / 10
+  enemy.vy = -1
+end`;
+
+        const newSpawnSize = `-- Global table for size options
 SIZES = {24, 32, 40}
 
-spawn_enemy = function()
+function spawn_enemy()
   -- Random size: 24, 32, or 40 pixels
-  -- Lua uses 1-based indexing, so math.random(1, 3) gives us indices 1-3
   local size = SIZES[math.random(1, 3)]
 
   local enemy = create_enemy("enemy_ship", size, size)
@@ -44,21 +55,10 @@ spawn_enemy = function()
   enemy.vy = -1
 end`;
 
-        renderCodeBlock('random-size-code', randomSizeCode, 'lua');
+        renderDiffBlock('random-size-diff', oldSpawnStep2, newSpawnSize, 'Add random enemy sizes');
     </script>
 
-    <div class="info-box">
-        <h3>Understanding Table Indexing in Lua</h3>
-        <p>The expression <code>SIZES[math.random(1, 3)]</code> breaks down like this:</p>
-        <ul>
-            <li><code>SIZES = {24, 32, 40}</code> - Creates a table with three size options using <strong>curly braces { }</strong></li>
-            <li><code>math.random(1, 3)</code> - Generates 1, 2, or 3 randomly</li>
-            <li><code>SIZES[1]</code> - Returns 24 (first element)</li>
-            <li><code>SIZES[2]</code> - Returns 32 (second element)</li>
-            <li><code>SIZES[3]</code> - Returns 40 (third element)</li>
-        </ul>
-        <p><strong>Important: Lua uses 1-based indexing</strong>, so the first element is at index 1, not 0!</p>
-    </div>
+    <p><strong>Note:</strong> <code>SIZES[math.random(1, 3)]</code> randomly selects from the table. Lua uses 1-based indexing, so the first element is at index 1.</p>
 
     <p><strong>Try it out:</strong> Test your updated function in the console with <code>spawn_enemy()</code>. You should see enemies of different sizes appearing!</p>
 
@@ -77,16 +77,30 @@ end`;
 
     <p>Now let's make it even more interesting by spawning <strong>different enemy sprites</strong> randomly!</p>
 
-    <p>Modify your <code>spawn_enemy()</code> function to randomly select between two different enemy sprites:</p>
+    <p>Modify your <code>spawn_enemy()</code> function to randomly select between different enemy sprites:</p>
 
-    <div id="random-sprite-code"></div>
+    <div id="random-sprite-diff"></div>
 
     <script>
-        const randomSpriteCode = `-- Global tables for randomization options
+        const oldSpawnSize = `-- Global table for size options
+SIZES = {24, 32, 40}
+
+function spawn_enemy()
+  -- Random size
+  local size = SIZES[math.random(1, 3)]
+
+  local enemy = create_enemy("enemy_ship", size, size)
+  enemy.x = math.random(-100, 100)
+  enemy.y = 100
+  enemy.vx = math.random(-10, 10) / 10
+  enemy.vy = -1
+end`;
+
+        const newSpawnSprite = `-- Global tables for randomization options
 SIZES = {24, 32, 40}
 ENEMY_SPRITES = {"enemy_ship", "ufo"}
 
-spawn_enemy = function()
+function spawn_enemy()
   -- Random size
   local size = SIZES[math.random(1, 3)]
 
@@ -100,16 +114,9 @@ spawn_enemy = function()
   enemy.vy = -1
 end`;
 
-        renderCodeBlock('random-sprite-code', randomSpriteCode, 'lua');
+        renderDiffBlock('random-sprite-diff', oldSpawnSize, newSpawnSprite, 'Add random enemy sprite types');
     </script>
 
-    <p><strong>How it works:</strong></p>
-    <ul>
-        <li>The table <code>ENEMY_SPRITES = {"enemy_ship", "ufo"}</code> contains two sprite names</li>
-        <li><code>math.random(1, 2)</code> randomly picks index 1 or 2 (Lua's 1-based indexing)</li>
-        <li>The selected sprite name is stored in <code>sprite_name</code></li>
-        <li><code>create_enemy(sprite_name, size, size)</code> uses the random sprite</li>
-    </ul>
 
     <div style="text-align: center; margin: 20px 0;">
         <button onclick="showGallery()" class="gallery-button">
@@ -133,24 +140,20 @@ local sprite_name = ENEMY_SPRITES[math.random(1, 4)]</code></pre>
         <p><strong>Note:</strong> microStudio converts all sprite names to lowercase automatically!</p>
     </div>
 
-    <h3>Testing Your Randomization</h3>
+    <h3>Testing</h3>
 
-    <p>Test your enhanced spawning function by calling it multiple times from the console:</p>
+    <p>Spawn multiple enemies to see variety: <code>spawn_enemy()</code> repeatedly—you should see different sizes and sprite types.</p>
 
     <div id="test-commands"></div>
 
     <script>
-        const testCommands = `// Spawn several enemies to see the variety:
-spawn_enemy()
-spawn_enemy()
+        const testCommands = `// Spawn several enemies
 spawn_enemy()
 spawn_enemy()
 spawn_enemy()`;
 
         renderCodeBlock('test-commands', testCommands, 'lua');
     </script>
-
-    <p><strong>What you should see:</strong> A mix of different enemy sizes and sprite types appearing on screen!</p>
 
     <h3>Try the Demo</h3>
 
@@ -181,18 +184,9 @@ spawn_enemy()`;
     </script>
 
     <div class="success-box">
-        <h3>🎉 Key Concepts Learned</h3>
-        <p>Great work! You've learned several important game development concepts:</p>
-        <ul>
-            <li><strong>Data-driven design</strong> - Using tables to store options makes code flexible and easy to modify</li>
-            <li><strong>Random selection</strong> - The pattern <code>table[math.random(0, n)]</code> is used constantly in games</li>
-            <li><strong>Visual variety</strong> - Randomization makes games more interesting without writing more code</li>
-            <li><strong>Square sprite constraints</strong> - Understanding your asset requirements prevents visual bugs</li>
-        </ul>
-        <p><strong>Pro tip:</strong> The same table selection pattern works for sounds, colors, speeds, and any other game element you want to randomize!</p>
+        <h3>Randomization & Data-Driven Design</h3>
+        <p>You've learned data-driven design (tables for options), random selection (<code>table[math.random(1, n)]</code>), and visual variety through randomization. This pattern works for sounds, colors, speeds, and any game element.</p>
     </div>
-
-    <p><strong>Next:</strong> In Step 3, you'll refactor your <code>init_enemies()</code> function to use this powerful new spawning system, replacing all that repetitive code with clean function calls.</p>
 </div>
 
 <style>

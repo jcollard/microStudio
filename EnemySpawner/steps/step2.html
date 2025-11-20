@@ -46,40 +46,15 @@ end`;
         renderCodeBlock('spawn-enemy-code', spawnEnemyCode, 'lua');
     </script>
 
-    <div class="info-box">
-        <h3>How It Works</h3>
-        <ul>
-            <li><code>create_enemy("enemy_ship", 32, 32)</code> - Creates a new enemy using your factory function</li>
-            <li><code>enemy.x = math.random(-100, 100)</code> - Random horizontal position across the screen</li>
-            <li><code>enemy.y = 100</code> - Spawns at the top (adjust based on your screen size)</li>
-            <li><code>enemy.vx = math.random(-10, 10) / 10</code> - Random horizontal drift (-1.0 to 1.0)</li>
-            <li><code>enemy.vy = -1</code> - Moves downward at constant speed</li>
-        </ul>
-    </div>
+    <p><strong>Note:</strong> <code>math.random(-10, 10) / 10</code> generates 21 float values (-1.0 to 1.0) instead of 3 integers, creating smoother, more varied enemy movement.</p>
 
-    <div class="info-box">
-        <h3>Why <code>math.random(-10, 10) / 10</code> instead of <code>math.random(-1, 1)</code>?</h3>
-        <p>This is a common pattern for generating floating-point random numbers in Lua. Here's why it matters:</p>
-        <ul>
-            <li><code>math.random(-1, 1)</code> only generates <strong>integers</strong>: -1, 0, or 1 (three possible values)</li>
-            <li><code>math.random(-10, 10) / 10</code> generates integers from -10 to 10, then divides by 10</li>
-            <li>This gives us 21 possible values: -1.0, -0.9, -0.8, ..., 0.0, ..., 0.8, 0.9, 1.0</li>
-            <li>More granular velocity values create smoother, more varied enemy movement</li>
-        </ul>
-        <p><strong>Result:</strong> Instead of enemies moving in just 3 patterns (left, straight, right), we get 21 different horizontal drift speeds for much more interesting gameplay.</p>
-    </div>
-
-    <h3>Testing Your Function</h3>
-    <p>You can test the function by calling it from the <strong>console</strong> while the game is running:</p>
+    <h3>Testing</h3>
+    <p>Test by calling <code>spawn_enemy()</code> in the console—enemies should appear at the top and drift downward.</p>
 
     <div id="test-commands"></div>
 
     <script>
-        const testCommands = `// In the microStudio console, type:
-spawn_enemy()
-
-// You should see a new enemy appear at the top!
-// Try spawning several:
+        const testCommands = `// Spawn enemies from console
 spawn_enemy()
 spawn_enemy()
 spawn_enemy()`;
@@ -87,12 +62,8 @@ spawn_enemy()`;
         renderCodeBlock('test-commands', testCommands, 'javascript');
     </script>
 
-    <p><strong>What you should see:</strong> Each time you call <code>spawn_enemy()</code>, a new enemy appears at the top of the screen and drifts downward.</p>
-
     <div class="success-box">
-        <h3>Key Concept: Reusable Spawning</h3>
-        <p>By creating a dedicated spawning function, you've separated <strong>when</strong> enemies are created from <strong>how</strong> they're created. This function becomes your single source of truth for enemy spawning. In the next steps, you'll use this function everywhere you need to create enemies - during initialization, after all enemies are destroyed, and in wave systems.</p>
+        <h3>Reusable Spawning</h3>
+        <p>You've separated <strong>when</strong> from <strong>how</strong>. <code>spawn_enemy()</code> is now your single source of truth for enemy creation.</p>
     </div>
-
-    <p><strong>Next:</strong> You'll refactor <code>init_enemies()</code> to use this new spawning function instead of creating enemies directly.</p>
 </div>

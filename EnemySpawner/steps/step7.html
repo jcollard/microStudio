@@ -54,110 +54,31 @@ end`;
         renderCodeBlock('spawn-enemy-wave-code', spawnWaveCode, 'lua');
     </script>
 
-    <div class="info-box">
-        <h3>Understanding Traditional For Loops</h3>
-        <p>You've used <code>for ix, enemy in pairs(enemies)</code> to iterate over table contents. Now you're using a different loop style:</p>
-        <p><strong>Traditional for loop:</strong> <code>for i = 1, n do</code></p>
-        <ul>
-            <li><code>i</code> starts at 1</li>
-            <li><code>i</code> increments by 1 each iteration</li>
-            <li>Loop runs until <code>i</code> reaches <code>n</code></li>
-        </ul>
-        <p><strong>When to use:</strong> Use traditional for loops when you know exactly how many times to loop. Use <code>pairs()</code> when you need to iterate over table contents.</p>
-        <p><strong>The # operator:</strong> <code>#enemies</code> returns the length of the table (how many items it contains).</p>
-    </div>
+    <p><strong>Note:</strong> <code>for i = 1, #enemies do</code> is a traditional counting loop. The <code>#</code> operator returns table length. Use this when you know how many iterations; use <code>pairs()</code> to iterate over table contents.</p>
 
-    <div class="info-box">
-        <h3>How It Works</h3>
-        <p>Let's trace through the wave progression:</p>
-        <ol>
-            <li><strong>Game starts:</strong>
-                <ul>
-                    <li><code>init_enemies()</code> spawns 1 enemy</li>
-                    <li><code>#enemies == 1</code></li>
-                </ul>
-            </li>
-            <li><strong>Player destroys all enemies:</strong>
-                <ul>
-                    <li><code>spawn_enemy_wave()</code> is called (later in Step 8)</li>
-                    <li>Loop runs 1 time (because <code>#enemies == 1</code>)</li>
-                    <li>Then spawns 1 more enemy</li>
-                    <li>Total spawned: 2 enemies</li>
-                    <li><code>#enemies == 2</code> (1 was reused via pooling, 1 was new)</li>
-                </ul>
-            </li>
-            <li><strong>Player destroys all again:</strong>
-                <ul>
-                    <li>Loop runs 2 times (because <code>#enemies == 2</code>)</li>
-                    <li>Then spawns 1 more enemy</li>
-                    <li>Total spawned: 3 enemies</li>
-                    <li><code>#enemies == 3</code></li>
-                </ul>
-            </li>
-        </ol>
-        <p><strong>Key insight:</strong> The table size grows by 1 each wave, creating linear difficulty increase.</p>
-    </div>
+    <p><strong>Key insight:</strong> The loop spawns N enemies, then one more—so the table grows by 1 each wave, creating linear difficulty increase.</p>
 
-    <h3>Testing Your Implementation</h3>
+    <h3>Testing</h3>
 
-    <p>Test the wave spawning function using the console:</p>
+    <p>Test with <code>spawn_enemy_wave()</code>—each call should spawn progressively more enemies based on current table size.</p>
 
     <div id="test-commands"></div>
 
     <script>
-        const testCommands = `// Check current enemy count
-print(#enemies)  // Should show 1 (from init)
-
-// Spawn a wave
+        const testCommands = `print(#enemies)  // 1
 spawn_enemy_wave()
+print(#enemies)  // 2 (spawned 1+1)
 
-// Check new count
-print(#enemies)  // Should show 2 (spawned 1 + 1)
-
-// Spawn another wave
 spawn_enemy_wave()
-
-// Check count again
-print(#enemies)  // Should show 4 (spawned 2 + 1, plus existing 1)`;
+print(#enemies)  // 4 (spawned 2+1, 1 reused)`;
 
         renderCodeBlock('test-commands', testCommands, 'lua');
     </script>
 
-    <p><strong>What you should observe:</strong></p>
-    <ul>
-        <li>First call spawns 2 enemies (1 from loop + 1 extra)</li>
-        <li>Second call spawns more enemies based on current table size</li>
-        <li>Each wave spawns more enemies than the last</li>
-        <li>Enemies spawn at the top with random properties</li>
-    </ul>
-
     <div class="success-box">
-        <h3>Escalating Difficulty Systems</h3>
-        <p>You've just implemented <strong>wave-based difficulty scaling</strong>, a fundamental game design pattern.</p>
-        <p><strong>Why this matters:</strong></p>
-        <ul>
-            <li><strong>Predictable difficulty curve</strong> - Players can anticipate challenge increase</li>
-            <li><strong>Fair progression</strong> - Linear increase gives players time to adapt</li>
-            <li><strong>Simple implementation</strong> - Complex behavior from simple formula</li>
-            <li><strong>Scalable design</strong> - Easy to modify formula for different curves</li>
-        </ul>
-        <p><strong>Real-world examples:</strong></p>
-        <ul>
-            <li><strong>Call of Duty Zombies</strong> - Each round spawns more zombies with higher health</li>
-            <li><strong>Vampire Survivors</strong> - Enemy count and variety increases over time</li>
-            <li><strong>Plants vs. Zombies</strong> - Each level introduces more enemy types</li>
-            <li><strong>Geometry Wars</strong> - Wave difficulty scales with player score</li>
-        </ul>
-        <p><strong>Difficulty formulas:</strong></p>
-        <ul>
-            <li><strong>Linear:</strong> <code>n + 1</code> (what you built - gentle curve)</li>
-            <li><strong>Multiplicative:</strong> <code>n * 1.5</code> (steeper curve)</li>
-            <li><strong>Exponential:</strong> <code>n ^ 2</code> (very steep curve)</li>
-            <li><strong>Capped:</strong> <code>min(n + 1, 10)</code> (levels off)</li>
-        </ul>
+        <h3>Wave-Based Difficulty</h3>
+        <p>You've implemented escalating difficulty used in Call of Duty Zombies, Vampire Survivors, and Geometry Wars. Your linear formula (<code>n + 1</code>) creates fair, predictable progression. Try other formulas: <code>n * 1.5</code> (steeper), <code>n ^ 2</code> (exponential), or <code>min(n + 1, 10)</code> (capped).</p>
     </div>
-
-    <p><strong>Next:</strong> In Step 8, you'll connect this wave spawning function to your game loop by replacing <code>spawn_enemy()</code> with <code>spawn_enemy_wave()</code> in <code>update_enemies()</code>.</p>
 </div>
 
 <style>

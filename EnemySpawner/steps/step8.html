@@ -75,40 +75,11 @@ end`;
         renderDiffBlock('update-enemies-diff', oldUpdate, newUpdate, 'Replace spawn_enemy() with spawn_enemy_wave()');
     </script>
 
-    <div class="info-box">
-        <h3>What Just Happened?</h3>
-        <p>This one-line change creates a complete wave system:</p>
-        <ol>
-            <li><strong>Wave 1:</strong> Game starts with 1 enemy (from <code>init_enemies()</code>)</li>
-            <li><strong>Player destroys enemy:</strong> <code>all_enemies_destroyed()</code> returns true</li>
-            <li><strong>Wave 2 spawns:</strong> <code>spawn_enemy_wave()</code> spawns 2 enemies (1 + 1)</li>
-            <li><strong>Player destroys all:</strong> Condition triggers again</li>
-            <li><strong>Wave 3 spawns:</strong> <code>spawn_enemy_wave()</code> spawns 3 enemies (2 + 1)</li>
-            <li><strong>Pattern continues:</strong> Each wave has one more enemy than the last</li>
-        </ol>
-        <p><strong>Key insight:</strong> By building composable functions (<code>spawn_enemy()</code>, <code>all_enemies_destroyed()</code>, <code>spawn_enemy_wave()</code>), a tiny change creates massive gameplay impact.</p>
-    </div>
+    <p><strong>What just happened?</strong> This one-line change creates a complete wave system. Game starts with 1 enemy → 2 spawn → 3 spawn → pattern continues. Composable functions enable massive gameplay impact from tiny changes.</p>
 
-    <h3>Testing Your Implementation</h3>
+    <h3>Testing</h3>
 
-    <p>Play the game to experience the wave system:</p>
-
-    <ol>
-        <li><strong>Start the game</strong> - You should see 1 enemy spawn</li>
-        <li><strong>Destroy the first enemy</strong> - Watch 2 enemies spawn immediately</li>
-        <li><strong>Destroy Wave 2</strong> - 3 enemies spawn</li>
-        <li><strong>Destroy Wave 3</strong> - 4 enemies spawn</li>
-        <li><strong>Continue playing</strong> - Notice how the challenge increases each wave</li>
-    </ol>
-
-    <p><strong>What you should observe:</strong></p>
-    <ul>
-        <li>Each wave spawns more enemies than the last</li>
-        <li>Enemies spawn at the top with random sizes and sprites</li>
-        <li>Difficulty increases linearly and feels fair</li>
-        <li>Game becomes progressively more challenging</li>
-        <li>You can play indefinitely - waves never stop</li>
-    </ul>
+    <p>Play the game—each wave should spawn progressively more enemies. 1 enemy → 2 enemies → 3 enemies. Difficulty increases linearly with no end.</p>
 
     <h3>Try It Yourself</h3>
 
@@ -121,35 +92,9 @@ end`;
     </script>
 
     <div class="success-box">
-        <h3>Professional Wave-Based Gameplay</h3>
-        <p>You've just implemented a <strong>complete wave system</strong> - a fundamental game design pattern used across the industry.</p>
-        <p><strong>What you built:</strong></p>
-        <ul>
-            <li><strong>Dynamic spawning</strong> - Enemies created during gameplay</li>
-            <li><strong>Object pooling</strong> - Efficient memory usage through reuse</li>
-            <li><strong>State checking</strong> - Game reacts to conditions automatically</li>
-            <li><strong>Event-driven gameplay</strong> - Actions trigger without manual intervention</li>
-            <li><strong>Wave mechanics</strong> - Escalating difficulty keeps players engaged</li>
-        </ul>
-        <p><strong>Real-world applications:</strong></p>
-        <ul>
-            <li><strong>Survival games</strong> - Progressively harder waves of enemies</li>
-            <li><strong>Tower defense</strong> - Each round brings new challenges</li>
-            <li><strong>Bullet hell</strong> - Escalating enemy counts and patterns</li>
-            <li><strong>Roguelikes</strong> - Increasing difficulty as you progress</li>
-            <li><strong>Arena shooters</strong> - More enemies and stronger foes each round</li>
-        </ul>
-        <p><strong>Professional techniques you've learned:</strong></p>
-        <ul>
-            <li><strong>Composable functions</strong> - Small building blocks create complex systems</li>
-            <li><strong>Factory pattern</strong> - <code>spawn_enemy()</code> abstracts enemy creation</li>
-            <li><strong>Object pooling</strong> - Industry-standard optimization technique</li>
-            <li><strong>State machines</strong> - <code>all_enemies_destroyed()</code> checks game state</li>
-            <li><strong>Event-driven architecture</strong> - Code reacts to conditions automatically</li>
-        </ul>
+        <h3>Complete Wave System</h3>
+        <p>You've implemented dynamic spawning, object pooling, state checking, event-driven gameplay, and wave mechanics—techniques used in survival games, tower defense, bullet hell, roguelikes, and arena shooters.</p>
     </div>
-
-    <p><strong>Next:</strong> Step 9 celebrates your accomplishment and previews what's next in your game development journey!</p>
 </div>
 
 <style>

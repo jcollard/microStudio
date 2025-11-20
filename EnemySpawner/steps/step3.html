@@ -5,13 +5,7 @@
 
     <div class="info-box">
         <h3>The Power of Abstraction</h3>
-        <p>Right now, your <code>init_enemies()</code> function manually creates every enemy at game start—setting positions, velocities, and properties for each one. This works, but it's repetitive and inflexible.</p>
-        <p>By using <code>spawn_enemy()</code>, you get:</p>
-        <ul>
-            <li><strong>Less code</strong> - One function call instead of 5-10 lines per enemy</li>
-            <li><strong>Consistency</strong> - All enemies use the same spawning logic</li>
-            <li><strong>Flexibility</strong> - Easy to adjust how many enemies spawn at start</li>
-        </ul>
+        <p>Your <code>init_enemies()</code> manually creates every enemy. By using <code>spawn_enemy()</code>, you get less code, consistency, and flexibility—one function call instead of 5-10 lines per enemy.</p>
     </div>
 
     <h3>Your Task</h3>
@@ -71,24 +65,10 @@ end`;
         renderDiffBlock('init-enemies-diff', oldInit, newInit, 'Refactor init_enemies() to use spawn_enemy()');
     </script>
 
-    <div class="info-box">
-        <h3>What Just Happened?</h3>
-        <p>We went from <strong>33 lines of repetitive code</strong> down to <strong>5 lines</strong>. The enemy spawning logic is now centralized in <code>spawn_enemy()</code>, which means:</p>
-        <ul>
-            <li>If you want to change how enemies spawn, you only update one function</li>
-            <li>To spawn more enemies at start, just call <code>spawn_enemy()</code> multiple times</li>
-            <li>Your code is cleaner and easier to understand</li>
-        </ul>
-    </div>
 
-    <h3>Testing Your Changes</h3>
+    <h3>Testing</h3>
 
-    <p>After making this change, run your game. You should see:</p>
-    <ul>
-        <li><strong>One enemy</strong> spawning at the top of the screen</li>
-        <li>The enemy moving downward with random horizontal drift</li>
-        <li>All your existing functionality (player movement, lasers) still working</li>
-    </ul>
+    <p>Run your game—one enemy should spawn at the top with random movement. All existing functionality should still work.</p>
 
     <div class="info-box">
         <h3>🎮 Try This!</h3>
@@ -107,16 +87,7 @@ end</code></pre>
     </div>
 
     <div class="success-box">
-        <h3>Key Concept: Code Reuse</h3>
-        <p>You've just experienced one of the most powerful principles in programming: <strong>Don't Repeat Yourself (DRY)</strong>.</p>
-        <p>By creating a reusable <code>spawn_enemy()</code> function, you've made your code:</p>
-        <ul>
-            <li><strong>More maintainable</strong> - Changes happen in one place</li>
-            <li><strong>More readable</strong> - The intent is clear from the function name</li>
-            <li><strong>More flexible</strong> - Easy to spawn enemies anywhere in your code</li>
-        </ul>
-        <p>This same pattern applies to all programming: identify repetitive code, extract it into a function, and reuse it everywhere you need it.</p>
+        <h3>Don't Repeat Yourself (DRY)</h3>
+        <p>You've reduced 33 lines to 5 by centralizing enemy spawning logic. Changes now happen in one place, making code more maintainable, readable, and flexible.</p>
     </div>
-
-    <p><strong>Next:</strong> In Step 4, you'll optimize <code>spawn_enemy()</code> with object pooling—a professional technique used in real game engines to improve performance.</p>
 </div>

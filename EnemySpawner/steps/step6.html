@@ -73,42 +73,11 @@ end`;
         renderDiffBlock('update-enemies-diff', oldUpdate, newUpdate, 'Add auto-spawn check to update_enemies()');
     </script>
 
-    <div class="info-box">
-        <h3>How It Works</h3>
-        <p>Let's trace through the gameplay loop:</p>
-        <ol>
-            <li><strong>Game starts</strong> - 1 enemy on screen (from <code>init_enemies()</code>)</li>
-            <li><strong>Every frame</strong> - <code>update_enemies()</code> runs:
-                <ul>
-                    <li>Updates enemy positions</li>
-                    <li>Checks if all enemies destroyed</li>
-                    <li>If yes → spawns new enemy immediately</li>
-                </ul>
-            </li>
-            <li><strong>Player destroys enemy</strong> - On the very next frame, <code>all_enemies_destroyed()</code> returns true</li>
-            <li><strong>New enemy spawns</strong> - Challenge continues seamlessly</li>
-        </ol>
-        <p><strong>Key insight:</strong> The check happens every frame, so the response is instant. The moment the last enemy is destroyed, a new one spawns.</p>
-    </div>
+    <p><strong>How it works:</strong> Every frame, <code>update_enemies()</code> checks if all enemies are destroyed. If yes, it spawns a new one immediately—creating continuous challenge.</p>
 
-    <h3>Testing Your Implementation</h3>
+    <h3>Testing</h3>
 
-    <p>Test the auto-spawn system by playing the game:</p>
-
-    <ol>
-        <li><strong>Run the game</strong> - You should see 1 enemy spawn at the top</li>
-        <li><strong>Destroy the enemy</strong> - Shoot it with your laser</li>
-        <li><strong>Watch what happens</strong> - A new enemy should spawn immediately at the top of the screen</li>
-        <li><strong>Repeat</strong> - Destroy the new enemy and watch another spawn</li>
-    </ol>
-
-    <p><strong>What you should observe:</strong></p>
-    <ul>
-        <li>Enemies spawn continuously - you can never "win"</li>
-        <li>Spawning is instant - no delay after destroying the last enemy</li>
-        <li>Each new enemy has random properties (size, sprite, position)</li>
-        <li>The game never runs out of enemies</li>
-    </ul>
+    <p>Play the game—destroy enemies and watch new ones spawn immediately at the top. Spawning is instant and continuous.</p>
 
     <h3>Try It Yourself</h3>
 
@@ -121,25 +90,9 @@ end`;
     </script>
 
     <div class="success-box">
-        <h3>Reactive Game Systems</h3>
-        <p>You've just implemented a <strong>reactive game system</strong> - code that automatically responds to game state changes.</p>
-        <p><strong>Why this matters:</strong></p>
-        <ul>
-            <li><strong>Continuous challenge</strong> - Game never becomes "empty" or boring</li>
-            <li><strong>No manual triggers</strong> - System handles spawning automatically</li>
-            <li><strong>Scalable design</strong> - Easy to modify behavior (spawn multiple enemies, add delays, etc.)</li>
-            <li><strong>Professional pattern</strong> - Used in endless runners, survival games, roguelikes, arena shooters</li>
-        </ul>
-        <p><strong>Real-world examples:</strong></p>
-        <ul>
-            <li><strong>Vampire Survivors</strong> - Enemies spawn continuously based on time and player position</li>
-            <li><strong>Call of Duty Zombies</strong> - New waves trigger when all zombies eliminated</li>
-            <li><strong>Halo Infinite</strong> - Enemy reinforcements arrive when areas are cleared</li>
-            <li><strong>Fortnite</strong> - Storm circle shrinks, forcing player movement (reactive to timer)</li>
-        </ul>
+        <h3>Event-Driven Gameplay</h3>
+        <p>You've implemented reactive, event-driven architecture—code that automatically responds to game state. This pattern enables continuous challenge and is used in Vampire Survivors, Call of Duty Zombies, and Halo.</p>
     </div>
-
-    <p><strong>Next:</strong> In Step 7, you'll create a <code>spawn_enemy_wave()</code> function that spawns multiple enemies at once, setting up a proper wave system with escalating difficulty.</p>
 </div>
 
 <style>
