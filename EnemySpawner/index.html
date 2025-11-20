@@ -125,24 +125,33 @@
 
                 const html = await response.text();
 
-                // Insert HTML
-                contentArea.innerHTML = html;
+                // Parse HTML using DOMParser for proper parsing
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
 
-                // Execute any <script> tags in the loaded HTML
-                const scripts = contentArea.querySelectorAll('script');
-                scripts.forEach(oldScript => {
-                    const newScript = document.createElement('script');
+                // Extract scripts before setting content
+                const scripts = Array.from(doc.querySelectorAll('script'));
+                const scriptTexts = scripts.map(script => script.textContent);
 
-                    // Copy attributes
-                    Array.from(oldScript.attributes).forEach(attr => {
-                        newScript.setAttribute(attr.name, attr.value);
-                    });
+                // Remove scripts from parsed document
+                scripts.forEach(script => script.remove());
 
-                    // Copy content
-                    newScript.textContent = oldScript.textContent;
+                // Clear content area and insert HTML without scripts
+                contentArea.innerHTML = '';
 
-                    // Replace old script with new one to trigger execution
-                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                // Move all body content to contentArea
+                while (doc.body.firstChild) {
+                    contentArea.appendChild(doc.body.firstChild);
+                }
+
+                // Execute scripts directly using eval in order
+                scriptTexts.forEach((scriptText, index) => {
+                    try {
+                        // Use indirect eval to execute in global scope
+                        (0, eval)(scriptText);
+                    } catch (error) {
+                        console.error(`Error executing script ${index + 1}:`, error);
+                    }
                 });
 
                 // Scroll to top
