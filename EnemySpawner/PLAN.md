@@ -9,12 +9,146 @@
 
 ---
 
+## File Architecture
+
+### Directory Structure
+```
+EnemySpawner/
+├── index.html              # Main page with full HTML structure
+├── styles.css              # Main page layout and styling
+├── codeblocks.css          # Code block and diff styling
+├── codeblocks.js           # Code rendering functions
+├── demo.html               # Demo/testing page for code rendering
+├── PLAN.md                 # This planning document
+└── steps/
+    ├── step0.html          # Welcome/Introduction (HTML fragment)
+    ├── step1.html          # Getting Started (HTML fragment)
+    ├── step2.html          # Create spawn_enemy() (HTML fragment)
+    ├── step3.html          # Replace init_enemies() (HTML fragment)
+    ├── step4.html          # Object Pooling (HTML fragment)
+    ├── step5.html          # all_enemies_destroyed() (HTML fragment)
+    ├── step6.html          # Auto-spawn (HTML fragment)
+    ├── step7.html          # spawn_enemy_wave() (HTML fragment)
+    ├── step8.html          # Wave System (HTML fragment)
+    └── step9.html          # Congratulations (HTML fragment)
+```
+
+### File Responsibilities
+
+**`index.html`** - Main page container:
+- Complete HTML document structure (`<!DOCTYPE html>`, `<html>`, `<head>`, `<body>`)
+- Includes all CDN links (Highlight.js, jsdiff)
+- Includes CSS files (`styles.css`, `codeblocks.css`)
+- Includes JavaScript files (`codeblocks.js`)
+- Contains navigation UI (step selector/buttons)
+- Loads step HTML fragments dynamically into a content area
+- Manages which step is currently displayed
+
+**`styles.css`** - Main page styling:
+- Page layout (navigation, content area, step container)
+- Typography (fonts, sizes, spacing)
+- Color palette application (backgrounds, text, borders)
+- Navigation UI styling
+- Info boxes, success boxes, step-content containers
+- Responsive design rules
+- **Does NOT include**: Code block or diff styling (that's in `codeblocks.css`)
+
+**`codeblocks.css`** - Code rendering styling:
+- Code block wrapper and header styles
+- Diff block wrapper and header styles
+- Syntax highlighting colors for diffs
+- Line number styling
+- Copy button styling
+- Side-by-side diff layout
+- Dark theme colors for code display
+- **Independent of main page styles** - can be reused in other lessons
+
+**`codeblocks.js`** - Code rendering logic:
+- `renderCodeBlock(elementId, code, language)` function
+- `renderDiffBlock(elementId, oldCode, newCode, description)` function
+- `copyCode(elementId, useDataAttribute)` helper
+- `highlightCode(code, language)` helper for syntax highlighting
+- `escapeHtml(text)` utility
+- **No page-specific logic** - pure rendering functions
+
+**`steps/stepN.html`** - Step content fragments:
+- HTML fragments (no `<!DOCTYPE>`, no `<html>`, no `<head>`)
+- Start directly with content (typically `<h2>Step N: Title</h2>`)
+- Include inline `<script>` tags that call `renderCodeBlock()` or `renderDiffBlock()`
+- Self-contained step content with all explanations, code, and demos
+- Loaded dynamically into the main page's content area
+
+**`demo.html`** - Development/testing page:
+- Standalone page showcasing `renderCodeBlock()` and `renderDiffBlock()` functions
+- Used for testing and demonstrating code rendering features
+- Not linked from main lesson navigation
+- Serves as reference for how to use the rendering functions
+
+### Step Loading Mechanism
+
+The main `index.html` should dynamically load step HTML fragments using one of these approaches:
+
+**Option 1: Fetch API** (Recommended):
+```javascript
+async function loadStep(stepNumber) {
+  const response = await fetch(`steps/step${stepNumber}.html`);
+  const html = await response.text();
+  document.getElementById('step-content').innerHTML = html;
+
+  // Execute any <script> tags in the loaded HTML
+  const scripts = document.getElementById('step-content').querySelectorAll('script');
+  scripts.forEach(script => {
+    const newScript = document.createElement('script');
+    newScript.textContent = script.textContent;
+    document.body.appendChild(newScript);
+  });
+}
+```
+
+**Option 2: Server-side includes** (if using a web server):
+- PHP: `<?php include 'steps/step0.html'; ?>`
+- Other server-side template engines
+
+**Benefits of This Architecture**:
+- **Separation of concerns**: Page structure, styling, and content are separate
+- **Maintainability**: Each step is its own file - easy to edit without affecting others
+- **Reusability**: `codeblocks.js` and `codeblocks.css` can be used in other lessons
+- **Modularity**: Steps can be developed and tested independently
+- **Version control friendly**: Small files with focused changes
+- **Consistent styling**: All steps use the same CSS and rendering functions
+
+### HTML/CSS/JavaScript Separation
+
+**HTML Responsibilities**:
+- Document structure and semantic markup
+- Content organization (headings, paragraphs, lists)
+- Placeholder divs for dynamic code rendering
+- Navigation structure
+
+**CSS Responsibilities**:
+- Visual presentation (colors, fonts, spacing)
+- Layout (flexbox, grid, positioning)
+- Responsive design
+- Hover states and transitions
+- **Never** contains content or behavior
+
+**JavaScript Responsibilities**:
+- Dynamic content loading (step fragments)
+- Code rendering (syntax highlighting, diffs)
+- Clipboard operations (copy buttons)
+- Navigation logic (step switching)
+- **Never** contains styling (use CSS classes instead)
+
+---
+
 ## HTML Implementation Guidelines
 
 ### Design Philosophy
 - **Keep it simple and sparse**: Don't overload pages with excessive styling or flare
 - **Focus on the essentials**: Clear explanations, working code, and testing instructions
 - **Minimize visual noise**: Use consistent, clean styling without distractions
+- **Target audience**: Mature high school students - use a professional, sophisticated aesthetic
+- **Avoid "kiddy" styling**: Previous lessons were criticized as too childish; this lesson should feel more grown-up and technical
 
 ### Code Display Functions
 
@@ -568,6 +702,19 @@ Each step HTML should follow this minimal structure:
     <div id="test-code"></div>
     <script>/* render test code here */</script>
 
+    <!-- Demo placeholder - URL to be provided or removed if not applicable -->
+    <div class="demo-container">
+        <h3>Demo</h3>
+        <p>See this step in action:</p>
+        <iframe
+            src="DEMO_URL_HERE"
+            width="100%"
+            height="400"
+            style="border: 2px solid #3a3a4e; border-radius: 6px; margin: 10px 0;">
+        </iframe>
+        <p class="demo-caption">Interactive demo of Step N completed</p>
+    </div>
+
     <div class="success-box">
         <h3>Key Teaching Moment</h3>
         <p>Why this matters / what they learned</p>
@@ -575,23 +722,115 @@ Each step HTML should follow this minimal structure:
 </div>
 ```
 
+### Demo Guidelines
+
+**When to Include Demos**:
+- Steps with visible, testable changes (Steps 2, 3, 6, 8)
+- Steps where students can interact with the result
+- Steps that show clear visual progress
+
+**When to Remove Demo Section**:
+- Steps with no visual output (Steps 4, 5, 7)
+- Steps that are purely conceptual or setup
+- Console-only testing steps
+
+**Demo Placeholder Notes**:
+- Leave `src="DEMO_URL_HERE"` as placeholder during development
+- Replace with actual microStudio project URL when ready
+- Remove entire `<div class="demo-container">...</div>` if no demo is needed
+- Ensure iframe dimensions work on mobile (responsive)
+
+### Recommended Color Palette (Mature/Professional)
+
+**Background Colors**:
+- Primary background: `#1a1a2e` (Deep blue-gray)
+- Secondary background: `#16213e` (Darker blue)
+- Card/box background: `#0f3460` (Muted navy)
+
+**Accent Colors**:
+- Primary accent: `#4a90e2` (Professional blue)
+- Secondary accent: `#7b68ee` (Muted purple)
+- Success/highlight: `#2ecc71` (Muted green, not bright)
+- Warning: `#e67e22` (Muted orange)
+
+**Text Colors**:
+- Primary text: `#e0e0e0` (Light gray)
+- Secondary text: `#a0a0a0` (Medium gray)
+- Headings: `#ffffff` (White)
+
+**Border/Divider Colors**:
+- Subtle borders: `#2a2a3e` (Slightly lighter than background)
+- Section dividers: `#3a3a4e`
+
+This palette creates a professional, modern feel appropriate for high school students without the "kiddy" appearance.
+
+**Demo Container Styling**:
+```css
+.demo-container {
+  margin: 30px 0;
+  padding: 20px;
+  background: #16213e;
+  border: 1px solid #2a2a3e;
+  border-radius: 6px;
+}
+
+.demo-container h3 {
+  color: #ffffff;
+  margin-top: 0;
+}
+
+.demo-container p {
+  color: #e0e0e0;
+  margin: 10px 0;
+}
+
+.demo-caption {
+  font-size: 0.9em;
+  color: #a0a0a0;
+  font-style: italic;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.demo-container iframe {
+  display: block;
+  margin: 10px 0;
+  border: 2px solid #3a3a4e;
+  border-radius: 6px;
+  background: #0f3460;
+}
+```
+
 ### Style Guidelines
 
+**Color Scheme & Visual Design**:
+- **Professional palette**: Use muted, sophisticated colors (blues, grays, deep purples)
+- **Avoid bright/playful colors**: No bright green, hot pink, or neon colors
+- **Dark theme preferred**: Matches the code blocks and feels more technical
+- **Minimal contrast**: Subtle borders and backgrounds, not harsh dividing lines
+- **Modern typography**: Clean sans-serif fonts, adequate spacing
+
 **DO**:
-- Use clear headings (h2, h3)
-- Use info-box for explanations
-- Use success-box for key insights
-- Keep explanations concise (1-3 sentences)
+- Use clear headings (h2, h3) with subtle styling
+- Use understated info-boxes (dark backgrounds, subtle borders)
+- Use minimal success-boxes for key insights (not bright green)
+- Keep explanations concise and technical (1-3 sentences)
 - Show code immediately after describing it
 - Provide testing instructions
+- Include demo placeholder in each step (to be filled or removed)
+- Use professional, direct language
+- Target high school maturity level
 
 **DON'T**:
 - Add unnecessary graphics or animations
-- Use excessive emojis (one per major section is enough)
+- Use excessive emojis (sparingly - only when adding real value)
+- Use bright, saturated colors (feels childish)
 - Create complex layouts
 - Add "helpful tips" that aren't essential
 - Include tangential information
 - Use multiple colors/themes within a page
+- Use overly casual or "fun" language
+- Include cartoon-like elements or decorations
 
 ### Diff Display Specifications
 
