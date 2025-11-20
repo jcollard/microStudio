@@ -178,16 +178,20 @@
   - [x] Correct Lua syntax (curly braces, 1-based indexing)
 - [x] **CHECKPOINT: ✅ APPROVED - Ready for Step 3**
 
-### Step 3: Replace init_enemies()
-- [ ] Create `steps/step3.html`
-  - [ ] Intro: Using spawn function for initialization
-  - [ ] Info box explaining reuse of spawning function
-  - [ ] Task description
-  - [ ] Code block using `renderCodeBlock()` with updated init_enemies()
-  - [ ] Testing instructions
-  - [ ] Demo placeholder (likely include - visual output)
-  - [ ] Key teaching moment box
-- [ ] **CHECKPOINT: Get approval before proceeding to Step 4**
+### Step 3: Replace init_enemies() ✅
+- [x] Create `steps/step3.html`
+  - [x] Intro: Code refactoring and DRY principle
+  - [x] Info box explaining "The Power of Abstraction"
+  - [x] Task description
+  - [x] **Diff block** using `renderDiffBlock()` showing old (33 lines) vs new (5 lines) init_enemies()
+  - [x] Info box: "What Just Happened?" - explaining the transformation
+  - [x] Testing instructions
+  - [x] "Try This!" section showing multiple spawn_enemy() calls
+  - [x] Success box: Key Concept - Code Reuse and DRY principle
+- [x] Create `solutions/step3_solution.lua`
+  - [x] Simplified init_enemies() using spawn_enemy()
+  - [x] Complete working solution with all support functions
+- [x] **CHECKPOINT: ✅ APPROVED - Ready for Step 4**
 
 ### Step 4: Object Pooling Optimization
 - [ ] Create `steps/step4.html`
@@ -263,7 +267,7 @@
 - [x] Step 1: Verify requirements display correctly
 - [x] Step 2: Verify code block renders with syntax highlighting
 - [x] **Step 2b: Verify non-copyable code blocks work, sprite gallery button works, lazy embed loads**
-- [ ] Step 3: Verify code block renders correctly
+- [x] **Step 3: Verify diff block shows 33→5 line transformation clearly**
 - [ ] Step 4: Verify diff block shows changes clearly
 - [ ] Step 5: Verify code block renders correctly
 - [ ] Step 6: Verify diff block shows changes clearly
@@ -340,7 +344,7 @@
   - [x] step1.html ✅
   - [x] step2.html ✅
   - [x] step2b.html ✅
-  - [ ] step3.html
+  - [x] step3.html ✅
   - [ ] step4.html
   - [ ] step5.html
   - [ ] step6.html
@@ -364,7 +368,8 @@
 - [x] Solution files created:
   - [x] step2_solution.lua ✅
   - [x] step2b_solution.lua ✅
-  - [ ] step3-8 solution files (pending)
+  - [x] step3_solution.lua ✅
+  - [ ] step4-8 solution files (pending)
 - [ ] User has approved final implementation (Steps 0-2b approved, 3-9 pending)
 - [ ] Ready for student testing (after all steps complete)
 
@@ -372,9 +377,19 @@
 
 ## Notes
 
-**Current Phase**: Steps 0, 1, 2, and 2b Complete ✅ | Ready for Step 3
+**Current Phase**: Steps 0, 1, 2, 2b, and 3 Complete ✅ | Ready for Step 4
 
-**Next Action**: Begin implementation of Step 3 (Replace init_enemies())
+**Next Action**: Begin implementation of Step 4 (Object Pooling Optimization)
+
+**Step 3 Completion Summary**:
+- ✅ Created step3.html teaching code refactoring
+- ✅ Diff block showing dramatic 33 lines → 5 lines transformation
+- ✅ Info boxes explaining "The Power of Abstraction" and "What Just Happened?"
+- ✅ Teaching DRY (Don't Repeat Yourself) principle
+- ✅ "Try This!" section showing multiple spawn_enemy() calls
+- ✅ Success box: Key Concept about code reuse, maintainability, readability, and flexibility
+- ✅ Created step3_solution.lua with simplified init_enemies()
+- ✅ Demonstrates practical application of function abstraction
 
 **Step 2b Completion Summary**:
 - ✅ Created step2b.html with two progressive challenges
