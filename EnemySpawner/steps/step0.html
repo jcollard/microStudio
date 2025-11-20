@@ -1,0 +1,79 @@
+<h2>Step 0: Welcome to Enemy Spawner</h2>
+<div class="step-content">
+    <p>In this lesson, you'll build a dynamic enemy spawning system that creates enemies during gameplay, optimizes memory usage through object pooling, and implements escalating difficulty through wave mechanics.</p>
+
+    <div class="info-box">
+        <h3>The Current System</h3>
+        <p>Right now, your game creates all enemies once during initialization in the <code>init_enemies()</code> function. Once an enemy is destroyed, it's gone forever. This works fine for simple games, but what if you want:</p>
+        <ul>
+            <li>Enemies to appear continuously throughout the game</li>
+            <li>Waves of increasing difficulty as the player progresses</li>
+            <li>Efficient memory management for long gameplay sessions</li>
+        </ul>
+        <p>That's where <strong>dynamic spawning</strong> comes in.</p>
+    </div>
+
+    <h3>The Problem</h3>
+    <p>Static enemy initialization has limitations:</p>
+    <ul>
+        <li><strong>Fixed difficulty</strong>: The challenge never increases</li>
+        <li><strong>Short gameplay</strong>: Once all enemies are destroyed, the game is over</li>
+        <li><strong>No pacing</strong>: All enemies appear at once</li>
+    </ul>
+
+    <h3>The Solution</h3>
+    <p>You'll implement three key systems:</p>
+
+    <div class="info-box">
+        <h3>Dynamic Spawning</h3>
+        <p>Create enemies during gameplay, not just at initialization. This allows for continuous challenges and better pacing.</p>
+    </div>
+
+    <div class="info-box">
+        <h3>Object Pooling</h3>
+        <p>Reuse destroyed enemy objects instead of creating new ones constantly. This is a professional optimization technique that prevents memory bloat during long gameplay sessions.</p>
+    </div>
+
+    <div class="info-box">
+        <h3>Wave Mechanics</h3>
+        <p>Spawn progressively larger groups of enemies to create escalating difficulty. Each wave becomes more challenging than the last.</p>
+    </div>
+
+    <h3>What You'll Build</h3>
+    <p>By the end of this lesson, your game will:</p>
+    <ul>
+        <li>Spawn enemies dynamically at the top of the screen</li>
+        <li>Automatically spawn new waves when all enemies are destroyed</li>
+        <li>Increase difficulty linearly (1 enemy → 2 enemies → 3 enemies...)</li>
+        <li>Efficiently reuse destroyed enemies to optimize memory</li>
+        <li>React to game state to trigger spawning events</li>
+    </ul>
+
+    <div class="demo-container">
+        <h3>Demo: Finished System</h3>
+        <p>Here's what you'll create by the end of this lesson:</p>
+        <iframe
+            src="DEMO_URL_HERE"
+            width="100%"
+            height="400"
+            style="border: 2px solid #3a3a4e; border-radius: 6px; margin: 10px 0;">
+        </iframe>
+        <p class="demo-caption">Play through a few waves to see dynamic spawning and escalating difficulty in action</p>
+    </div>
+
+    <div class="success-box">
+        <h3>Real Game Development</h3>
+        <p>The techniques you'll learn here are used in professional games. Object pooling is essential for bullet hell games, endless runners, and any game with frequent object creation/destruction. Dynamic spawning creates engaging gameplay loops that keep players challenged.</p>
+    </div>
+
+    <h3>Prerequisites</h3>
+    <p>You should have completed the <strong>Abstracting Enemies</strong> lesson. You'll need:</p>
+    <ul>
+        <li>An <code>enemies</code> table</li>
+        <li>A <code>create_enemy()</code> factory function</li>
+        <li>Enemy objects with an <code>isDestroyed</code> property</li>
+        <li>Basic understanding of <code>for</code> loops and <code>pairs()</code></li>
+    </ul>
+
+    <p>Ready to build a professional spawning system? Let's begin!</p>
+</div>

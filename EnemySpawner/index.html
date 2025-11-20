@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enemy Spawner - Dynamic Enemy System</title>
+
+    <!-- Highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- jsdiff for computing code differences -->
+    <script src="https://cdn.jsdelivr.net/npm/diff@5.1.0/dist/diff.min.js"></script>
+
+    <!-- Our custom code rendering functions -->
+    <script src="codeblocks.js"></script>
+
+    <!-- Main page styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Code block and diff styles -->
+    <link rel="stylesheet" href="codeblocks.css">
+</head>
+<body>
+    <div class="page-container">
+        <!-- Header -->
+        <header class="page-header">
+            <h1>Enemy Spawner</h1>
+            <p class="subtitle">Dynamic Enemy System with Wave Mechanics</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="step-nav">
+            <div class="nav-container">
+                <button class="nav-btn prev-btn" id="prevBtn" onclick="navigateStep(-1)">
+                    ← Previous
+                </button>
+
+                <div class="step-selector">
+                    <label for="stepSelect">Step:</label>
+                    <select id="stepSelect" onchange="loadSelectedStep()">
+                        <option value="0">0: Welcome</option>
+                        <option value="1">1: Getting Started</option>
+                        <option value="2">2: Create spawn_enemy()</option>
+                        <option value="3">3: Replace init_enemies()</option>
+                        <option value="4">4: Object Pooling</option>
+                        <option value="5">5: all_enemies_destroyed()</option>
+                        <option value="6">6: Auto-spawn</option>
+                        <option value="7">7: spawn_enemy_wave()</option>
+                        <option value="8">8: Wave System</option>
+                        <option value="9">9: Congratulations</option>
+                    </select>
+                </div>
+
+                <button class="nav-btn next-btn" id="nextBtn" onclick="navigateStep(1)">
+                    Next →
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div id="step-content" class="step-container">
+                <!-- Step content will be loaded here dynamically -->
+                <div class="loading">Loading step content...</div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="page-footer">
+            <p>Part of the microStudio Game Development Curriculum</p>
+        </footer>
+    </div>
+
+    <!-- Step Loading JavaScript -->
+    <script>
+        let currentStep = 0;
+        const totalSteps = 9;
+
+        /**
+         * Load a specific step by number
+         */
+        async function loadStep(stepNumber) {
+            // Validate step number
+            if (stepNumber < 0 || stepNumber > totalSteps) {
+                console.error(`Invalid step number: ${stepNumber}`);
+                return;
+            }
+
+            currentStep = stepNumber;
+
+            // Update UI
+            updateNavigation();
+
+            // Show loading message
+            const contentArea = document.getElementById('step-content');
+            contentArea.innerHTML = '<div class="loading">Loading step content...</div>';
+
+            try {
+                // Fetch step HTML
+                const response = await fetch(`steps/step${stepNumber}.html`);
+
+                if (!response.ok) {
+                    throw new Error(`Failed to load step ${stepNumber}: ${response.statusText}`);
+                }
+
+                const html = await response.text();
+
+                // Insert HTML
+                contentArea.innerHTML = html;
+
+                // Execute any <script> tags in the loaded HTML
+                const scripts = contentArea.querySelectorAll('script');
+                scripts.forEach(oldScript => {
+                    const newScript = document.createElement('script');
+
+                    // Copy attributes
+                    Array.from(oldScript.attributes).forEach(attr => {
+                        newScript.setAttribute(attr.name, attr.value);
+                    });
+
+                    // Copy content
+                    newScript.textContent = oldScript.textContent;
+
+                    // Replace old script with new one to trigger execution
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                });
+
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            } catch (error) {
+                console.error('Error loading step:', error);
+                contentArea.innerHTML = `
+                    <div class="error-box">
+                        <h2>Error Loading Step</h2>
+                        <p>Could not load step ${stepNumber}. Please make sure the step file exists.</p>
+                        <p class="error-detail">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        /**
+         * Navigate to next/previous step
+         */
+        function navigateStep(direction) {
+            const newStep = currentStep + direction;
+            if (newStep >= 0 && newStep <= totalSteps) {
+                loadStep(newStep);
+            }
+        }
+
+        /**
+         * Load step from dropdown selection
+         */
+        function loadSelectedStep() {
+            const select = document.getElementById('stepSelect');
+            const stepNumber = parseInt(select.value);
+            loadStep(stepNumber);
+        }
+
+        /**
+         * Update navigation UI (button states, dropdown selection)
+         */
+        function updateNavigation() {
+            // Update dropdown
+            const select = document.getElementById('stepSelect');
+            select.value = currentStep;
+
+            // Update button states
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.disabled = currentStep === 0;
+            nextBtn.disabled = currentStep === totalSteps;
+        }
+
+        /**
+         * Initialize page - load Step 0 on page load
+         */
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStep(0);
+        });
+    </script>
+</body>
+</html>
