@@ -87,17 +87,17 @@
   - [x] Link to starter project (URL to be provided)
   - [x] Prerequisites explanation
   - [x] Remove demo section (no visual output)
-- [ ] **CHECKPOINT: Get approval before proceeding to Step 2**
+- [x] **CHECKPOINT: Get approval before proceeding to Step 2**
 
 ### Step 2: Create spawn_enemy() Function
-- [ ] Create `steps/step2.html`
-  - [ ] Intro: Dynamic spawning concept
-  - [ ] Info box explaining the concept
-  - [ ] Task description
-  - [ ] Code block using `renderCodeBlock()` with spawn_enemy() implementation
-  - [ ] Testing section with console commands
-  - [ ] Demo placeholder (likely include - visual output)
-  - [ ] Key teaching moment box
+- [x] Create `steps/step2.html`
+  - [x] Intro: Dynamic spawning concept
+  - [x] Info box explaining the concept
+  - [x] Task description
+  - [x] Code block using `renderCodeBlock()` with spawn_enemy() implementation
+  - [x] Testing section with console commands
+  - [x] Remove demo section (console testing only)
+  - [x] Key teaching moment box
 - [ ] **CHECKPOINT: Get approval before proceeding to Step 3**
 
 ### Step 3: Replace init_enemies()

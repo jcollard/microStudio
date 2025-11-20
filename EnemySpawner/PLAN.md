@@ -18,19 +18,30 @@ EnemySpawner/
 ├── styles.css              # Main page layout and styling
 ├── codeblocks.css          # Code block and diff styling
 ├── codeblocks.js           # Code rendering functions
+├── lazy-embed.js           # Lazy-loading embed functionality
 ├── demo.html               # Demo/testing page for code rendering
 ├── PLAN.md                 # This planning document
-└── steps/
-    ├── step0.html          # Welcome/Introduction (HTML fragment)
-    ├── step1.html          # Getting Started (HTML fragment)
-    ├── step2.html          # Create spawn_enemy() (HTML fragment)
-    ├── step3.html          # Replace init_enemies() (HTML fragment)
-    ├── step4.html          # Object Pooling (HTML fragment)
-    ├── step5.html          # all_enemies_destroyed() (HTML fragment)
-    ├── step6.html          # Auto-spawn (HTML fragment)
-    ├── step7.html          # spawn_enemy_wave() (HTML fragment)
-    ├── step8.html          # Wave System (HTML fragment)
-    └── step9.html          # Congratulations (HTML fragment)
+├── TASK_LIST.md            # Task tracking document
+├── steps/
+│   ├── step0.html          # Welcome/Introduction (HTML fragment)
+│   ├── step1.html          # Getting Started (HTML fragment)
+│   ├── step2.html          # Create spawn_enemy() (HTML fragment)
+│   ├── step3.html          # Replace init_enemies() (HTML fragment)
+│   ├── step4.html          # Object Pooling (HTML fragment)
+│   ├── step5.html          # all_enemies_destroyed() (HTML fragment)
+│   ├── step6.html          # Auto-spawn (HTML fragment)
+│   ├── step7.html          # spawn_enemy_wave() (HTML fragment)
+│   ├── step8.html          # Wave System (HTML fragment)
+│   └── step9.html          # Congratulations (HTML fragment)
+└── solutions/
+    ├── starter_code.lua    # Starting point (copy of AbstractingEnemies step10)
+    ├── step2_solution.lua  # Solution after completing Step 2
+    ├── step3_solution.lua  # Solution after completing Step 3
+    ├── step4_solution.lua  # Solution after completing Step 4
+    ├── step5_solution.lua  # Solution after completing Step 5
+    ├── step6_solution.lua  # Solution after completing Step 6
+    ├── step7_solution.lua  # Solution after completing Step 7
+    └── step8_solution.lua  # Final solution after completing Step 8
 ```
 
 ### File Responsibilities
@@ -83,6 +94,14 @@ EnemySpawner/
 - Used for testing and demonstrating code rendering features
 - Not linked from main lesson navigation
 - Serves as reference for how to use the rendering functions
+
+**`solutions/`** - Complete code solutions:
+- **`starter_code.lua`** - Starting point for the lesson (copy of AbstractingEnemies step10_solution.lua)
+- **`stepN_solution.lua`** - Complete working code after completing each step
+- Each solution file contains all code needed to run the game at that point in the lesson
+- Solutions build on each other incrementally (step3 includes changes from step2, etc.)
+- Used for reference, debugging, and verification that students are on the right track
+- **IMPORTANT**: Create a new solution file after completing each step (Steps 2-8)
 
 ### Step Loading Mechanism
 
