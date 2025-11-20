@@ -1,0 +1,75 @@
+<h2>Step 1: Getting Started</h2>
+<div class="step-content">
+    <p>Before building the dynamic spawning system, you need a project with the basic enemy system in place. This lesson builds on the foundation from the <strong>Abstracting Enemies</strong> lesson.</p>
+
+    <h3>Choose Your Path</h3>
+
+    <div class="info-box">
+        <h3>Option 1: Clone the Starter Project (Recommended)</h3>
+        <p>Start with a pre-configured project that has all the prerequisites already set up. This is the fastest way to begin.</p>
+        <p><strong>Starter Project:</strong> <a href="https://microstudio.dev/i/jocolloman/abstractenemiesfinished/" target="_blank" style="color: #5b9bd5; text-decoration: underline;">https://microstudio.dev/i/jocolloman/abstractenemiesfinished/</a></p>
+        <p>The starter project includes:</p>
+        <ul>
+            <li>A working <code>enemies</code> table</li>
+            <li>Complete enemy factory function (<code>create_enemy()</code>)</li>
+            <li>Basic collision detection</li>
+            <li>All prerequisite systems ready to go</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h3>Option 2: Continue from Your Own Project</h3>
+        <p>If you completed the <strong>Abstracting Enemies</strong> lesson, you can continue with your existing project. Just make sure it meets the requirements below.</p>
+    </div>
+
+    <h3>Requirements Checklist</h3>
+    <p>Your project must have the following before proceeding:</p>
+
+    <ul>
+        <li><strong>An <code>enemies</code> table</strong> - A table that stores all enemy objects</li>
+        <li><strong><code>create_enemy()</code> factory function</strong> - Creates and returns a new enemy object with properties like:
+            <ul>
+                <li><code>x</code>, <code>y</code> - Position</li>
+                <li><code>isDestroyed</code> - Boolean flag for destroyed state</li>
+                <li><code>update()</code> method - Updates enemy behavior</li>
+                <li><code>draw()</code> method - Renders the enemy</li>
+            </ul>
+        </li>
+        <li><strong><code>init_enemies()</code> function</strong> - Initializes enemies at game start</li>
+        <li><strong><code>update_enemies()</code> function</strong> - Updates all active enemies each frame</li>
+        <li><strong><code>draw_enemies()</code> function</strong> - Draws all active enemies each frame</li>
+    </ul>
+
+    <div class="info-box">
+        <h3>Why These Requirements?</h3>
+        <p>This lesson will modify these existing systems to add dynamic spawning. You'll enhance <code>init_enemies()</code> to use a spawning function, create new spawning logic, and add wave mechanics on top of what you already have.</p>
+    </div>
+
+    <h3>Prerequisites</h3>
+    <p>You should be comfortable with:</p>
+    <ul>
+        <li><strong>Tables and iteration</strong> - Using <code>for</code> loops with <code>pairs()</code> and traditional counting loops</li>
+        <li><strong>Object properties</strong> - Accessing and modifying enemy properties like <code>enemy.x</code>, <code>enemy.isDestroyed</code></li>
+        <li><strong>Factory functions</strong> - Calling <code>create_enemy()</code> to generate new objects</li>
+        <li><strong>Boolean logic</strong> - Checking conditions with <code>if</code> statements</li>
+        <li><strong>Game loop concepts</strong> - Understanding <code>init()</code>, <code>update()</code>, <code>draw()</code></li>
+    </ul>
+
+    <div class="demo-container">
+        <h3>What Your Project Should Look Like</h3>
+        <p>Before starting this lesson, your project should function like this demo. You should be able to shoot and destroy enemies, but once they're all gone, the game is over.</p>
+        <div id="step1-demo" style="margin: 10px 0;"></div>
+        <p class="demo-caption">Use arrow keys to move, space to shoot. Notice how the game ends once all enemies are destroyed.</p>
+    </div>
+
+    <script>
+        createLazyEmbed('step1-demo', 'https://microstudio.io/jocolloman/abstractenemiesfinished/', 400);
+    </script>
+
+    <div class="success-box">
+        <h3>Ready to Start?</h3>
+        <p>Once your project meets the requirements above, you're ready to build the spawning system. The next steps will guide you through creating dynamic spawning, object pooling, and wave mechanics.</p>
+    </div>
+
+    <p><strong>Next:</strong> You'll create the <code>spawn_enemy()</code> function that handles dynamic enemy creation during gameplay.</p>
+</div>

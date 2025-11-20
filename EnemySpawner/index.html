@@ -15,6 +15,9 @@
     <!-- Our custom code rendering functions -->
     <script src="codeblocks.js"></script>
 
+    <!-- Lazy embed functionality -->
+    <script src="lazy-embed.js"></script>
+
     <!-- Main page styles -->
     <link rel="stylesheet" href="styles.css">
 
@@ -88,6 +91,9 @@
             }
 
             currentStep = stepNumber;
+
+            // Save to localStorage
+            localStorage.setItem('enemySpawner_currentStep', stepNumber);
 
             // Update UI
             updateNavigation();
@@ -177,10 +183,19 @@
         }
 
         /**
-         * Initialize page - load Step 0 on page load
+         * Initialize page - load last visited step or Step 0
          */
         window.addEventListener('DOMContentLoaded', () => {
-            loadStep(0);
+            // Check localStorage for saved step
+            const savedStep = localStorage.getItem('enemySpawner_currentStep');
+            const initialStep = savedStep !== null ? parseInt(savedStep) : 0;
+
+            // Validate saved step is within valid range
+            if (initialStep >= 0 && initialStep <= totalSteps) {
+                loadStep(initialStep);
+            } else {
+                loadStep(0);
+            }
         });
     </script>
 </body>

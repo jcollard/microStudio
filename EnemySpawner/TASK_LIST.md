@@ -78,15 +78,15 @@
   - [x] Introduce the solution (dynamic spawning)
   - [x] Preview the challenge (spawning, pooling, waves)
   - [x] Embedded demo of finished project (DEMO_URL_HERE placeholder)
-- [ ] **CHECKPOINT: Get approval before proceeding to Step 1**
+- [x] **CHECKPOINT: Get approval before proceeding to Step 1**
 
 ### Step 1: Getting Started
-- [ ] Create `steps/step1.html`
-  - [ ] Two options section (clone vs continue)
-  - [ ] Requirements checklist
-  - [ ] Link to starter project (URL to be provided)
-  - [ ] Prerequisites explanation
-  - [ ] Remove demo section (no visual output)
+- [x] Create `steps/step1.html`
+  - [x] Two options section (clone vs continue)
+  - [x] Requirements checklist
+  - [x] Link to starter project (URL to be provided)
+  - [x] Prerequisites explanation
+  - [x] Remove demo section (no visual output)
 - [ ] **CHECKPOINT: Get approval before proceeding to Step 2**
 
 ### Step 2: Create spawn_enemy() Function
