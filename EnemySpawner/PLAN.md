@@ -19,13 +19,19 @@ EnemySpawner/
 ├── codeblocks.css          # Code block and diff styling
 ├── codeblocks.js           # Code rendering functions
 ├── lazy-embed.js           # Lazy-loading embed functionality
+├── sprite-gallery.js       # Sprite gallery functionality
+├── sprite-gallery.css      # Sprite gallery modal styling
 ├── demo.html               # Demo/testing page for code rendering
 ├── PLAN.md                 # This planning document
 ├── TASK_LIST.md            # Task tracking document
+├── kenney-sprites/         # PNG sprite assets for students
+│   ├── (various .png files from Kenney asset packs)
+│   └── ...
 ├── steps/
 │   ├── step0.html          # Welcome/Introduction (HTML fragment)
 │   ├── step1.html          # Getting Started (HTML fragment)
 │   ├── step2.html          # Create spawn_enemy() (HTML fragment)
+│   ├── step2b.html         # CHALLENGE: Randomize Enemies (HTML fragment)
 │   ├── step3.html          # Replace init_enemies() (HTML fragment)
 │   ├── step4.html          # Object Pooling (HTML fragment)
 │   ├── step5.html          # all_enemies_destroyed() (HTML fragment)
@@ -36,6 +42,7 @@ EnemySpawner/
 └── solutions/
     ├── starter_code.lua    # Starting point (copy of AbstractingEnemies step10)
     ├── step2_solution.lua  # Solution after completing Step 2
+    ├── step2b_solution.lua # Solution after completing Step 2b (challenge)
     ├── step3_solution.lua  # Solution after completing Step 3
     ├── step4_solution.lua  # Solution after completing Step 4
     ├── step5_solution.lua  # Solution after completing Step 5
@@ -49,10 +56,11 @@ EnemySpawner/
 **`index.html`** - Main page container:
 - Complete HTML document structure (`<!DOCTYPE html>`, `<html>`, `<head>`, `<body>`)
 - Includes all CDN links (Highlight.js, jsdiff)
-- Includes CSS files (`styles.css`, `codeblocks.css`)
-- Includes JavaScript files (`codeblocks.js`)
-- Contains navigation UI (step selector/buttons)
+- Includes CSS files (`styles.css`, `codeblocks.css`, `sprite-gallery.css`)
+- Includes JavaScript files (`codeblocks.js`, `lazy-embed.js`, `sprite-gallery.js`)
+- Contains navigation UI (step selector/buttons, sprite gallery button)
 - Loads step HTML fragments dynamically into a content area
+- **Uses array-based step tracking** (not integer-based) to avoid confusion with step names like "step2b"
 - Manages which step is currently displayed
 
 **`styles.css`** - Main page styling:
@@ -75,12 +83,30 @@ EnemySpawner/
 - **Independent of main page styles** - can be reused in other lessons
 
 **`codeblocks.js`** - Code rendering logic:
-- `renderCodeBlock(elementId, code, language)` function
+- `renderCodeBlock(elementId, code, language, options)` function
+  - **NEW**: `options.copyable` - boolean to show/hide copy button (default: true)
+  - **NEW**: `options.selectable` - boolean to allow/prevent text selection (default: true)
 - `renderDiffBlock(elementId, oldCode, newCode, description)` function
 - `copyCode(elementId, useDataAttribute)` helper
 - `highlightCode(code, language)` helper for syntax highlighting
 - `escapeHtml(text)` utility
 - **No page-specific logic** - pure rendering functions
+
+**`sprite-gallery.js`** - Sprite gallery system:
+- `showGallery()` - Opens modal with sprite browser
+- Indexes PNG files from `kenney-sprites/` directory
+- Modal UI with sprite grid displaying thumbnails and filenames
+- Rotate sprite 90° clockwise/counterclockwise using HTML5 Canvas
+- Download rotated sprite as PNG file
+- **Available globally** - can be called from any step or via navigation button
+
+**`sprite-gallery.css`** - Sprite gallery styling:
+- Modal overlay and container styles
+- Sprite grid layout
+- Rotation controls styling
+- Download button styling
+- Responsive design for gallery
+- Dark theme matching lesson aesthetics
 
 **`steps/stepN.html`** - Step content fragments:
 - HTML fragments (no `<!DOCTYPE>`, no `<html>`, no `<head>`)
@@ -99,18 +125,30 @@ EnemySpawner/
 - **`starter_code.lua`** - Starting point for the lesson (copy of AbstractingEnemies step10_solution.lua)
 - **`stepN_solution.lua`** - Complete working code after completing each step
 - Each solution file contains all code needed to run the game at that point in the lesson
-- Solutions build on each other incrementally (step3 includes changes from step2, etc.)
+- Solutions build on each other incrementally (step3 includes changes from step2, step2b, etc.)
 - Used for reference, debugging, and verification that students are on the right track
-- **IMPORTANT**: Create a new solution file after completing each step (Steps 2-8)
+- **IMPORTANT**: Create a new solution file after completing each step (Steps 2, 2b, 3-8)
+- **Challenge steps get solutions too** - These will be used in future demos and as reference implementations
+
+**`kenney-sprites/`** - Sprite assets:
+- PNG sprite files from Kenney asset packs
+- Available for students to browse via sprite gallery
+- Used in Step 2b challenge for sprite randomization
+- Filenames displayed in gallery for easy reference in code
 
 ### Step Loading Mechanism
 
-The main `index.html` should dynamically load step HTML fragments using one of these approaches:
+The main `index.html` should dynamically load step HTML fragments using **array-based step tracking**:
 
-**Option 1: Fetch API** (Recommended):
+**Array-Based Step Tracking** (Required):
 ```javascript
-async function loadStep(stepNumber) {
-  const response = await fetch(`steps/step${stepNumber}.html`);
+// Define steps as an array of step names (not integers)
+const steps = ['step0', 'step1', 'step2', 'step2b', 'step3', 'step4', 'step5', 'step6', 'step7', 'step8', 'step9'];
+let currentStepIndex = 0;
+
+async function loadStep(stepIndex) {
+  const stepName = steps[stepIndex];
+  const response = await fetch(`steps/${stepName}.html`);
   const html = await response.text();
   document.getElementById('step-content').innerHTML = html;
 
@@ -124,9 +162,11 @@ async function loadStep(stepNumber) {
 }
 ```
 
-**Option 2: Server-side includes** (if using a web server):
-- PHP: `<?php include 'steps/step0.html'; ?>`
-- Other server-side template engines
+**Why Array-Based Tracking?**
+- Handles non-sequential step names like "step2b" without confusion
+- Easy to add/remove/reorder steps without renumbering
+- Clear mapping between index and actual step file name
+- Dropdown selector can iterate over array for step options
 
 **Benefits of This Architecture**:
 - **Separation of concerns**: Page structure, styling, and content are separate
@@ -330,6 +370,60 @@ spawn_enemy()
 A new enemy should appear at the top of the screen and move in a random direction! They can call it multiple times to spawn multiple enemies.
 
 **Key teaching moment**: Functions can create game objects on-demand, not just during initialization. This is fundamental to dynamic gameplay.
+
+### Step 2b: CHALLENGE - Randomize Enemy Properties
+**New Concept**: Apply your knowledge by adding randomization without copy-pasting code
+
+**Challenge Type**: This is a **challenge step** where students implement features on their own:
+- Code blocks shown are **NOT copyable** (no copy button)
+- Code is **NOT selectable** (CSS `user-select: none`) to prevent easy copying
+- Students must **type the code themselves** to reinforce learning
+- Encourages problem-solving and code comprehension over copy-paste
+
+**Task**: Enhance your `spawn_enemy()` function to randomize more properties:
+
+1. **Randomize vertical velocity (`enemy.vy`)**:
+   - Currently fixed at `-1`
+   - Make it random between `-2.0` and `-0.5` (always moving downward, but at varying speeds)
+   - Use the same pattern as `enemy.vx`: `math.random(-20, -5) / 10`
+
+2. **Randomize enemy size**:
+   - Currently fixed at `32, 32`
+   - Make width random between `20` and `48`
+   - Make height random between `20` and `48`
+   - Hint: `math.random(20, 48)`
+
+3. **Randomize sprite selection**:
+   - Currently uses `"enemy_ship"` for all enemies
+   - Create an array of sprite names from the sprite gallery
+   - Randomly select one sprite from the array
+   - Use sprite gallery button in navigation to browse available sprites
+
+**Sprite Gallery**:
+- Click "Sprite Gallery" button in navigation bar
+- Browse available PNG sprites from Kenney asset packs
+- Filenames are shown for easy reference in code
+- Rotate sprites clockwise/counterclockwise before downloading if needed
+- Download sprites to add to your microStudio project
+
+**Example Code Structure** (non-copyable, for reference only):
+```lua
+-- You'll need to update spawn_enemy() to include:
+-- 1. Random vy velocity
+-- 2. Random width and height in create_enemy()
+-- 3. Random sprite selection from an array
+```
+
+**Testing**:
+- Spawn multiple enemies using console: `spawn_enemy()`
+- You should see varied sizes, speeds, and sprites!
+
+**Hints**:
+- For random sprite selection, create a table like: `local sprites = {"sprite1", "sprite2", "sprite3"}`
+- Access random element: `sprites[math.random(1, #sprites)]`
+- Remember to pass width/height variables to `create_enemy()`
+
+**Key teaching moment**: Randomization creates variety and replayability. Professional games use randomization extensively to keep gameplay fresh. Typing code yourself (not copy-pasting) helps build muscle memory and deeper understanding.
 
 ### Step 3: Replace init_enemies() to Use spawn_enemy()
 **New Concept**: Use our new spawning function to initialize enemies
@@ -888,3 +982,75 @@ Both `renderCodeBlock()` and `renderDiffBlock()` should include a "Copy Code" bu
 - For diffs: copies only the new (right side) code
 - Uses `navigator.clipboard.writeText()` API
 - Styled to match the lesson theme (simple, unobtrusive)
+
+### Challenge Step Code Blocks (Non-Copyable)
+
+For challenge steps like Step 2b, code blocks should be non-copyable to encourage active learning:
+
+**Updated `renderCodeBlock()` signature**:
+```javascript
+renderCodeBlock(elementId, code, language, options = {
+  copyable: true,    // Set to false to hide copy button
+  selectable: true   // Set to false to prevent text selection
+})
+```
+
+**Usage in Step 2b**:
+```javascript
+renderCodeBlock('challenge-code', codeExample, 'lua', {
+  copyable: false,    // No copy button
+  selectable: false   // Cannot highlight/select text
+});
+```
+
+**Implementation**:
+- When `copyable: false` - Do not render the copy button
+- When `selectable: false` - Add CSS class `.code-non-selectable` with `user-select: none`
+- Visual indicator: Add subtle border or label showing "Type this code yourself"
+
+### Sprite Gallery System
+
+The sprite gallery provides a visual browser for students to explore available sprites:
+
+**Features**:
+- **Global access**: Button in navigation bar opens gallery modal
+- **Sprite browsing**: Grid layout displaying PNG thumbnails
+- **Filename display**: Show filename under each sprite for code reference
+- **Rotation tools**: Rotate sprite 90° CW/CCW before download
+- **Download**: Export rotated sprite as PNG file
+
+**Implementation Details**:
+
+1. **sprite-gallery.js**:
+   - `showGallery()` - Opens modal overlay
+   - Index PNG files from `kenney-sprites/` directory (hardcoded list or dynamic)
+   - Render grid of sprite thumbnails with filenames
+   - Rotation state management (0°, 90°, 180°, 270°)
+   - Canvas-based rotation:
+     ```javascript
+     function rotateSprite(img, degrees) {
+       const canvas = document.createElement('canvas');
+       const ctx = canvas.getContext('2d');
+       // Rotate image on canvas
+       // Return data URL for download
+     }
+     ```
+
+2. **sprite-gallery.css**:
+   - Modal overlay: `position: fixed`, dark semi-transparent background
+   - Gallery container: centered, max-width, scrollable
+   - Sprite grid: CSS Grid, 4-6 columns, responsive
+   - Sprite cards: thumbnail, filename, rotation/download buttons
+   - Dark theme matching lesson aesthetics
+
+3. **Navigation Button**:
+   - Add "Sprite Gallery" button to top navigation bar (next to step selector)
+   - `onclick="showGallery()"` to open modal
+
+**User Workflow**:
+1. Student clicks "Sprite Gallery" in navigation
+2. Modal opens showing grid of available sprites
+3. Student finds desired sprite, notes the filename
+4. (Optional) Rotate sprite if needed
+5. (Optional) Download rotated sprite
+6. Student uses filename in their code: `create_enemy("filename", ...)`
