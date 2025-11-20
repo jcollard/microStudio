@@ -27,7 +27,7 @@
 ### Directory Structure
 - [x] Create `steps/` subdirectory
 - [x] Create `solutions/` subdirectory
-- [ ] Create `kenney-sprites/` subdirectory (for Step 2b)
+- [x] Create `kenney-sprites/` subdirectory (for Step 2b)
 - [x] Verify all existing files are in correct locations:
   - [x] codeblocks.js
   - [x] codeblocks.css
@@ -44,12 +44,12 @@
   - [x] Navigation UI structure
   - [x] Content area for loading step fragments
   - [x] Step loading JavaScript (Fetch API)
-- [ ] **UPDATE `index.html` for Step 2b**:
-  - [ ] Replace integer-based step tracking with array-based tracking
-  - [ ] Define `steps` array: `['step0', 'step1', 'step2', 'step2b', 'step3', ...]`
-  - [ ] Update `loadStep()` to use array lookup: `steps[stepIndex]`
-  - [ ] Add sprite gallery button to navigation bar
-  - [ ] Include `sprite-gallery.js` and `sprite-gallery.css` in head
+- [x] **UPDATE `index.html` for Step 2b**:
+  - [x] Replace integer-based step tracking with array-based tracking
+  - [x] Define `steps` array: `['step0', 'step1', 'step2', 'step2b', 'step3', ...]`
+  - [x] Update `loadStep()` to use array lookup: `steps[stepIndex]`
+  - [x] Add sprite gallery button to navigation bar
+  - [x] Include `sprite-gallery.js`, `sprite-gallery.css`, and `lazy-embed.js` in head
 
 - [x] Create `styles.css` with:
   - [x] Page layout (navigation, content area)
@@ -62,38 +62,46 @@
   - [x] Step content container styling (.step-content)
   - [x] Responsive design rules
 
-- [ ] **UPDATE `codeblocks.js` for Step 2b**:
-  - [ ] Add `options` parameter to `renderCodeBlock(elementId, code, language, options)`
-  - [ ] Implement `options.copyable` (default: true) - hide copy button when false
-  - [ ] Implement `options.selectable` (default: true) - add `.code-non-selectable` class when false
-  - [ ] Add visual indicator for non-copyable code blocks
+- [x] **UPDATE for Step 2b - CSS-based approach**:
+  - [x] Use CSS `user-select: none` directly in step2b.html for non-copyable code
+  - [x] Hide copy buttons via CSS in step2b.html
+  - [x] Simpler approach - no codeblocks.js modifications needed
 
-- [ ] **UPDATE `codeblocks.css` for Step 2b**:
-  - [ ] Add `.code-non-selectable` class with `user-select: none`
-  - [ ] Style non-copyable code blocks (subtle border or label)
+- [x] **CREATE `lazy-embed.js`**:
+  - [x] Implement `createLazyEmbed()` function for manual embed creation
+  - [x] Implement `initializeLazyEmbeds()` for auto-initialization
+  - [x] Support `data-src` and `data-height` attributes
+  - [x] "Click to Play" placeholder overlay
+  - [x] Lazy-load iframes on click
 
-- [ ] **CREATE `sprite-gallery.js`**:
-  - [ ] Implement `showGallery()` function to open modal
-  - [ ] Index PNG files from `kenney-sprites/` directory (hardcoded array)
-  - [ ] Render sprite grid with thumbnails and filenames
-  - [ ] Implement rotation controls (90° CW/CCW)
-  - [ ] Canvas-based sprite rotation function
-  - [ ] Download rotated sprite as PNG functionality
-  - [ ] Close modal functionality
+- [x] **CREATE `sprite-gallery.js`**:
+  - [x] Implement `showGallery()` function to open modal
+  - [x] Index 299 PNG files from 10 categories (Enemy Ships, UFOs, Player Ships, Lasers, Effects, Damage, Meteors, Parts, Power-ups, UI)
+  - [x] Render sprite grid with thumbnails and lowercase filenames
+  - [x] Category tab navigation system
+  - [x] Dynamic pagination based on viewport size
+  - [x] Cross-category navigation with wrap-around
+  - [x] Rotation controls (90° CW/CCW)
+  - [x] Canvas-based sprite rotation
+  - [x] Download rotated sprite as PNG
+  - [x] Close modal functionality
 
-- [ ] **CREATE `sprite-gallery.css`**:
-  - [ ] Modal overlay styles (fixed position, dark background)
-  - [ ] Gallery container styles (centered, scrollable)
-  - [ ] Sprite grid layout (CSS Grid, 4-6 columns, responsive)
-  - [ ] Sprite card styles (thumbnail, filename, buttons)
-  - [ ] Rotation control button styles
-  - [ ] Download button styles
-  - [ ] Dark theme matching lesson aesthetics
-  - [ ] Close button and modal controls
+- [x] **CREATE `sprite-gallery.css`**:
+  - [x] Modal overlay (fixed, dark background, 85vh height)
+  - [x] Gallery container (fixed height, scrollable)
+  - [x] Category tabs (active states, hover effects)
+  - [x] Sprite grid (responsive, auto-fill)
+  - [x] Sprite cards (preview, filename, controls)
+  - [x] Rotation button styles
+  - [x] Download button styles
+  - [x] Pagination controls
+  - [x] Dark theme matching lesson aesthetics
+  - [x] Responsive design (mobile/tablet/desktop)
 
-- [ ] **CREATE `kenney-sprites/` directory**:
-  - [ ] Add PNG sprite files from Kenney asset packs
-  - [ ] Document sprite filenames for gallery indexing
+- [x] **POPULATE `kenney-sprites/` directory**:
+  - [x] Added 299 PNG sprite files from Kenney Space Shooter Redux pack
+  - [x] Organized in 10 categories with subdirectories
+  - [x] All sprites indexed in sprite-gallery.js
 
 ---
 
@@ -134,7 +142,7 @@
   - [x] Remove demo section (no visual output)
 - [x] **CHECKPOINT: Get approval before proceeding to Step 2**
 
-### Step 2: Create spawn_enemy() Function
+### Step 2: Create spawn_enemy() Function ✅
 - [x] Create `steps/step2.html`
   - [x] Intro: Dynamic spawning concept
   - [x] Info box explaining the concept
@@ -144,24 +152,31 @@
   - [x] Remove demo section (console testing only)
   - [x] Key teaching moment box
 - [x] Create `solutions/step2_solution.lua`
-- [ ] **CHECKPOINT: Get approval before proceeding to Step 2b**
+- [x] **CHECKPOINT: ✅ APPROVED**
 
-### Step 2b: CHALLENGE - Randomize Enemy Properties
-- [ ] Create `steps/step2b.html`
-  - [ ] Intro: Challenge step explanation (no copy-paste)
-  - [ ] Info box explaining challenge format and sprite gallery
-  - [ ] Task description with 3 sub-tasks:
-    - [ ] Randomize enemy.vy velocity
-    - [ ] Randomize enemy width/height
-    - [ ] Randomize sprite selection
-  - [ ] **Non-copyable code blocks** using `renderCodeBlock()` with `{copyable: false, selectable: false}`
-  - [ ] Sprite gallery usage instructions
-  - [ ] Hints section (not full solutions)
-  - [ ] Testing section with console commands
-  - [ ] Remove demo section (console testing only)
-  - [ ] Key teaching moment box (active learning, typing code)
-- [ ] Create `solutions/step2b_solution.lua`
-- [ ] **CHECKPOINT: Get approval before proceeding to Step 3**
+### Step 2b: CHALLENGE - Randomize Enemy Properties ✅
+- [x] Create `steps/step2b.html`
+  - [x] Intro: Challenge step explanation (optional but recommended)
+  - [x] Info box explaining square sprite constraints (width = height)
+  - [x] **Challenge 1: Random Enemy Sizes**
+    - [x] Global SIZES table with curly braces `{24, 32, 40}`
+    - [x] Explanation of Lua 1-based indexing
+    - [x] Example: `SIZES[math.random(1, 3)]`
+    - [x] Challenge to add more sizes (5 options)
+  - [x] **Challenge 2: Random Enemy Types**
+    - [x] Global ENEMY_SPRITES table
+    - [x] Random selection between 2 sprite types
+    - [x] Challenge to add more types (3-5 sprites)
+  - [x] **Non-copyable code blocks** - CSS user-select: none
+  - [x] Sprite gallery button integration
+  - [x] Testing section with console commands
+  - [x] Embedded playable demo with refresh button
+  - [x] Success box: Key concepts (data-driven design, random selection, visual variety)
+- [x] Create `solutions/step2b_solution.lua`
+  - [x] 5 size options: `{16, 24, 32, 40, 48}`
+  - [x] 5 lowercase sprite names: `{"enemyblack1", "enemyblue2", "enemygreen3", "enemyred4", "ufoblue"}`
+  - [x] Correct Lua syntax (curly braces, 1-based indexing)
+- [x] **CHECKPOINT: ✅ APPROVED - Ready for Step 3**
 
 ### Step 3: Replace init_enemies()
 - [ ] Create `steps/step3.html`
@@ -244,10 +259,10 @@
 ## Testing & Verification Tasks
 
 ### Individual Step Testing
-- [ ] Step 0: Verify all content loads, demo iframe works
-- [ ] Step 1: Verify requirements display correctly
-- [ ] Step 2: Verify code block renders with syntax highlighting
-- [ ] **Step 2b: Verify non-copyable code blocks work, sprite gallery instructions clear**
+- [x] Step 0: Verify all content loads, demo iframe works
+- [x] Step 1: Verify requirements display correctly
+- [x] Step 2: Verify code block renders with syntax highlighting
+- [x] **Step 2b: Verify non-copyable code blocks work, sprite gallery button works, lazy embed loads**
 - [ ] Step 3: Verify code block renders correctly
 - [ ] Step 4: Verify diff block shows changes clearly
 - [ ] Step 5: Verify code block renders correctly
@@ -257,13 +272,14 @@
 - [ ] Step 9: Verify all content loads, demo iframe works
 
 ### Navigation Testing
-- [ ] Test step navigation (0 through 2b, 3-9) using array-based tracking
-- [ ] Verify step loading mechanism works with step names (not just integers)
-- [ ] Check that `<script>` tags execute after loading
-- [ ] Verify all code rendering functions work in each step
-- [ ] Test copy buttons in all code blocks and diffs
-- [ ] **Test non-copyable code blocks in Step 2b** (no copy button, no text selection)
-- [ ] **Test sprite gallery button in navigation** - opens modal correctly
+- [x] Test step navigation (0 through 2b, 3-9) using array-based tracking
+- [x] Verify step loading mechanism works with step names (not just integers)
+- [x] Check that `<script>` tags execute after loading
+- [x] Verify all code rendering functions work in each step
+- [x] Test copy buttons in all code blocks and diffs
+- [x] **Test non-copyable code blocks in Step 2b** (no copy button, no text selection via CSS)
+- [x] **Test sprite gallery button in navigation** - opens modal correctly
+- [x] **Test lazy embed initialization** - embeds load dynamically in steps
 
 ### Cross-browser Testing
 - [ ] Test in Chrome/Edge
@@ -280,14 +296,17 @@
 - [ ] **Non-copyable code blocks work** (Step 2b) - no copy button, no text selection
 
 ### Sprite Gallery Testing
-- [ ] Sprite gallery button opens modal
-- [ ] Sprite grid displays correctly with thumbnails
-- [ ] Filenames shown clearly under each sprite
-- [ ] Rotation controls work (90° CW/CCW)
-- [ ] Canvas-based rotation produces correct output
-- [ ] Download button exports rotated PNG correctly
-- [ ] Close modal functionality works
-- [ ] Gallery responsive on different screen sizes
+- [x] Sprite gallery button opens modal
+- [x] Sprite grid displays correctly with thumbnails
+- [x] Filenames shown in lowercase under each sprite
+- [x] Category tabs work (10 categories)
+- [x] Pagination works (dynamic based on viewport)
+- [x] Cross-category navigation with wrap-around
+- [x] Rotation controls work (90° CW/CCW)
+- [x] Canvas-based rotation produces correct output
+- [x] Download button exports rotated PNG correctly
+- [x] Close modal functionality works
+- [x] Gallery responsive on different screen sizes
 
 ---
 
@@ -317,30 +336,57 @@
 ## Completion Checklist
 
 - [ ] All 11 step HTML files created and tested (step0-step9 + step2b)
-- [ ] index.html updated with array-based step tracking
-- [ ] styles.css created with professional styling
-- [ ] codeblocks.js updated with copyable/selectable options
-- [ ] sprite-gallery.js created and functional
-- [ ] sprite-gallery.css created matching lesson theme
-- [ ] kenney-sprites/ directory populated with PNG assets
-- [ ] All code blocks and diffs render correctly
-- [ ] All copy buttons work (except in Step 2b challenge)
-- [ ] Non-copyable code blocks work in Step 2b
-- [ ] Sprite gallery functional and integrated in navigation
-- [ ] Navigation between steps works smoothly with array tracking
-- [ ] Responsive design verified
-- [ ] Demo URLs provided or placeholders removed
-- [ ] All solution files created (including step2b_solution.lua)
-- [ ] User has approved final implementation
-- [ ] Ready for student testing
+  - [x] step0.html ✅
+  - [x] step1.html ✅
+  - [x] step2.html ✅
+  - [x] step2b.html ✅
+  - [ ] step3.html
+  - [ ] step4.html
+  - [ ] step5.html
+  - [ ] step6.html
+  - [ ] step7.html
+  - [ ] step8.html
+  - [ ] step9.html
+- [x] index.html updated with array-based step tracking
+- [x] styles.css created with professional styling
+- [x] codeblocks.js created (no modifications needed for Step 2b)
+- [x] lazy-embed.js created with auto-initialization
+- [x] sprite-gallery.js created and functional (299 sprites, 10 categories)
+- [x] sprite-gallery.css created matching lesson theme
+- [x] kenney-sprites/ directory populated with 299 PNG assets
+- [x] All code blocks render correctly (Steps 0-2b)
+- [x] All copy buttons work (Steps 0-2)
+- [x] Non-copyable code blocks work in Step 2b (CSS approach)
+- [x] Sprite gallery functional and integrated in navigation
+- [x] Navigation between steps works smoothly with array tracking
+- [x] Responsive design verified
+- [ ] Demo URLs provided or placeholders removed (Steps 3-9 pending)
+- [x] Solution files created:
+  - [x] step2_solution.lua ✅
+  - [x] step2b_solution.lua ✅
+  - [ ] step3-8 solution files (pending)
+- [ ] User has approved final implementation (Steps 0-2b approved, 3-9 pending)
+- [ ] Ready for student testing (after all steps complete)
 
 ---
 
 ## Notes
 
-**Current Phase**: Step 2 Complete, awaiting approval before Step 2b
+**Current Phase**: Steps 0, 1, 2, and 2b Complete ✅ | Ready for Step 3
 
-**Next Action**: Get user approval on Step 2 before proceeding to implement Step 2b features
+**Next Action**: Begin implementation of Step 3 (Replace init_enemies())
+
+**Step 2b Completion Summary**:
+- ✅ Created step2b.html with two progressive challenges
+- ✅ Challenge 1: Random enemy sizes using SIZES table
+- ✅ Challenge 2: Random sprite types using ENEMY_SPRITES table
+- ✅ Implemented non-copyable code blocks via CSS
+- ✅ Integrated sprite gallery button
+- ✅ Added playable demo with refresh functionality
+- ✅ Created step2b_solution.lua with correct Lua syntax
+- ✅ Sprite gallery fully functional (299 sprites, 10 categories, pagination, rotation, download)
+- ✅ Lazy embed system for interactive demos
+- ✅ All lowercase sprite names matching microStudio conventions
 
 **Implementation Strategy**:
 1. Update core files first (index.html array tracking, codeblocks.js options, sprite gallery system)

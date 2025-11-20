@@ -659,9 +659,10 @@ function createSpriteCard(filename) {
     const safeId = spriteNameWithoutExt.replace(/\//g, '-');
 
     // Display name without directory path (just the filename)
+    // Convert to lowercase to match microStudio's automatic conversion
     const displayName = spriteNameWithoutExt.includes('/')
-        ? spriteNameWithoutExt.split('/').pop()
-        : spriteNameWithoutExt;
+        ? spriteNameWithoutExt.split('/').pop().toLowerCase()
+        : spriteNameWithoutExt.toLowerCase();
 
     card.innerHTML = `
         <div class="sprite-preview">

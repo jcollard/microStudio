@@ -1,0 +1,277 @@
+<div class="step-content">
+    <h2>Step 2b: CHALLENGE - Randomize Enemies</h2>
+
+    <p>Now that you have a working <code>spawn_enemy()</code> function, let's make your enemies more interesting by adding randomization! These challenges will teach you how to create visual variety in your game.</p>
+
+    <div class="info-box">
+        <h3>💡 About Challenge Steps</h3>
+        <p>Challenge steps are <strong>optional</strong> but highly recommended. They help you:</p>
+        <ul>
+            <li>Practice the concepts you just learned</li>
+            <li>Experiment with game design decisions</li>
+            <li>Make your game more unique and interesting</li>
+        </ul>
+        <p>If you get stuck, you can skip ahead and come back later!</p>
+    </div>
+
+    <h3>Challenge 1: Random Enemy Sizes</h3>
+
+    <p>Right now, all your enemies are the same size (32x32). Let's make some enemies bigger and some smaller to add visual variety!</p>
+
+    <div class="info-box">
+        <h3>🎨 Square Sprites</h3>
+        <p><strong>Important:</strong> Enemy sprites are square images, so the width and height should <strong>always match</strong>. If you set different values (like width=32, height=64), your sprite will appear stretched and distorted.</p>
+        <p><strong>Rule:</strong> Always use the same value for both width and height (e.g., 24x24, 32x32, 48x48).</p>
+    </div>
+
+    <p>Modify your <code>spawn_enemy()</code> function to use a random size. Here's one approach:</p>
+
+    <div id="random-size-code"></div>
+
+    <script>
+        const randomSizeCode = `-- Global table for size options
+SIZES = {24, 32, 40}
+
+spawn_enemy = function()
+  -- Random size: 24, 32, or 40 pixels
+  -- Lua uses 1-based indexing, so math.random(1, 3) gives us indices 1-3
+  local size = SIZES[math.random(1, 3)]
+
+  local enemy = create_enemy("enemy_ship", size, size)
+  enemy.x = math.random(-100, 100)
+  enemy.y = 100
+  enemy.vx = math.random(-10, 10) / 10
+  enemy.vy = -1
+end`;
+
+        renderCodeBlock('random-size-code', randomSizeCode, 'lua');
+    </script>
+
+    <div class="info-box">
+        <h3>Understanding Table Indexing in Lua</h3>
+        <p>The expression <code>SIZES[math.random(1, 3)]</code> breaks down like this:</p>
+        <ul>
+            <li><code>SIZES = {24, 32, 40}</code> - Creates a table with three size options using <strong>curly braces { }</strong></li>
+            <li><code>math.random(1, 3)</code> - Generates 1, 2, or 3 randomly</li>
+            <li><code>SIZES[1]</code> - Returns 24 (first element)</li>
+            <li><code>SIZES[2]</code> - Returns 32 (second element)</li>
+            <li><code>SIZES[3]</code> - Returns 40 (third element)</li>
+        </ul>
+        <p><strong>Important: Lua uses 1-based indexing</strong>, so the first element is at index 1, not 0!</p>
+    </div>
+
+    <p><strong>Try it out:</strong> Test your updated function in the console with <code>spawn_enemy()</code>. You should see enemies of different sizes appearing!</p>
+
+    <div class="challenge-box">
+        <h3>🎯 Your Challenge</h3>
+        <p>Experiment with different size values! Try:</p>
+        <ul>
+            <li>Adding more size options to the table (e.g., <code>SIZES = {16, 24, 32, 40, 48}</code>)</li>
+            <li>Adjusting the <code>math.random()</code> range to match your table size</li>
+            <li>Finding size values that look best for your game</li>
+        </ul>
+        <p><strong>Remember:</strong> If you add 5 sizes to the table, use <code>math.random(1, 5)</code> to pick from all of them!</p>
+    </div>
+
+    <h3>Challenge 2: Random Enemy Types</h3>
+
+    <p>Now let's make it even more interesting by spawning <strong>different enemy sprites</strong> randomly!</p>
+
+    <p>Modify your <code>spawn_enemy()</code> function to randomly select between two different enemy sprites:</p>
+
+    <div id="random-sprite-code"></div>
+
+    <script>
+        const randomSpriteCode = `-- Global tables for randomization options
+SIZES = {24, 32, 40}
+ENEMY_SPRITES = {"enemy_ship", "ufo"}
+
+spawn_enemy = function()
+  -- Random size
+  local size = SIZES[math.random(1, 3)]
+
+  -- Random sprite type
+  local sprite_name = ENEMY_SPRITES[math.random(1, 2)]
+
+  local enemy = create_enemy(sprite_name, size, size)
+  enemy.x = math.random(-100, 100)
+  enemy.y = 100
+  enemy.vx = math.random(-10, 10) / 10
+  enemy.vy = -1
+end`;
+
+        renderCodeBlock('random-sprite-code', randomSpriteCode, 'lua');
+    </script>
+
+    <p><strong>How it works:</strong></p>
+    <ul>
+        <li>The table <code>ENEMY_SPRITES = {"enemy_ship", "ufo"}</code> contains two sprite names</li>
+        <li><code>math.random(1, 2)</code> randomly picks index 1 or 2 (Lua's 1-based indexing)</li>
+        <li>The selected sprite name is stored in <code>sprite_name</code></li>
+        <li><code>create_enemy(sprite_name, size, size)</code> uses the random sprite</li>
+    </ul>
+
+    <div style="text-align: center; margin: 20px 0;">
+        <button onclick="showGallery()" class="gallery-button">
+            🎨 Browse Sprite Gallery
+        </button>
+        <p style="margin-top: 10px; color: #d4d4d4; font-size: 0.9em;">Click to find sprite names for your game!</p>
+    </div>
+
+    <div class="challenge-box">
+        <h3>🎯 Your Challenge</h3>
+        <p>Expand your enemy variety! Try these challenges:</p>
+        <ol>
+            <li><strong>Add a third sprite type</strong> - Modify the table and random range to include 3 different enemies</li>
+            <li><strong>Add even more!</strong> - Can you make it select from 5 different enemy types?</li>
+            <li><strong>Use the sprite gallery</strong> - Browse the gallery and pick your favorite enemy sprites</li>
+            <li><strong>Mix categories</strong> - Try combining sprites from "Enemy Ships" and "UFOs" categories</li>
+        </ol>
+        <p><strong>Example with 4 sprites:</strong></p>
+        <pre><code>ENEMY_SPRITES = {"enemyblack1", "ufoblue", "meteorbrrown_big1", "playership1_blue"}
+local sprite_name = ENEMY_SPRITES[math.random(1, 4)]</code></pre>
+        <p><strong>Note:</strong> microStudio converts all sprite names to lowercase automatically!</p>
+    </div>
+
+    <h3>Testing Your Randomization</h3>
+
+    <p>Test your enhanced spawning function by calling it multiple times from the console:</p>
+
+    <div id="test-commands"></div>
+
+    <script>
+        const testCommands = `// Spawn several enemies to see the variety:
+spawn_enemy()
+spawn_enemy()
+spawn_enemy()
+spawn_enemy()
+spawn_enemy()`;
+
+        renderCodeBlock('test-commands', testCommands, 'lua');
+    </script>
+
+    <p><strong>What you should see:</strong> A mix of different enemy sizes and sprite types appearing on screen!</p>
+
+    <h3>Try the Demo</h3>
+
+    <p>See the randomization in action! This demo spawns enemies with random sizes and sprite types when the game starts. <strong>Click the refresh button</strong> to restart the game and see different enemies spawn each time.</p>
+
+    <div class="lazy-embed" data-src="https://microstudio.io/jocolloman/spawningenemies2b/CFGNEGEU/"></div>
+
+    <div style="text-align: center; margin: 15px 0;">
+        <button onclick="refreshEmbed()" class="gallery-button">
+            🔄 Refresh Demo
+        </button>
+        <p style="margin-top: 8px; color: #d4d4d4; font-size: 0.85em;">Reload the game to see new random enemies spawn</p>
+    </div>
+
+    <script>
+        function refreshEmbed() {
+            const embed = document.querySelector('.lazy-embed');
+            const iframe = embed.querySelector('iframe');
+            if (iframe) {
+                iframe.src = iframe.src;
+            }
+        }
+
+        // Initialize the lazy embed when this step loads
+        if (typeof initializeLazyEmbeds === 'function') {
+            initializeLazyEmbeds();
+        }
+    </script>
+
+    <div class="success-box">
+        <h3>🎉 Key Concepts Learned</h3>
+        <p>Great work! You've learned several important game development concepts:</p>
+        <ul>
+            <li><strong>Data-driven design</strong> - Using tables to store options makes code flexible and easy to modify</li>
+            <li><strong>Random selection</strong> - The pattern <code>table[math.random(0, n)]</code> is used constantly in games</li>
+            <li><strong>Visual variety</strong> - Randomization makes games more interesting without writing more code</li>
+            <li><strong>Square sprite constraints</strong> - Understanding your asset requirements prevents visual bugs</li>
+        </ul>
+        <p><strong>Pro tip:</strong> The same table selection pattern works for sounds, colors, speeds, and any other game element you want to randomize!</p>
+    </div>
+
+    <p><strong>Next:</strong> In Step 3, you'll refactor your <code>init_enemies()</code> function to use this powerful new spawning system, replacing all that repetitive code with clean function calls.</p>
+</div>
+
+<style>
+.challenge-box {
+    background: linear-gradient(135deg, #2d4a5a 0%, #1a2a3a 100%);
+    border-left: 4px solid #5b9bd5;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 6px;
+}
+
+.challenge-box h3 {
+    color: #5b9bd5;
+    margin-top: 0;
+    font-size: 1.3em;
+}
+
+.challenge-box p, .challenge-box ul, .challenge-box ol {
+    color: #d4d4d4;
+}
+
+.challenge-box code {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #4fc3f7;
+}
+
+.challenge-box pre {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 12px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 10px 0;
+}
+
+.challenge-box pre code {
+    background: none;
+    padding: 0;
+}
+
+/* Disable copying and text selection for challenge code */
+.step-content .code-block-wrapper .copy-btn {
+    display: none;
+}
+
+.step-content .code-block-wrapper code {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.step-content .code-block-wrapper pre {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Gallery button styling */
+.gallery-button {
+    background: #5b9bd5;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.gallery-button:hover {
+    background: #4a8bc8;
+}
+
+.gallery-button:active {
+    background: #3a7bb8;
+    transform: translateY(1px);
+}
+</style>

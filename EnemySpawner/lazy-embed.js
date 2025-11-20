@@ -79,3 +79,37 @@ function createLazyEmbed(containerId, embedUrl, height = 400) {
 
   container.appendChild(placeholder);
 }
+
+/**
+ * Auto-initialize all lazy embeds with class="lazy-embed" and data-src attribute
+ * This runs automatically when the DOM is ready
+ */
+function initializeLazyEmbeds() {
+  const lazyEmbeds = document.querySelectorAll('.lazy-embed[data-src]');
+
+  lazyEmbeds.forEach((element, index) => {
+    const embedUrl = element.getAttribute('data-src');
+    const height = parseInt(element.getAttribute('data-height')) || 400;
+
+    if (!embedUrl) {
+      console.warn('Lazy embed missing data-src attribute:', element);
+      return;
+    }
+
+    // Give element an ID if it doesn't have one
+    if (!element.id) {
+      element.id = `lazy-embed-${index}`;
+    }
+
+    // Create the embed
+    createLazyEmbed(element.id, embedUrl, height);
+  });
+}
+
+// Auto-initialize when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeLazyEmbeds);
+} else {
+  // DOM already loaded, initialize immediately
+  initializeLazyEmbeds();
+}
