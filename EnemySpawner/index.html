@@ -18,11 +18,17 @@
     <!-- Lazy embed functionality -->
     <script src="lazy-embed.js"></script>
 
+    <!-- Sprite gallery functionality -->
+    <script src="sprite-gallery.js"></script>
+
     <!-- Main page styles -->
     <link rel="stylesheet" href="styles.css">
 
     <!-- Code block and diff styles -->
     <link rel="stylesheet" href="codeblocks.css">
+
+    <!-- Sprite gallery styles -->
+    <link rel="stylesheet" href="sprite-gallery.css">
 </head>
 <body>
     <div class="page-container">
@@ -45,15 +51,20 @@
                         <option value="0">0: Welcome</option>
                         <option value="1">1: Getting Started</option>
                         <option value="2">2: Create spawn_enemy()</option>
-                        <option value="3">3: Replace init_enemies()</option>
-                        <option value="4">4: Object Pooling</option>
-                        <option value="5">5: all_enemies_destroyed()</option>
-                        <option value="6">6: Auto-spawn</option>
-                        <option value="7">7: spawn_enemy_wave()</option>
-                        <option value="8">8: Wave System</option>
-                        <option value="9">9: Congratulations</option>
+                        <option value="3">2b: CHALLENGE - Randomize</option>
+                        <option value="4">3: Replace init_enemies()</option>
+                        <option value="5">4: Object Pooling</option>
+                        <option value="6">5: all_enemies_destroyed()</option>
+                        <option value="7">6: Auto-spawn</option>
+                        <option value="8">7: spawn_enemy_wave()</option>
+                        <option value="9">8: Wave System</option>
+                        <option value="10">9: Congratulations</option>
                     </select>
                 </div>
+
+                <button class="nav-btn" onclick="showGallery()" title="Browse available sprites">
+                    🎨 Sprite Gallery
+                </button>
 
                 <button class="nav-btn next-btn" id="nextBtn" onclick="navigateStep(1)">
                     Next →
@@ -77,23 +88,25 @@
 
     <!-- Step Loading JavaScript -->
     <script>
-        let currentStep = 0;
-        const totalSteps = 9;
+        // Array-based step tracking (handles non-sequential names like "step2b")
+        const steps = ['step0', 'step1', 'step2', 'step2b', 'step3', 'step4', 'step5', 'step6', 'step7', 'step8', 'step9'];
+        let currentStepIndex = 0;
 
         /**
-         * Load a specific step by number
+         * Load a specific step by index
          */
-        async function loadStep(stepNumber) {
-            // Validate step number
-            if (stepNumber < 0 || stepNumber > totalSteps) {
-                console.error(`Invalid step number: ${stepNumber}`);
+        async function loadStep(stepIndex) {
+            // Validate step index
+            if (stepIndex < 0 || stepIndex >= steps.length) {
+                console.error(`Invalid step index: ${stepIndex}`);
                 return;
             }
 
-            currentStep = stepNumber;
+            currentStepIndex = stepIndex;
+            const stepName = steps[stepIndex];
 
             // Save to localStorage
-            localStorage.setItem('enemySpawner_currentStep', stepNumber);
+            localStorage.setItem('enemySpawner_currentStep', stepIndex);
 
             // Update UI
             updateNavigation();
@@ -103,11 +116,11 @@
             contentArea.innerHTML = '<div class="loading">Loading step content...</div>';
 
             try {
-                // Fetch step HTML
-                const response = await fetch(`steps/step${stepNumber}.html`);
+                // Fetch step HTML using step name
+                const response = await fetch(`steps/${stepName}.html`);
 
                 if (!response.ok) {
-                    throw new Error(`Failed to load step ${stepNumber}: ${response.statusText}`);
+                    throw new Error(`Failed to load ${stepName}: ${response.statusText}`);
                 }
 
                 const html = await response.text();
@@ -140,7 +153,7 @@
                 contentArea.innerHTML = `
                     <div class="error-box">
                         <h2>Error Loading Step</h2>
-                        <p>Could not load step ${stepNumber}. Please make sure the step file exists.</p>
+                        <p>Could not load ${stepName}. Please make sure the step file exists.</p>
                         <p class="error-detail">${error.message}</p>
                     </div>
                 `;
@@ -151,9 +164,9 @@
          * Navigate to next/previous step
          */
         function navigateStep(direction) {
-            const newStep = currentStep + direction;
-            if (newStep >= 0 && newStep <= totalSteps) {
-                loadStep(newStep);
+            const newStepIndex = currentStepIndex + direction;
+            if (newStepIndex >= 0 && newStepIndex < steps.length) {
+                loadStep(newStepIndex);
             }
         }
 
@@ -162,8 +175,8 @@
          */
         function loadSelectedStep() {
             const select = document.getElementById('stepSelect');
-            const stepNumber = parseInt(select.value);
-            loadStep(stepNumber);
+            const stepIndex = parseInt(select.value);
+            loadStep(stepIndex);
         }
 
         /**
@@ -172,14 +185,14 @@
         function updateNavigation() {
             // Update dropdown
             const select = document.getElementById('stepSelect');
-            select.value = currentStep;
+            select.value = currentStepIndex;
 
             // Update button states
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
 
-            prevBtn.disabled = currentStep === 0;
-            nextBtn.disabled = currentStep === totalSteps;
+            prevBtn.disabled = currentStepIndex === 0;
+            nextBtn.disabled = currentStepIndex === (steps.length - 1);
         }
 
         /**
@@ -187,12 +200,12 @@
          */
         window.addEventListener('DOMContentLoaded', () => {
             // Check localStorage for saved step
-            const savedStep = localStorage.getItem('enemySpawner_currentStep');
-            const initialStep = savedStep !== null ? parseInt(savedStep) : 0;
+            const savedStepIndex = localStorage.getItem('enemySpawner_currentStep');
+            const initialStepIndex = savedStepIndex !== null ? parseInt(savedStepIndex) : 0;
 
             // Validate saved step is within valid range
-            if (initialStep >= 0 && initialStep <= totalSteps) {
-                loadStep(initialStep);
+            if (initialStepIndex >= 0 && initialStepIndex < steps.length) {
+                loadStep(initialStepIndex);
             } else {
                 loadStep(0);
             }
