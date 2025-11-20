@@ -1,0 +1,164 @@
+<div class="step-content">
+    <h2>Step 6: Auto-Spawn After All Enemies Destroyed</h2>
+
+    <p>You now have a function that can detect when all enemies are destroyed. But what happens next? In most games, destroying all enemies triggers something—a victory screen, a new wave, or in this case, automatic spawning to keep the challenge going.</p>
+
+    <div class="info-box">
+        <h3>Event-Driven Gameplay</h3>
+        <p><strong>Event-driven programming</strong> means your game reacts to conditions and triggers actions automatically.</p>
+        <p><strong>The pattern:</strong></p>
+        <ol>
+            <li><strong>Check a condition</strong> - "Are all enemies destroyed?"</li>
+            <li><strong>Trigger an action</strong> - "Spawn a new enemy!"</li>
+            <li><strong>Game responds dynamically</strong> - Player never runs out of enemies to fight</li>
+        </ol>
+        <p><strong>Why this matters:</strong> Event-driven systems create dynamic, responsive gameplay that reacts to player actions without manual intervention.</p>
+    </div>
+
+    <h3>Your Task</h3>
+
+    <p>Update your <code>update_enemies()</code> function to automatically spawn a new enemy when all enemies are destroyed.</p>
+
+    <p><strong>Requirements:</strong></p>
+    <ol>
+        <li>At the END of <code>update_enemies()</code>, add a check for <code>all_enemies_destroyed()</code></li>
+        <li>If it returns <code>true</code>, call <code>spawn_enemy()</code></li>
+        <li>This creates a continuous loop: destroy all enemies → spawn new enemy → repeat</li>
+    </ol>
+
+    <h3>The Changes</h3>
+
+    <p>Here's how your <code>update_enemies()</code> function evolves with auto-spawning:</p>
+
+    <div id="update-enemies-diff"></div>
+
+    <script>
+        const oldUpdate = `function update_enemies()
+  for ix, enemy in pairs(enemies) do
+    if not enemy.isDestroyed then
+      enemy.x = enemy.x + enemy.vx
+      enemy.y = enemy.y + enemy.vy
+
+      enemy.rotation = enemy.rotation + enemy.rotation_speed
+
+      if enemy.x < -100 then enemy.vx = -enemy.vx end
+      if enemy.x > 100 then enemy.vx = -enemy.vx end
+      if enemy.y < -100 then enemy.vy = -enemy.vy end
+      if enemy.y > 100 then enemy.vy = -enemy.vy end
+    end
+  end
+end`;
+
+        const newUpdate = `function update_enemies()
+  for ix, enemy in pairs(enemies) do
+    if not enemy.isDestroyed then
+      enemy.x = enemy.x + enemy.vx
+      enemy.y = enemy.y + enemy.vy
+
+      enemy.rotation = enemy.rotation + enemy.rotation_speed
+
+      if enemy.x < -100 then enemy.vx = -enemy.vx end
+      if enemy.x > 100 then enemy.vx = -enemy.vx end
+      if enemy.y < -100 then enemy.vy = -enemy.vy end
+      if enemy.y > 100 then enemy.vy = -enemy.vy end
+    end
+  end
+
+  -- NEW: Check if all enemies are destroyed
+  if all_enemies_destroyed() then
+    spawn_enemy()  -- Spawn one new enemy
+  end
+end`;
+
+        renderDiffBlock('update-enemies-diff', oldUpdate, newUpdate, 'Add auto-spawn check to update_enemies()');
+    </script>
+
+    <div class="info-box">
+        <h3>How It Works</h3>
+        <p>Let's trace through the gameplay loop:</p>
+        <ol>
+            <li><strong>Game starts</strong> - 1 enemy on screen (from <code>init_enemies()</code>)</li>
+            <li><strong>Every frame</strong> - <code>update_enemies()</code> runs:
+                <ul>
+                    <li>Updates enemy positions</li>
+                    <li>Checks if all enemies destroyed</li>
+                    <li>If yes → spawns new enemy immediately</li>
+                </ul>
+            </li>
+            <li><strong>Player destroys enemy</strong> - On the very next frame, <code>all_enemies_destroyed()</code> returns true</li>
+            <li><strong>New enemy spawns</strong> - Challenge continues seamlessly</li>
+        </ol>
+        <p><strong>Key insight:</strong> The check happens every frame, so the response is instant. The moment the last enemy is destroyed, a new one spawns.</p>
+    </div>
+
+    <h3>Testing Your Implementation</h3>
+
+    <p>Test the auto-spawn system by playing the game:</p>
+
+    <ol>
+        <li><strong>Run the game</strong> - You should see 1 enemy spawn at the top</li>
+        <li><strong>Destroy the enemy</strong> - Shoot it with your laser</li>
+        <li><strong>Watch what happens</strong> - A new enemy should spawn immediately at the top of the screen</li>
+        <li><strong>Repeat</strong> - Destroy the new enemy and watch another spawn</li>
+    </ol>
+
+    <p><strong>What you should observe:</strong></p>
+    <ul>
+        <li>Enemies spawn continuously - you can never "win"</li>
+        <li>Spawning is instant - no delay after destroying the last enemy</li>
+        <li>Each new enemy has random properties (size, sprite, position)</li>
+        <li>The game never runs out of enemies</li>
+    </ul>
+
+    <h3>Try It Yourself</h3>
+
+    <p>Play the game below to see auto-spawning in action. Destroy all enemies and watch new ones spawn immediately:</p>
+
+    <div id="step6-demo" style="margin: 10px 0;"></div>
+
+    <script>
+        createLazyEmbed('step6-demo', 'https://microstudio.io/jocolloman/spawningenemies6/HV7FFXYR/', 400);
+    </script>
+
+    <div class="success-box">
+        <h3>Reactive Game Systems</h3>
+        <p>You've just implemented a <strong>reactive game system</strong> - code that automatically responds to game state changes.</p>
+        <p><strong>Why this matters:</strong></p>
+        <ul>
+            <li><strong>Continuous challenge</strong> - Game never becomes "empty" or boring</li>
+            <li><strong>No manual triggers</strong> - System handles spawning automatically</li>
+            <li><strong>Scalable design</strong> - Easy to modify behavior (spawn multiple enemies, add delays, etc.)</li>
+            <li><strong>Professional pattern</strong> - Used in endless runners, survival games, roguelikes, arena shooters</li>
+        </ul>
+        <p><strong>Real-world examples:</strong></p>
+        <ul>
+            <li><strong>Vampire Survivors</strong> - Enemies spawn continuously based on time and player position</li>
+            <li><strong>Call of Duty Zombies</strong> - New waves trigger when all zombies eliminated</li>
+            <li><strong>Halo Infinite</strong> - Enemy reinforcements arrive when areas are cleared</li>
+            <li><strong>Fortnite</strong> - Storm circle shrinks, forcing player movement (reactive to timer)</li>
+        </ul>
+    </div>
+
+    <p><strong>Next:</strong> In Step 7, you'll create a <code>spawn_enemy_wave()</code> function that spawns multiple enemies at once, setting up a proper wave system with escalating difficulty.</p>
+</div>
+
+<style>
+/* Disable copying for diff block - students should type the code themselves */
+.step-content .diff-block-wrapper .copy-btn {
+    display: none;
+}
+
+.step-content .diff-block-wrapper .line-content {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.step-content .diff-block-wrapper .diff-lines {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+</style>
