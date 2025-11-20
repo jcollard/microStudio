@@ -1,7 +1,7 @@
 -- ============================================
--- SOLUTION FOR STEP 2B: CHALLENGE - RANDOMIZE ENEMIES
+-- SOLUTION FOR STEP 4: OBJECT POOLING OPTIMIZATION
 -- ============================================
--- Enhanced spawn_enemy() with random sizes and sprite types
+-- Enhanced spawn_enemy() with object pooling to reuse destroyed enemies
 
 enemies = {}
 
@@ -37,33 +37,45 @@ end
 SIZES = {16, 24, 32, 40, 48}
 ENEMY_SPRITES = {"enemyblack1", "enemyblue2", "enemygreen3", "enemyred4", "ufoblue"}
 
-function spawn_enemy()
-  -- CHALLENGE 1: Random size (5 options)
-  -- Lua uses 1-based indexing, so math.random(1, 5) gives us indices 1-5
-  local size = SIZES[math.random(1, 5)]
+-- ===== STEP 4: SPAWN_ENEMY() WITH OBJECT POOLING =====
 
-  -- CHALLENGE 2: Random sprite type (5 options)
+function spawn_enemy()
+  -- OBJECT POOLING: Try to find a destroyed enemy to reuse
+  local enemy = nil
+
+  for ix, e in pairs(enemies) do
+    if e.isDestroyed then
+      enemy = e
+      break  -- Found one! Stop searching
+    end
+  end
+
+  -- Generate random properties
+  local size = SIZES[math.random(1, 5)]
   local sprite_name = ENEMY_SPRITES[math.random(1, 5)]
 
-  local enemy = create_enemy(sprite_name, size, size)
+  -- If no destroyed enemy found, create a new one
+  if enemy == nil then
+    enemy = create_enemy(sprite_name, size, size)
+  end
 
-  -- Spawn at top of screen with random x position
+  -- Set/reset properties (works for both new and reused enemies)
+  enemy.sprite = sprite_name
+  enemy.width = size
+  enemy.height = size
   enemy.x = math.random(-100, 100)
   enemy.y = 100
-
-  -- Give it random downward velocity
   enemy.vx = math.random(-10, 10) / 10
   enemy.vy = -1
+  enemy.isDestroyed = false
 end
+
+-- ===== STEP 3: REFACTORED INIT_ENEMIES() =====
 
 function init_enemies()
   enemies = {}
 
-  spawn_enemy()
-  spawn_enemy()
-  spawn_enemy()
-  spawn_enemy()
-  spawn_enemy()
+  -- Spawn 1 enemy at the start
   spawn_enemy()
 end
 

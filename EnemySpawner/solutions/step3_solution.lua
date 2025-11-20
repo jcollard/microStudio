@@ -1,7 +1,7 @@
 -- ============================================
--- SOLUTION FOR STEP 3: REPLACE INIT_ENEMIES()
+-- SOLUTION FOR STEP 2B: CHALLENGE - RANDOMIZE ENEMIES
 -- ============================================
--- Refactored init_enemies() to use spawn_enemy()
+-- Enhanced spawn_enemy() with random sizes and sprite types
 
 enemies = {}
 
@@ -31,10 +31,21 @@ function random_enemy()
   return enemy
 end
 
--- ===== STEP 2: SPAWN_ENEMY() FUNCTION =====
+-- ===== STEP 2B: ENHANCED SPAWN_ENEMY() WITH RANDOMIZATION =====
+
+-- Global tables for randomization options
+SIZES = {16, 24, 32, 40, 48}
+ENEMY_SPRITES = {"enemyblack1", "enemyblue2", "enemygreen3", "enemyred4", "ufoblue"}
 
 function spawn_enemy()
-  local enemy = create_enemy("enemy_ship", 32, 32)
+  -- CHALLENGE 1: Random size (5 options)
+  -- Lua uses 1-based indexing, so math.random(1, 5) gives us indices 1-5
+  local size = SIZES[math.random(1, 5)]
+
+  -- CHALLENGE 2: Random sprite type (5 options)
+  local sprite_name = ENEMY_SPRITES[math.random(1, 5)]
+
+  local enemy = create_enemy(sprite_name, size, size)
 
   -- Spawn at top of screen with random x position
   enemy.x = math.random(-100, 100)
@@ -45,12 +56,14 @@ function spawn_enemy()
   enemy.vy = -1
 end
 
--- ===== STEP 3: REFACTORED INIT_ENEMIES() =====
-
 function init_enemies()
   enemies = {}
 
-  -- Spawn 1 enemy at the start
+  spawn_enemy()
+  spawn_enemy()
+  spawn_enemy()
+  spawn_enemy()
+  spawn_enemy()
   spawn_enemy()
 end
 
