@@ -1,0 +1,128 @@
+<div class="step-content">
+    <h2>Step 5: Create all_enemies_destroyed() Function</h2>
+
+    <p>Now that you have a working <code>spawn_enemy()</code> function with object pooling, you need a way to detect when the player has destroyed all enemies. This is the foundation of the wave system you'll build later.</p>
+
+    <div class="info-box">
+        <h3>State Checking Functions</h3>
+        <p><strong>State checking functions</strong> answer yes/no questions about your game state. They return <code>true</code> or <code>false</code> (boolean values).</p>
+        <p><strong>Common examples in games:</strong></p>
+        <ul>
+            <li><code>is_player_dead()</code> - Check if player health is 0</li>
+            <li><code>is_level_complete()</code> - Check if all objectives are met</li>
+            <li><code>has_collected_all_coins()</code> - Check if coin count matches total</li>
+            <li><code>all_enemies_destroyed()</code> - Check if no enemies are alive</li>
+        </ul>
+        <p><strong>Why they're useful:</strong> These functions let you trigger events, show messages, spawn new waves, or transition to different game states.</p>
+    </div>
+
+    <h3>Your Task</h3>
+
+    <p>Create an <code>all_enemies_destroyed()</code> function that checks if all enemies in the <code>enemies</code> table have been destroyed.</p>
+
+    <p><strong>Requirements:</strong></p>
+    <ol>
+        <li>Loop through the <code>enemies</code> table using <code>for ix, enemy in pairs(enemies)</code></li>
+        <li>Check if any enemy has <code>isDestroyed == false</code> (meaning it's still alive)</li>
+        <li>If you find a living enemy, immediately <code>return false</code> (not all destroyed)</li>
+        <li>If the loop completes without finding any living enemies, <code>return true</code> (all destroyed)</li>
+    </ol>
+
+    <h3>The Implementation</h3>
+
+    <p>Here's the <code>all_enemies_destroyed()</code> function:</p>
+
+    <div id="all-enemies-destroyed-code"></div>
+
+    <script>
+        const allEnemiesDestroyedCode = `function all_enemies_destroyed()
+  for ix, enemy in pairs(enemies) do
+    if not enemy.isDestroyed then
+      return false  -- Found a living enemy - not all destroyed!
+    end
+  end
+  return true  -- Made it through the loop - all destroyed!
+end`;
+
+        renderCodeBlock('all-enemies-destroyed-code', allEnemiesDestroyedCode, 'lua');
+    </script>
+
+    <div class="info-box">
+        <h3>How It Works</h3>
+        <p>This function uses a clever pattern called <strong>"early return"</strong>:</p>
+        <ol>
+            <li><strong>Loop through all enemies</strong> - Check each one</li>
+            <li><strong>If any enemy is NOT destroyed</strong> - Immediately return false and stop checking</li>
+            <li><strong>If loop completes</strong> - We checked every enemy and none were alive, so return true</li>
+        </ol>
+        <p><strong>Key insight:</strong> We only need to find ONE living enemy to know that NOT all are destroyed. This makes the function efficient - it stops as soon as it finds evidence that contradicts "all destroyed".</p>
+    </div>
+
+    <h3>Testing Your Implementation</h3>
+
+    <p>Test the function using the console to see how it responds to different game states:</p>
+
+    <div id="test-commands"></div>
+
+    <script>
+        const testCommands = `// Test 1: With enemies on screen
+print(all_enemies_destroyed())  // Should print: false
+
+// Test 2: Destroy all enemies by shooting them
+// (Play the game and destroy all visible enemies)
+
+// Then test again
+print(all_enemies_destroyed())  // Should print: true
+
+// Test 3: Spawn a new enemy
+spawn_enemy()
+
+// Check again
+print(all_enemies_destroyed())  // Should print: false`;
+
+        renderCodeBlock('test-commands', testCommands, 'lua');
+    </script>
+
+    <p><strong>What you should observe:</strong></p>
+    <ul>
+        <li>When enemies are visible → function returns <code>false</code></li>
+        <li>After destroying all enemies → function returns <code>true</code></li>
+        <li>After spawning new enemies → function returns <code>false</code> again</li>
+    </ul>
+
+    <div class="success-box">
+        <h3>Professional Game Design Pattern</h3>
+        <p>You've just implemented a <strong>state checking function</strong>, one of the most fundamental patterns in game programming.</p>
+        <p><strong>Why this matters:</strong></p>
+        <ul>
+            <li><strong>Event triggering</strong> - Detect when conditions are met to trigger new events</li>
+            <li><strong>UI updates</strong> - Show victory messages, unlock buttons, display completion status</li>
+            <li><strong>Game flow control</strong> - Transition between game states (playing → victory → next level)</li>
+            <li><strong>Wave systems</strong> - Detect when to spawn the next wave of enemies</li>
+        </ul>
+        <p><strong>This pattern is everywhere:</strong> Achievement systems, quest completion, multiplayer win conditions, boss phase transitions, puzzle solutions - they all use state checking functions.</p>
+    </div>
+
+    <p><strong>Next:</strong> In Step 6, you'll use this function to create an auto-spawn system that continuously spawns enemies when all are destroyed.</p>
+</div>
+
+<style>
+/* Disable copying for code blocks - students should type the code themselves */
+.step-content .code-block-wrapper .copy-btn {
+    display: none;
+}
+
+.step-content .code-block-wrapper .line-content {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.step-content .code-block-wrapper pre {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+</style>

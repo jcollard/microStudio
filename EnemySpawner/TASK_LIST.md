@@ -193,27 +193,35 @@
   - [x] Complete working solution with all support functions
 - [x] **CHECKPOINT: ✅ APPROVED - Ready for Step 4**
 
-### Step 4: Object Pooling Optimization
-- [ ] Create `steps/step4.html`
-  - [ ] Intro: Object pooling concept
-  - [ ] Info box explaining the problem and solution
-  - [ ] Task description with detailed steps
-  - [ ] **Diff block** using `renderDiffBlock()` showing old vs new spawn_enemy()
-  - [ ] Testing section with console commands
-  - [ ] Remove demo section (no visual change)
-  - [ ] Key teaching moment box (professional optimization technique)
-- [ ] **CHECKPOINT: Get approval before proceeding to Step 5**
+### Step 4: Object Pooling Optimization ✅
+- [x] Create `steps/step4.html`
+  - [x] Intro: Object pooling concept explaining memory waste problem
+  - [x] Info box: "The Problem: Memory Waste" - showing table growth issues
+  - [x] Info box: "The Solution: Object Pooling" - explaining reuse pattern
+  - [x] Task description with detailed steps
+  - [x] **Diff block** using `renderDiffBlock()` showing old vs new spawn_enemy()
+  - [x] Refactored with cleaner pattern (local enemy = nil, single property setting)
+  - [x] Info box: "How Object Pooling Works" - step-by-step trace
+  - [x] Testing section with console commands
+  - [x] Success box: Professional optimization technique with real-world applications
+  - [x] **Non-copyable diff block** - encourages typing for learning
+- [x] Create `solutions/step4_solution.lua`
+  - [x] Object pooling implementation with cleaner pattern
+  - [x] Searches for destroyed enemy, breaks when found
+  - [x] Single property-setting section (no duplication)
+- [x] **CHECKPOINT: ✅ APPROVED - Ready for Step 5**
 
-### Step 5: Create all_enemies_destroyed()
-- [ ] Create `steps/step5.html`
-  - [ ] Intro: State checking concept
-  - [ ] Info box explaining boolean functions
-  - [ ] Task description
-  - [ ] Code block using `renderCodeBlock()` with all_enemies_destroyed()
-  - [ ] Testing section with console commands
-  - [ ] Remove demo section (no visual output)
-  - [ ] Key teaching moment box (state checking pattern)
-- [ ] **CHECKPOINT: Get approval before proceeding to Step 6**
+### Step 5: Create all_enemies_destroyed() ✅
+- [x] Create `steps/step5.html`
+  - [x] Intro: State checking concept
+  - [x] Info box explaining boolean functions and common examples
+  - [x] Task description with requirements
+  - [x] Code block using `renderCodeBlock()` with all_enemies_destroyed()
+  - [x] Info box explaining "early return" pattern
+  - [x] Testing section with console commands
+  - [x] Success box explaining state checking pattern and real-world applications
+- [x] Create `solutions/step5_solution.lua`
+- [x] **CHECKPOINT: ✅ READY FOR APPROVAL - Ready for Step 6**
 
 ### Step 6: Auto-spawn After All Destroyed
 - [ ] Create `steps/step6.html`
@@ -268,8 +276,8 @@
 - [x] Step 2: Verify code block renders with syntax highlighting
 - [x] **Step 2b: Verify non-copyable code blocks work, sprite gallery button works, lazy embed loads**
 - [x] **Step 3: Verify diff block shows 33→5 line transformation clearly**
-- [ ] Step 4: Verify diff block shows changes clearly
-- [ ] Step 5: Verify code block renders correctly
+- [x] **Step 4: Verify diff block shows object pooling pattern, non-copyable**
+- [x] **Step 5: Verify code block renders correctly, info boxes display properly**
 - [ ] Step 6: Verify diff block shows changes clearly
 - [ ] Step 7: Verify code block renders correctly
 - [ ] Step 8: Verify diff block shows changes clearly
@@ -345,8 +353,8 @@
   - [x] step2.html ✅
   - [x] step2b.html ✅
   - [x] step3.html ✅
-  - [ ] step4.html
-  - [ ] step5.html
+  - [x] step4.html ✅
+  - [x] step5.html ✅
   - [ ] step6.html
   - [ ] step7.html
   - [ ] step8.html
@@ -369,7 +377,9 @@
   - [x] step2_solution.lua ✅
   - [x] step2b_solution.lua ✅
   - [x] step3_solution.lua ✅
-  - [ ] step4-8 solution files (pending)
+  - [x] step4_solution.lua ✅
+  - [x] step5_solution.lua ✅
+  - [ ] step6-8 solution files (pending)
 - [ ] User has approved final implementation (Steps 0-2b approved, 3-9 pending)
 - [ ] Ready for student testing (after all steps complete)
 
@@ -377,9 +387,31 @@
 
 ## Notes
 
-**Current Phase**: Steps 0, 1, 2, 2b, and 3 Complete ✅ | Ready for Step 4
+**Current Phase**: Steps 0, 1, 2, 2b, 3, 4, and 5 Complete ✅ | Ready for Step 6
 
-**Next Action**: Begin implementation of Step 4 (Object Pooling Optimization)
+**Next Action**: Await approval for Step 5, then begin implementation of Step 6 (Auto-spawn After All Destroyed)
+
+**Step 5 Completion Summary**:
+- ✅ Created step5.html teaching state checking functions
+- ✅ Info box explaining boolean functions and common examples (is_player_dead, is_level_complete, etc.)
+- ✅ Task description with 4 clear requirements
+- ✅ Code block showing all_enemies_destroyed() implementation
+- ✅ Info box explaining "early return" pattern and how the function works
+- ✅ Testing section with 3 test scenarios (with enemies, after destroying all, after spawning new)
+- ✅ Success box: Professional game design pattern used in achievement systems, quest completion, boss transitions
+- ✅ Created step5_solution.lua with complete implementation
+- ✅ Demonstrates loop-and-return pattern for checking collections
+
+**Step 4 Completion Summary**:
+- ✅ Created step4.html teaching object pooling optimization
+- ✅ Explained memory waste problem with growing enemies table
+- ✅ Diff block showing object pooling implementation
+- ✅ Refactored with cleaner pattern (local enemy = nil, single property setting)
+- ✅ Info boxes explaining problem, solution, and how pooling works
+- ✅ Testing section with console commands to verify pooling
+- ✅ Success box: Professional optimization technique used in Unity, Unreal, AAA games
+- ✅ Non-copyable diff block to encourage typing and understanding
+- ✅ Created step4_solution.lua with clean pooling implementation
 
 **Step 3 Completion Summary**:
 - ✅ Created step3.html teaching code refactoring
