@@ -1,0 +1,174 @@
+<div class="step-content">
+    <h2>Step 8: Implement Wave System</h2>
+
+    <p>You've created the building blocks—now it's time to put them together. You have a function that spawns one enemy (<code>spawn_enemy()</code>) and a function that spawns multiple enemies (<code>spawn_enemy_wave()</code>). Currently, your game spawns one enemy at a time. With a single line change, you'll transform it into a wave-based system.</p>
+
+    <div class="info-box">
+        <h3>The Power of Small Changes</h3>
+        <p>Sometimes the smallest code changes create the biggest impact on gameplay.</p>
+        <p><strong>Current behavior:</strong> When all enemies destroyed → spawn 1 enemy</p>
+        <p><strong>New behavior:</strong> When all enemies destroyed → spawn an entire wave (progressively more enemies)</p>
+        <p><strong>The change:</strong> Replace <code>spawn_enemy()</code> with <code>spawn_enemy_wave()</code> in <code>update_enemies()</code></p>
+        <p><strong>Result:</strong> Escalating difficulty, engaging gameplay loop, professional wave mechanics</p>
+    </div>
+
+    <h3>Your Task</h3>
+
+    <p>Update your <code>update_enemies()</code> function to use wave spawning instead of single-enemy spawning.</p>
+
+    <p><strong>Requirements:</strong></p>
+    <ol>
+        <li>Find the line in <code>update_enemies()</code> that calls <code>spawn_enemy()</code></li>
+        <li>Replace it with <code>spawn_enemy_wave()</code></li>
+        <li>That's it! One line change transforms your entire game</li>
+    </ol>
+
+    <h3>The Changes</h3>
+
+    <p>Here's the simple but powerful update to <code>update_enemies()</code>:</p>
+
+    <div id="update-enemies-diff"></div>
+
+    <script>
+        const oldUpdate = `function update_enemies()
+  for ix, enemy in pairs(enemies) do
+    if not enemy.isDestroyed then
+      enemy.x = enemy.x + enemy.vx
+      enemy.y = enemy.y + enemy.vy
+
+      enemy.rotation = enemy.rotation + enemy.rotation_speed
+
+      if enemy.x < -100 then enemy.vx = -enemy.vx end
+      if enemy.x > 100 then enemy.vx = -enemy.vx end
+      if enemy.y < -100 then enemy.vy = -enemy.vy end
+      if enemy.y > 100 then enemy.vy = -enemy.vy end
+    end
+  end
+
+  -- Check if all enemies are destroyed
+  if all_enemies_destroyed() then
+    spawn_enemy()  -- Spawn one new enemy
+  end
+end`;
+
+        const newUpdate = `function update_enemies()
+  for ix, enemy in pairs(enemies) do
+    if not enemy.isDestroyed then
+      enemy.x = enemy.x + enemy.vx
+      enemy.y = enemy.y + enemy.vy
+
+      enemy.rotation = enemy.rotation + enemy.rotation_speed
+
+      if enemy.x < -100 then enemy.vx = -enemy.vx end
+      if enemy.x > 100 then enemy.vx = -enemy.vx end
+      if enemy.y < -100 then enemy.vy = -enemy.vy end
+      if enemy.y > 100 then enemy.vy = -enemy.vy end
+    end
+  end
+
+  -- Check if all enemies are destroyed
+  if all_enemies_destroyed() then
+    spawn_enemy_wave()  -- Spawn a whole wave!
+  end
+end`;
+
+        renderDiffBlock('update-enemies-diff', oldUpdate, newUpdate, 'Replace spawn_enemy() with spawn_enemy_wave()');
+    </script>
+
+    <div class="info-box">
+        <h3>What Just Happened?</h3>
+        <p>This one-line change creates a complete wave system:</p>
+        <ol>
+            <li><strong>Wave 1:</strong> Game starts with 1 enemy (from <code>init_enemies()</code>)</li>
+            <li><strong>Player destroys enemy:</strong> <code>all_enemies_destroyed()</code> returns true</li>
+            <li><strong>Wave 2 spawns:</strong> <code>spawn_enemy_wave()</code> spawns 2 enemies (1 + 1)</li>
+            <li><strong>Player destroys all:</strong> Condition triggers again</li>
+            <li><strong>Wave 3 spawns:</strong> <code>spawn_enemy_wave()</code> spawns 3 enemies (2 + 1)</li>
+            <li><strong>Pattern continues:</strong> Each wave has one more enemy than the last</li>
+        </ol>
+        <p><strong>Key insight:</strong> By building composable functions (<code>spawn_enemy()</code>, <code>all_enemies_destroyed()</code>, <code>spawn_enemy_wave()</code>), a tiny change creates massive gameplay impact.</p>
+    </div>
+
+    <h3>Testing Your Implementation</h3>
+
+    <p>Play the game to experience the wave system:</p>
+
+    <ol>
+        <li><strong>Start the game</strong> - You should see 1 enemy spawn</li>
+        <li><strong>Destroy the first enemy</strong> - Watch 2 enemies spawn immediately</li>
+        <li><strong>Destroy Wave 2</strong> - 3 enemies spawn</li>
+        <li><strong>Destroy Wave 3</strong> - 4 enemies spawn</li>
+        <li><strong>Continue playing</strong> - Notice how the challenge increases each wave</li>
+    </ol>
+
+    <p><strong>What you should observe:</strong></p>
+    <ul>
+        <li>Each wave spawns more enemies than the last</li>
+        <li>Enemies spawn at the top with random sizes and sprites</li>
+        <li>Difficulty increases linearly and feels fair</li>
+        <li>Game becomes progressively more challenging</li>
+        <li>You can play indefinitely - waves never stop</li>
+    </ul>
+
+    <h3>Try It Yourself</h3>
+
+    <p>Play the complete wave system below. Destroy each wave and watch the difficulty increase:</p>
+
+    <div id="step8-demo" style="margin: 10px 0;"></div>
+
+    <script>
+        createLazyEmbed('step8-demo', 'https://microstudio.io/jocolloman/spawningenemies8/UPNXXGRY/', 400);
+    </script>
+
+    <div class="success-box">
+        <h3>Professional Wave-Based Gameplay</h3>
+        <p>You've just implemented a <strong>complete wave system</strong> - a fundamental game design pattern used across the industry.</p>
+        <p><strong>What you built:</strong></p>
+        <ul>
+            <li><strong>Dynamic spawning</strong> - Enemies created during gameplay</li>
+            <li><strong>Object pooling</strong> - Efficient memory usage through reuse</li>
+            <li><strong>State checking</strong> - Game reacts to conditions automatically</li>
+            <li><strong>Event-driven gameplay</strong> - Actions trigger without manual intervention</li>
+            <li><strong>Wave mechanics</strong> - Escalating difficulty keeps players engaged</li>
+        </ul>
+        <p><strong>Real-world applications:</strong></p>
+        <ul>
+            <li><strong>Survival games</strong> - Progressively harder waves of enemies</li>
+            <li><strong>Tower defense</strong> - Each round brings new challenges</li>
+            <li><strong>Bullet hell</strong> - Escalating enemy counts and patterns</li>
+            <li><strong>Roguelikes</strong> - Increasing difficulty as you progress</li>
+            <li><strong>Arena shooters</strong> - More enemies and stronger foes each round</li>
+        </ul>
+        <p><strong>Professional techniques you've learned:</strong></p>
+        <ul>
+            <li><strong>Composable functions</strong> - Small building blocks create complex systems</li>
+            <li><strong>Factory pattern</strong> - <code>spawn_enemy()</code> abstracts enemy creation</li>
+            <li><strong>Object pooling</strong> - Industry-standard optimization technique</li>
+            <li><strong>State machines</strong> - <code>all_enemies_destroyed()</code> checks game state</li>
+            <li><strong>Event-driven architecture</strong> - Code reacts to conditions automatically</li>
+        </ul>
+    </div>
+
+    <p><strong>Next:</strong> Step 9 celebrates your accomplishment and previews what's next in your game development journey!</p>
+</div>
+
+<style>
+/* Disable copying for diff block - students should type the code themselves */
+.step-content .diff-block-wrapper .copy-btn {
+    display: none;
+}
+
+.step-content .diff-block-wrapper .line-content {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.step-content .diff-block-wrapper .diff-lines {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+</style>
