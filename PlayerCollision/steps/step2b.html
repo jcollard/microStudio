@@ -1,0 +1,82 @@
+<h2>Step 2b: Disable Player When Destroyed</h2>
+<div class="step-content">
+    <p>When the player is destroyed, we should stop updating and drawing them.</p>
+
+    <h3>Update update_player()</h3>
+    <div id="update-player-diff"></div>
+
+    <script>
+        const oldUpdatePlayer = `function update_player()
+  rotation = 0
+
+  if keyboard.LEFT == 1 then
+    player.x = player.x - 1
+    rotation = 15
+  end
+
+  if keyboard.RIGHT == 1 then
+    player.x = player.x + 1
+    rotation = -15
+  end
+
+  if player.x < -100 then player.x = -100 end
+  if player.x > 100 then player.x = 100 end
+end`;
+
+        const newUpdatePlayer = `function update_player()
+  if player.isDestroyed then
+    return  -- Don't process input if destroyed
+  end
+
+  rotation = 0
+
+  if keyboard.LEFT == 1 then
+    player.x = player.x - 1
+    rotation = 15
+  end
+
+  if keyboard.RIGHT == 1 then
+    player.x = player.x + 1
+    rotation = -15
+  end
+
+  if player.x < -100 then player.x = -100 end
+  if player.x > 100 then player.x = 100 end
+end`;
+
+        renderDiffBlock('update-player-diff', oldUpdatePlayer, newUpdatePlayer, 'Add early return when destroyed');
+    </script>
+
+    <h3>Update draw_player()</h3>
+    <div id="draw-player-diff"></div>
+
+    <script>
+        const oldDrawPlayer = `function draw_player()
+  screen:setDrawRotation(0)
+  draw_box(player)
+  screen:setDrawRotation(rotation)
+  screen:drawSprite("player", player.x, player.y, 99*0.25, 75*0.25)
+  screen:setDrawRotation(0)
+end`;
+
+        const newDrawPlayer = `function draw_player()
+  if player.isDestroyed then
+    return  -- Don't draw if destroyed
+  end
+
+  screen:setDrawRotation(0)
+  draw_box(player)
+  screen:setDrawRotation(rotation)
+  screen:drawSprite("player", player.x, player.y, 99*0.25, 75*0.25)
+  screen:setDrawRotation(0)
+end`;
+
+        renderDiffBlock('draw-player-diff', oldDrawPlayer, newDrawPlayer, 'Add early return when destroyed');
+    </script>
+
+    <h3>Testing</h3>
+    <ul>
+        <li><code>player.isDestroyed = true</code> — player disappears, controls stop working</li>
+        <li><code>player.isDestroyed = false</code> — player returns</li>
+    </ul>
+</div>

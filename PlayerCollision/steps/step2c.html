@@ -1,0 +1,62 @@
+<h2>Step 2c: Prevent Firing When Destroyed</h2>
+<div class="step-content">
+    <p>A destroyed player shouldn't be able to fire lasers.</p>
+
+    <h3>Update fire_laser()</h3>
+    <div id="fire-laser-diff"></div>
+
+    <script>
+        const oldFireLaser = `function fire_laser()
+  if keyboard.press.SPACE == 1 then
+    fired_laser = nil
+
+    for ix, laser in pairs(lasers) do
+      if lasers[ix].y > 300 then
+        fired_laser = lasers[ix]
+      end
+    end
+
+    if fired_laser == nil then
+      fired_laser = create_laser()
+      table.insert(lasers, fired_laser)
+    end
+
+    fired_laser.y = player.y + 15
+    fired_laser.x = player.x
+  end
+end`;
+
+        const newFireLaser = `function fire_laser()
+  if player.isDestroyed then
+    return  -- Can't fire if destroyed
+  end
+
+  if keyboard.press.SPACE == 1 then
+    fired_laser = nil
+
+    for ix, laser in pairs(lasers) do
+      if lasers[ix].y > 300 then
+        fired_laser = lasers[ix]
+      end
+    end
+
+    if fired_laser == nil then
+      fired_laser = create_laser()
+      table.insert(lasers, fired_laser)
+    end
+
+    fired_laser.y = player.y + 15
+    fired_laser.x = player.x
+  end
+end`;
+
+        renderDiffBlock('fire-laser-diff', oldFireLaser, newFireLaser, 'Add early return when destroyed');
+    </script>
+
+    <h3>Testing</h3>
+    <p>Set <code>player.isDestroyed = true</code> in the console. Pressing space should do nothing.</p>
+
+    <div class="success-box">
+        <p>All player actions now check <code>isDestroyed</code> before executing.</p>
+    </div>
+</div>

@@ -224,7 +224,7 @@ function update_respawn()
   player.respawn_timer = player.respawn_timer + 1
 
   if player.respawn_timer >= RESPAWN_DELAY then
-    if keyboard.press.ENTER then
+    if keyboard.press.ENTER == 1 then
       respawn_player()
     end
   end

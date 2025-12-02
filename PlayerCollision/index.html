@@ -44,7 +44,16 @@
                     <select id="stepSelect" onchange="loadSelectedStep()">
                         <option value="0">0: Welcome</option>
                         <option value="1">1: Getting Started</option>
-                        <!-- TODO: Add more steps as they are created -->
+                        <option value="2">2: Add isDestroyed to Player</option>
+                        <option value="3">2b: Disable Player When Destroyed</option>
+                        <option value="4">2c: Prevent Firing When Destroyed</option>
+                        <option value="5">3: Player-Enemy Collision</option>
+                        <option value="6">4: Respawning the Player</option>
+                        <option value="7">5: Adding a Life Count</option>
+                        <option value="8">6: Game Over Screen</option>
+                        <option value="9">7: Title Screen</option>
+                        <option value="10">8: Restart from Game Over</option>
+                        <option value="11">9: Congratulations</option>
                     </select>
                 </div>
 
@@ -71,7 +80,7 @@
     <!-- Step Loading JavaScript -->
     <script>
         // Array-based step tracking
-        const steps = ['step0', 'step1'];
+        const steps = ['step0', 'step1', 'step2', 'step2b', 'step2c', 'step3', 'step4', 'step5', 'step6', 'step7', 'step8', 'step9'];
         let currentStepIndex = 0;
 
         /**

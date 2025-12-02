@@ -1,0 +1,82 @@
+<h2>Step 5: Adding a Life Count</h2>
+<div class="step-content">
+    <p>Let's give the player multiple lives.</p>
+
+    <h3>Step 5a: Add Lives Variable</h3>
+    <p>Add near the top of your file:</p>
+    <div id="lives-var-code"></div>
+    <script>
+        const livesVarCode = `lives = 3`;
+        renderCodeBlock('lives-var-code', livesVarCode, 'lua');
+    </script>
+
+    <h3>Step 5b: Create player_hit()</h3>
+    <div id="player-hit-code"></div>
+    <script>
+        const playerHitCode = `function player_hit()
+  player.isDestroyed = true
+  player.respawn_timer = 0
+  lives = lives - 1
+end`;
+        renderCodeBlock('player-hit-code', playerHitCode, 'lua');
+    </script>
+
+    <h3>Step 5c: Update check_collisions()</h3>
+    <p>In the player-enemy collision section, replace <code>player.isDestroyed = true</code>:</p>
+    <div id="collision-diff"></div>
+    <script>
+        const oldCollision = `if boxes_colliding(player, enemy) then
+  player.isDestroyed = true
+  enemy.isDestroyed = true
+  return
+end`;
+
+        const newCollision = `if boxes_colliding(player, enemy) then
+  player_hit()  -- Use player_hit() instead
+  enemy.isDestroyed = true
+  return
+end`;
+
+        renderDiffBlock('collision-diff', oldCollision, newCollision, 'Use player_hit() function');
+    </script>
+
+    <h3>Step 5d: Update draw_ui()</h3>
+    <div id="draw-ui-diff"></div>
+    <script>
+        const oldDrawUi = `function draw_ui()
+  -- Respawn message (only when player is destroyed and timer elapsed)
+  if player.isDestroyed then
+    if player.respawn_timer >= RESPAWN_DELAY then
+      screen:drawText("Press Enter to Respawn", 0, 0, 20, "#FFFFFF")
+    end
+  end
+end`;
+
+        const newDrawUi = `function draw_ui()
+  -- Lives display (always visible during gameplay)
+  screen:drawText("Ships: " .. lives, 0, screen.height / 2 - 10, 15, "#FFFFFF")
+
+  -- Respawn message (only when player is destroyed and timer elapsed)
+  if player.isDestroyed then
+    if player.respawn_timer >= RESPAWN_DELAY then
+      screen:drawText("Press Enter to Respawn", 0, 0, 20, "#FFFFFF")
+    end
+  end
+end`;
+
+        renderDiffBlock('draw-ui-diff', oldDrawUi, newDrawUi, 'Add lives display');
+    </script>
+
+    <h3>Testing</h3>
+    <p>Lives should decrease each time you're hit. The display updates immediately.</p>
+
+    <div class="demo-container">
+        <h3>Demo</h3>
+        <div id="step5-demo"></div>
+        <p class="demo-caption">Watch the Ships counter decrease each time you get hit</p>
+    </div>
+
+    <script>
+        createLazyEmbed('step5-demo', 'https://microstudio.io/jocolloman/playercollisionsfinished222/', 400);
+    </script>
+</div>

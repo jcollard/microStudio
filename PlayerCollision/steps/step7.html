@@ -1,0 +1,175 @@
+<h2>Step 7: Adding a Title Screen</h2>
+<div class="step-content">
+    <p>Let's add a proper title screen that appears when the game starts.</p>
+
+    <h3>Step 7a: Add Game State Variable</h3>
+    <p>Add near the top of your file:</p>
+    <div id="game-state-code"></div>
+    <script>
+        const gameStateCode = `game_state = "title"  -- "title", "playing"`;
+        renderCodeBlock('game-state-code', gameStateCode, 'lua');
+    </script>
+
+    <h3>Step 7b: Create init_game()</h3>
+    <div id="init-game-code"></div>
+    <script>
+        const initGameCode = `function init_game()
+  game_state = "playing"
+  lives = 3
+
+  -- Reset player
+  player.isDestroyed = false
+  player.x = 0
+  player.y = -80
+  player.respawn_timer = 0
+
+  -- Clear and respawn enemies
+  enemies = {}
+  spawn_enemy()
+
+  -- Clear lasers
+  lasers = {}
+end`;
+        renderCodeBlock('init-game-code', initGameCode, 'lua');
+    </script>
+
+    <h3>Step 7c: Update init()</h3>
+    <div id="init-diff"></div>
+    <script>
+        const oldInit = `init = function()
+  init_stars()
+  init_player()
+  init_lasers()
+  spawn_enemy()
+end`;
+
+        const newInit = `init = function()
+  init_stars()
+  init_player()
+  init_lasers()
+  enemies = {}  -- Empty enemies table, don't spawn yet
+
+  -- Start on title screen
+  game_state = "title"
+  player.isDestroyed = true  -- Hide player on title
+end`;
+
+        renderDiffBlock('init-diff', oldInit, newInit, 'Start on title screen');
+    </script>
+
+    <h3>Step 7d: Update update()</h3>
+    <div id="update-diff"></div>
+    <script>
+        const oldUpdate = `update = function()
+  update_stars()
+  update_player()
+  update_enemies()
+  move_lasers()
+  fire_laser()
+  check_collisions()
+end`;
+
+        const newUpdate = `update = function()
+  update_stars()
+
+  if game_state == "title" then
+    if keyboard.press.ENTER == 1 then
+      init_game()
+    end
+    return
+  end
+
+  -- Playing state
+  update_player()
+  update_enemies()
+  move_lasers()
+  fire_laser()
+  check_collisions()
+end`;
+
+        renderDiffBlock('update-diff', oldUpdate, newUpdate, 'Add title screen state check');
+    </script>
+
+    <h3>Step 7e: Update draw_ui()</h3>
+    <div id="draw-ui-diff"></div>
+    <script>
+        const oldDrawUi = `function draw_ui()
+  -- Lives display (always visible during gameplay)
+  screen:drawText("Ships: " .. lives, 0, screen.height / 2 - 10, 15, "#FFFFFF")
+
+  -- Respawn message (only when player is destroyed and timer elapsed)
+  if player.isDestroyed then
+    if player.respawn_timer >= RESPAWN_DELAY then
+      screen:drawText("Press Enter to Respawn", 0, 0, 20, "#FFFFFF")
+    end
+  end
+end`;
+
+        const newDrawUi = `function draw_ui()
+  -- Title screen
+  if game_state == "title" then
+    screen:drawText("SPACE FLYER", 0, 30, 50, "#FFFFFF")
+    screen:drawText("Press Enter to Take Flight!", 0, -20, 18, "#AAAAAA")
+    return
+  end
+
+  -- Playing state UI
+  screen:drawText("Ships: " .. lives, 0, screen.height / 2 - 10, 15, "#FFFFFF")
+
+  if player.isDestroyed then
+    if player.respawn_timer >= RESPAWN_DELAY then
+      if lives <= 0 then
+        screen:drawText("GAME OVER", 0, 20, 40, "#FF0000")
+        screen:drawText("Press Enter to Continue", 0, -20, 15, "#FFFFFF")
+      else
+        screen:drawText("Press Enter to Respawn", 0, 0, 20, "#FFFFFF")
+      end
+    end
+  end
+end`;
+
+        renderDiffBlock('draw-ui-diff', oldDrawUi, newDrawUi, 'Add title and game over screens');
+    </script>
+
+    <h3>Step 7f: Update draw()</h3>
+    <div id="draw-diff"></div>
+    <script>
+        const oldDraw = `draw = function()
+  screen:clear("rgb(0, 0, 20)")
+
+  draw_stars()
+  draw_enemies()
+  draw_player()
+  draw_lasers()
+  draw_ui()
+end`;
+
+        const newDraw = `draw = function()
+  screen:clear("rgb(0, 0, 20)")
+  draw_stars()
+
+  if game_state == "playing" then
+    draw_enemies()
+    draw_player()
+    draw_lasers()
+  end
+
+  draw_ui()
+end`;
+
+        renderDiffBlock('draw-diff', oldDraw, newDraw, 'Only draw game objects when playing');
+    </script>
+
+    <h3>Testing</h3>
+    <p>Game should start on title screen with animated stars. Press Enter to start playing.</p>
+
+    <div class="demo-container">
+        <h3>Demo</h3>
+        <div id="step7-demo"></div>
+        <p class="demo-caption">See the title screen, then press Enter to start</p>
+    </div>
+
+    <script>
+        createLazyEmbed('step7-demo', 'https://microstudio.io/jocolloman/playercollisionsfinished22222/', 400);
+    </script>
+</div>

@@ -1,161 +1,67 @@
 <h2>Step 1: Getting Started</h2>
 <div class="step-content">
-    <p>Before implementing collision detection, you need a project with the enemy spawning system in place. This lesson builds on the foundation from the <strong>Enemy Spawner</strong> lesson.</p>
-
     <h3>Choose Your Path</h3>
-
-    <div class="info-box">
-        <h3>Option 1: Clone the Starter Project (Recommended)</h3>
-        <p>Start with a pre-configured project that has all the prerequisites already set up. This is the fastest way to begin.</p>
-        <p><strong>Starter Project:</strong> <a href="https://microstudio.io/jocolloman/spawningenemies8/" target="_blank" style="color: #5b9bd5; text-decoration: underline;">https://microstudio.io/jocolloman/spawningenemies8/</a></p>
-        <p>The starter project includes:</p>
-        <ul>
-            <li>Complete wave-based enemy spawning system</li>
-            <li>Object pooling for efficient memory usage</li>
-            <li>Player movement and shooting mechanics</li>
-            <li>All prerequisite systems ready to go</li>
-        </ul>
-    </div>
-
-    <div class="info-box">
-        <h3>Option 2: Continue from Your Own Project</h3>
-        <p>If you completed the <strong>Enemy Spawner</strong> lesson, you can continue with your existing project. Just make sure it meets the requirements below.</p>
-    </div>
-
-    <h3>Requirements Checklist</h3>
-    <p>Your project must have the following before proceeding:</p>
-
     <ul>
-        <li><strong>Wave-based enemy spawning</strong> - Enemies spawn in progressively larger waves</li>
-        <li><strong>A player object</strong> with position properties (<code>player.x</code>, <code>player.y</code>)</li>
-        <li><strong>Player dimensions</strong> - Width and height for collision bounds</li>
-        <li><strong>The <code>enemies</code> table</strong> with enemy objects that have position and size</li>
-        <li><strong>Enemy <code>isDestroyed</code> property</strong> to track active enemies</li>
+        <li><strong>Option 1:</strong> Clone <a href="https://microstudio.dev/i/jocolloman/playercollisionstarter/" target="_blank">starter project</a> (recommended)</li>
+        <li><strong>Option 2:</strong> Continue from your Enemy Spawner project</li>
     </ul>
 
-    <h3>The Starter Code</h3>
-    <p>Here's the complete enemy spawning system from the Enemy Spawner lesson. Your project should include these functions:</p>
+    <h3>Requirements Checklist</h3>
+    <p>Your project must have:</p>
+    <ul>
+        <li>Working wave-based enemy spawning</li>
+        <li>Player object with <code>x</code>, <code>y</code>, <code>width</code>, <code>height</code></li>
+        <li><code>fire_laser()</code> function</li>
+        <li><code>boxes_colliding()</code> function</li>
+        <li><code>check_collisions()</code> function (laser-enemy)</li>
+        <li><code>update_player()</code> and <code>draw_player()</code></li>
+    </ul>
 
-    <div id="starter-code"></div>
-
+    <h3>Existing Code Reference</h3>
+    <p>Your <code>boxes_colliding()</code> function:</p>
+    <div id="boxes-colliding-code"></div>
     <script>
-        const starterCode = `-- Global tables for randomization options
-SIZES = {24, 28, 32, 36, 40}
-ENEMY_SPRITES = {"enemyblack1", "enemyblue2", "enemygreen3", "enemyred4", "ufoblue"}
+        const boxesCollidingCode = `function boxes_colliding(box1, box2)
+  local box1_left = box1.x - box1.width / 2
+  local box1_right = box1.x + box1.width / 2
+  local box1_bottom = box1.y - box1.height / 2
+  local box1_top = box1.y + box1.height / 2
 
-function spawn_enemy()
-  -- OBJECT POOLING: Try to find a destroyed enemy to reuse
-  local enemy = nil
+  local box2_left = box2.x - box2.width / 2
+  local box2_right = box2.x + box2.width / 2
+  local box2_bottom = box2.y - box2.height / 2
+  local box2_top = box2.y + box2.height / 2
 
-  for ix, e in pairs(enemies) do
-    if e.isDestroyed then
-      enemy = e
-      break  -- Found one! Stop searching
+  if box1_right > box2_left and
+     box1_left < box2_right and
+     box1_top > box2_bottom and
+     box1_bottom < box2_top then
+    return true
+  end
+
+  return false
+end`;
+        renderCodeBlock('boxes-colliding-code', boxesCollidingCode, 'lua');
+    </script>
+
+    <p>Your <code>check_collisions()</code> function:</p>
+    <div id="check-collisions-code"></div>
+    <script>
+        const checkCollisionsCode = `function check_collisions()
+  for ix, laser in pairs(lasers) do
+    for jx, enemy in pairs(enemies) do
+      if not enemy.isDestroyed then
+        if boxes_colliding(laser, enemy) then
+          enemy.isDestroyed = true
+        end
+      end
     end
-  end
-
-  -- Generate random properties
-  local size = SIZES[math.random(1, 5)]
-  local sprite_name = ENEMY_SPRITES[math.random(1, 5)]
-
-  -- If no destroyed enemy found, create a new one
-  if enemy == nil then
-    enemy = create_enemy(sprite_name, size, size)
-  end
-
-  -- Set/reset properties (works for both new and reused enemies)
-  enemy.sprite = sprite_name
-  enemy.width = size
-  enemy.height = size
-  enemy.x = math.random(-100, 100)
-  enemy.y = 100
-  enemy.vx = math.random(-10, 10) / 10
-  enemy.vy = -1
-  enemy.isDestroyed = false
-end
-
-function all_enemies_destroyed()
-  for ix, enemy in pairs(enemies) do
-    if not enemy.isDestroyed then
-      return false  -- Found a living enemy - not all destroyed!
-    end
-  end
-  return true  -- Made it through the loop - all destroyed!
-end
-
-function spawn_enemy_wave()
-  -- Spawn one enemy for each enemy currently in the table
-  for i = 1, #enemies do
-    spawn_enemy()
-  end
-
-  -- Spawn ONE more enemy to increase difficulty
-  spawn_enemy()
-end
-
-function init_enemies()
-  enemies = {}
-
-  -- Spawn 1 enemy at the start
-  spawn_enemy()
-end
-
-function update_enemies()
-  for ix, enemy in pairs(enemies) do
-    if not enemy.isDestroyed then
-      enemy.x = enemy.x + enemy.vx
-      enemy.y = enemy.y + enemy.vy
-
-      enemy.rotation = enemy.rotation + enemy.rotation_speed
-
-      if enemy.x < -100 then enemy.vx = -enemy.vx end
-      if enemy.x > 100 then enemy.vx = -enemy.vx end
-      if enemy.y < -100 then enemy.vy = -enemy.vy end
-      if enemy.y > 100 then enemy.vy = -enemy.vy end
-    end
-  end
-
-  -- Check if all enemies are destroyed
-  if all_enemies_destroyed() then
-    spawn_enemy_wave()  -- Spawn a whole wave!
   end
 end`;
-
-        renderCodeBlock('starter-code', starterCode, 'lua');
-    </script>
-
-    <h3>Player Requirements</h3>
-    <p>Your player object should have these properties for collision detection:</p>
-
-    <div id="player-requirements"></div>
-
-    <script>
-        const playerCode = `-- Player object with collision-ready properties
-player = {}
-player.x = 0          -- Horizontal position
-player.y = -80        -- Vertical position (near bottom)
-player.width = 32     -- Width for collision bounds
-player.height = 32    -- Height for collision bounds
-player.sprite = "playership1_blue"`;
-
-        renderCodeBlock('player-requirements', playerCode, 'lua');
-    </script>
-
-    <div class="demo-container">
-        <h3>What Your Project Should Look Like</h3>
-        <p>Before starting this lesson, your project should function like this demo. Enemies spawn in waves, but they pass through the player without any effect.</p>
-        <div id="step1-demo" style="margin: 10px 0;"></div>
-        <p class="demo-caption">Use arrow keys to move, space to shoot. Notice how enemies don't damage the player yet.</p>
-    </div>
-
-    <script>
-        createLazyEmbed('step1-demo', 'https://microstudio.io/jocolloman/spawningenemies8/UPNXXGRY/', 400);
+        renderCodeBlock('check-collisions-code', checkCollisionsCode, 'lua');
     </script>
 
     <div class="success-box">
-        <h3>Ready to Start?</h3>
-        <p>Once your project meets the requirements above, you're ready to implement collision detection. The next steps will guide you through creating AABB collision, health systems, and game over states.</p>
+        <p>Ready? Let's add collision detection for the player!</p>
     </div>
-
-    <p><strong>Next:</strong> You'll create the <code>check_collision()</code> function that detects when two objects overlap.</p>
 </div>

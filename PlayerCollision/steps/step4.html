@@ -1,0 +1,130 @@
+<h2>Step 4: Respawning the Player</h2>
+<div class="step-content">
+    <p>Let's allow the player to respawn after being destroyed.</p>
+
+    <h3>Step 4a: Add Respawn Timer</h3>
+    <p>Add a constant near the top of your file:</p>
+    <div id="respawn-delay-code"></div>
+    <script>
+        const respawnDelayCode = `RESPAWN_DELAY = 120  -- 2 seconds at 60 FPS`;
+        renderCodeBlock('respawn-delay-code', respawnDelayCode, 'lua');
+    </script>
+
+    <h3>Step 4b: Update init_player()</h3>
+    <div id="init-player-diff"></div>
+    <script>
+        const oldInitPlayer = `function init_player()
+  player = create_box(0, -80, 25, 25, 0, 0, "#00FF00")
+  player.isDestroyed = false
+  rotation = 0
+end`;
+
+        const newInitPlayer = `function init_player()
+  player = create_box(0, -80, 25, 25, 0, 0, "#00FF00")
+  player.isDestroyed = false
+  player.respawn_timer = 0  -- NEW: Timer for respawn delay
+  rotation = 0
+end`;
+
+        renderDiffBlock('init-player-diff', oldInitPlayer, newInitPlayer, 'Add respawn_timer property');
+    </script>
+
+    <h3>Step 4c: Create Respawn Functions</h3>
+    <div id="respawn-functions-code"></div>
+    <script>
+        const respawnFunctionsCode = `function respawn_player()
+  player.isDestroyed = false
+  player.x = 0
+  player.y = -80
+  player.respawn_timer = 0
+end
+
+function update_respawn()
+  player.respawn_timer = player.respawn_timer + 1
+
+  if player.respawn_timer >= RESPAWN_DELAY then
+    if keyboard.press.ENTER == 1 then
+      respawn_player()
+    end
+  end
+end`;
+        renderCodeBlock('respawn-functions-code', respawnFunctionsCode, 'lua');
+    </script>
+
+    <h3>Step 4d: Update update_player()</h3>
+    <div id="update-player-diff"></div>
+    <script>
+        const oldUpdatePlayer = `function update_player()
+  if player.isDestroyed then
+    return  -- Don't process input if destroyed
+  end
+
+  rotation = 0
+  -- ... rest of function
+end`;
+
+        const newUpdatePlayer = `function update_player()
+  if player.isDestroyed then
+    update_respawn()  -- Handle respawn logic
+    return
+  end
+
+  rotation = 0
+  -- ... rest of function
+end`;
+
+        renderDiffBlock('update-player-diff', oldUpdatePlayer, newUpdatePlayer, 'Call update_respawn() when destroyed');
+    </script>
+
+    <h3>Step 4e: Create draw_ui()</h3>
+    <div id="draw-ui-code"></div>
+    <script>
+        const drawUiCode = `function draw_ui()
+  -- Respawn message (only when player is destroyed and timer elapsed)
+  if player.isDestroyed then
+    if player.respawn_timer >= RESPAWN_DELAY then
+      screen:drawText("Press Enter to Respawn", 0, 0, 20, "#FFFFFF")
+    end
+  end
+end`;
+        renderCodeBlock('draw-ui-code', drawUiCode, 'lua');
+    </script>
+
+    <h3>Step 4f: Update draw()</h3>
+    <div id="draw-diff"></div>
+    <script>
+        const oldDraw = `draw = function()
+  screen:clear("rgb(0, 0, 20)")
+
+  draw_stars()
+  draw_enemies()
+  draw_player()
+  draw_lasers()
+end`;
+
+        const newDraw = `draw = function()
+  screen:clear("rgb(0, 0, 20)")
+
+  draw_stars()
+  draw_enemies()
+  draw_player()
+  draw_lasers()
+  draw_ui()  -- NEW: Draw all UI text last (on top)
+end`;
+
+        renderDiffBlock('draw-diff', oldDraw, newDraw, 'Add draw_ui() call');
+    </script>
+
+    <h3>Testing</h3>
+    <p>Get destroyed, wait 2 seconds, press Enter. Player should reappear!</p>
+
+    <div class="demo-container">
+        <h3>Demo</h3>
+        <div id="step4-demo"></div>
+        <p class="demo-caption">Get hit, wait for the message, then press Enter to respawn</p>
+    </div>
+
+    <script>
+        createLazyEmbed('step4-demo', 'https://microstudio.io/jocolloman/playercollisionsfinished22/ZP3BRWCS/', 400);
+    </script>
+</div>

@@ -1,0 +1,37 @@
+<h2>Step 9: Congratulations!</h2>
+<div class="step-content">
+    <p>You've built a complete game loop with collision detection, lives, and game states!</p>
+
+    <h3>What You Built</h3>
+    <ul>
+        <li>Player-enemy collision detection</li>
+        <li>Lives system with UI display</li>
+        <li>Respawn mechanic with timer</li>
+        <li>Title screen and game over screen</li>
+        <li>Complete game loop (title &rarr; playing &rarr; game over &rarr; title)</li>
+    </ul>
+
+    <h3>Techniques Learned</h3>
+    <ul>
+        <li><strong>State Machines</strong> — Managing game states with a variable</li>
+        <li><strong>Early Return Pattern</strong> — Skipping logic when conditions aren't met</li>
+        <li><strong>Frame-based Timers</strong> — Counting frames for delays (60 FPS = 60 frames/second)</li>
+        <li><strong>Centralized UI</strong> — Single <code>draw_ui()</code> handles all text</li>
+        <li><strong>Reusing Patterns</strong> — Applied <code>isDestroyed</code> from enemies to player</li>
+    </ul>
+
+    <h3>Extension Ideas</h3>
+    <ul>
+        <li>Add invincibility frames after respawning (flash the player)</li>
+        <li>Add a score system when enemies are destroyed</li>
+        <li>Add sound effects for collisions and game over</li>
+        <li>Add a high score using <code>storage:set()</code> and <code>storage:get()</code></li>
+        <li>Add explosion effects when player/enemies are destroyed</li>
+        <li>Add a wave counter display</li>
+    </ul>
+
+    <div class="success-box">
+        <h3>Professional Game Development</h3>
+        <p>These patterns—state machines, collision detection, lives systems, and game loops—are used in nearly every game. You now have the foundation to build complete, polished games!</p>
+    </div>
+</div>

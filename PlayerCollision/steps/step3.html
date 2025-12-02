@@ -1,0 +1,71 @@
+<h2>Step 3: Detecting Player-Enemy Collision</h2>
+<div class="step-content">
+    <p>Now we'll make the <code>isDestroyed</code> flag trigger automatically when an enemy touches the player.</p>
+
+    <h3>Update check_collisions()</h3>
+    <div id="check-collisions-diff"></div>
+
+    <script>
+        const oldCheckCollisions = `function check_collisions()
+  for ix, laser in pairs(lasers) do
+    for jx, enemy in pairs(enemies) do
+      if not enemy.isDestroyed then
+        if boxes_colliding(laser, enemy) then
+          enemy.isDestroyed = true
+        end
+      end
+    end
+  end
+end`;
+
+        const newCheckCollisions = `function check_collisions()
+  for ix, laser in pairs(lasers) do
+    for jx, enemy in pairs(enemies) do
+      if not enemy.isDestroyed then
+        if boxes_colliding(laser, enemy) then
+          enemy.isDestroyed = true
+        end
+      end
+    end
+  end
+
+  -- Skip player collision checks if player is already destroyed
+  if player.isDestroyed then
+    return
+  end
+
+  -- NEW: Check if any enemy is colliding with the player
+  for ix, enemy in pairs(enemies) do
+    if not enemy.isDestroyed then
+      if boxes_colliding(player, enemy) then
+        player.isDestroyed = true
+        enemy.isDestroyed = true  -- Destroy the enemy too
+        return  -- Exit early, player is destroyed
+      end
+    end
+  end
+end`;
+
+        renderDiffBlock('check-collisions-diff', oldCheckCollisions, newCheckCollisions, 'Add player-enemy collision detection');
+    </script>
+
+    <h3>Key Points</h3>
+    <ul>
+        <li>Reuses existing <code>boxes_colliding()</code> function</li>
+        <li>Skips checks if player already destroyed</li>
+        <li>Destroys both player and colliding enemy</li>
+    </ul>
+
+    <h3>Testing</h3>
+    <p>Run the game and let an enemy touch the player. The player should disappear!</p>
+
+    <div class="demo-container">
+        <h3>Demo</h3>
+        <div id="step3-demo"></div>
+        <p class="demo-caption">Let an enemy collide with the player to see the collision in action</p>
+    </div>
+
+    <script>
+        createLazyEmbed('step3-demo', 'https://microstudio.io/jocolloman/playercollisionsfinished2/', 400);
+    </script>
+</div>

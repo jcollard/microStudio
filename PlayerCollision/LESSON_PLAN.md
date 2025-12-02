@@ -321,7 +321,7 @@ function update_respawn()
   player.respawn_timer = player.respawn_timer + 1
 
   if player.respawn_timer >= RESPAWN_DELAY then
-    if keyboard.press.ENTER then
+    if keyboard.press.ENTER == 1 then
       respawn_player()
     end
   end
@@ -388,7 +388,7 @@ Add `draw_ui()` at the end so text appears on top of everything:
 
 **Key Concepts:**
 - Timer-based delays using frame counting (60 FPS = 60 frames per second)
-- `keyboard.press.ENTER` detects a single key press (not held)
+- `keyboard.press.ENTER == 1` detects a single key press (not held)
 - State transitions
 - Centralizing respawn logic in a function
 - **Single UI function** - All text drawing in one place, drawn last
@@ -509,11 +509,11 @@ Update `update_respawn()` to only allow respawn when lives remain. When game ove
    player.respawn_timer = player.respawn_timer + 1
 
    if player.respawn_timer >= RESPAWN_DELAY then
--    if keyboard.press.ENTER then
+-    if keyboard.press.ENTER == 1 then
 -      respawn_player()
 +    -- Only allow respawn if lives remain
 +    if lives > 0 then
-+      if keyboard.press.ENTER then
++      if keyboard.press.ENTER == 1 then
 +        respawn_player()
 +      end
      end
@@ -525,7 +525,7 @@ Update `update_respawn()` to only allow respawn when lives remain. When game ove
 **Key Concepts:**
 - Conditional UI based on game state
 - Branching game flow
-- `keyboard.press.ENTER` prevents multiple triggers
+- `keyboard.press.ENTER == 1` prevents multiple triggers
 - **Single UI function** - Game over and respawn both in `draw_ui()`
 
 **Testing:**
@@ -591,7 +591,7 @@ end
    update_stars()
 +
 +  if game_state == "title" then
-+    if keyboard.press.ENTER then
++    if keyboard.press.ENTER == 1 then
 +      init_game()
 +    end
 +    return
@@ -665,7 +665,7 @@ The draw function now always calls `draw_ui()` at the end. The `draw_ui()` funct
 **Key Concepts:**
 - Game state management with a state variable
 - Initialization functions separate from main loop
-- `keyboard.press.ENTER` for single key press detection
+- `keyboard.press.ENTER == 1` for single key press detection
 - Stars continue animating on title screen for visual interest
 - **Single UI function** - Title, lives, respawn, and game over all in `draw_ui()`
 
@@ -713,8 +713,8 @@ Now wire up the game over path to call `show_title_screen()`:
    if player.respawn_timer >= RESPAWN_DELAY then
 -    -- Only allow respawn if lives remain
 -    if lives > 0 then
--      if keyboard.press.ENTER then
-+    if keyboard.press.ENTER then
+-      if keyboard.press.ENTER == 1 then
++    if keyboard.press.ENTER == 1 then
 +      if lives <= 0 then
 +        show_title_screen()  -- NEW: Go to title on game over
 +      else
@@ -800,7 +800,7 @@ Now wire up the game over path to call `show_title_screen()`:
 - `RESPAWN_DELAY` - Constant for respawn timer (120 frames = 2 seconds)
 
 ### Key API Notes (from microStudio Lua API)
-- `keyboard.press.ENTER` - Returns true only on the frame the key is first pressed
+- `keyboard.press.ENTER == 1` - Returns true only on the frame the key is first pressed
 - `keyboard.ENTER == 1` - Returns 1 while the key is held down
 - Use `keyboard.press.KEY` for single actions (menu selection, respawn)
 - Use `keyboard.KEY == 1` for continuous actions (movement)

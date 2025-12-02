@@ -223,7 +223,7 @@ function update_respawn()
   if player.respawn_timer >= RESPAWN_DELAY then
     -- Only allow respawn if lives remain
     if lives > 0 then
-      if keyboard.press.ENTER then
+      if keyboard.press.ENTER == 1 then
         respawn_player()
       end
     end

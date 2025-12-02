@@ -1,0 +1,76 @@
+<h2>Step 8: Restart from Game Over</h2>
+<div class="step-content">
+    <p>Let's wire up the game over screen to return to the title.</p>
+
+    <h3>Step 8a: Create show_title_screen()</h3>
+    <div id="show-title-code"></div>
+    <script>
+        const showTitleCode = `function show_title_screen()
+  game_state = "title"
+  player.isDestroyed = true
+  player.respawn_timer = 0
+
+  -- Clear all enemies
+  for ix, enemy in pairs(enemies) do
+    enemy.isDestroyed = true
+  end
+
+  -- Clear all lasers (move them off screen)
+  for ix, laser in pairs(lasers) do
+    laser.y = 500  -- Move off screen so they get recycled
+  end
+end`;
+        renderCodeBlock('show-title-code', showTitleCode, 'lua');
+    </script>
+
+    <h3>Step 8b: Update update_respawn()</h3>
+    <div id="update-respawn-diff"></div>
+    <script>
+        const oldUpdateRespawn = `function update_respawn()
+  player.respawn_timer = player.respawn_timer + 1
+
+  if player.respawn_timer >= RESPAWN_DELAY then
+    if keyboard.press.ENTER == 1 then
+      respawn_player()
+    end
+  end
+end`;
+
+        const newUpdateRespawn = `function update_respawn()
+  player.respawn_timer = player.respawn_timer + 1
+
+  if player.respawn_timer >= RESPAWN_DELAY then
+    if keyboard.press.ENTER == 1 then
+      if lives <= 0 then
+        show_title_screen()  -- Go to title on game over
+      else
+        respawn_player()
+      end
+    end
+  end
+end`;
+
+        renderDiffBlock('update-respawn-diff', oldUpdateRespawn, newUpdateRespawn, 'Handle game over vs respawn');
+    </script>
+
+    <h3>Testing</h3>
+    <ul>
+        <li>Lose all lives, wait for message, press Enter</li>
+        <li>Should return to title screen</li>
+        <li>Press Enter again to start fresh with 3 lives</li>
+    </ul>
+
+    <div class="demo-container">
+        <h3>Final Result</h3>
+        <div id="step8-demo"></div>
+        <p class="demo-caption">Press Enter to start, Arrow keys to move, Space to shoot</p>
+    </div>
+
+    <script>
+        createLazyEmbed('step8-demo', 'https://microstudio.io/jocolloman/playercollisionsfinished/', 400);
+    </script>
+
+    <div class="success-box">
+        <p>You've completed the full game loop: Title &rarr; Playing &rarr; Game Over &rarr; Title</p>
+    </div>
+</div>

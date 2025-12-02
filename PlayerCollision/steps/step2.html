@@ -1,0 +1,31 @@
+<h2>Step 2: Add isDestroyed to Player</h2>
+<div class="step-content">
+    <p>The player needs an <code>isDestroyed</code> flag, just like enemies have. This lets us track when the player is destroyed.</p>
+
+    <h3>Your Task</h3>
+    <p>Update <code>init_player()</code> to add the <code>isDestroyed</code> property:</p>
+
+    <div id="init-player-diff"></div>
+
+    <script>
+        const oldInitPlayer = `function init_player()
+  player = create_box(0, -80, 25, 25, 0, 0, "#00FF00")
+  rotation = 0
+end`;
+
+        const newInitPlayer = `function init_player()
+  player = create_box(0, -80, 25, 25, 0, 0, "#00FF00")
+  player.isDestroyed = false  -- NEW: Add destroyed flag
+  rotation = 0
+end`;
+
+        renderDiffBlock('init-player-diff', oldInitPlayer, newInitPlayer, 'Add isDestroyed to player');
+    </script>
+
+    <h3>Testing</h3>
+    <p>In the console, type <code>player.isDestroyed = true</code>. Nothing happens yet—we'll wire that up next.</p>
+
+    <div class="success-box">
+        <p>The player now follows the same pattern as enemies. Consistent patterns make code easier to understand and maintain.</p>
+    </div>
+</div>

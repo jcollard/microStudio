@@ -151,7 +151,6 @@ function renderDiffBlock(elementId, oldCode, newCode, description = '') {
     <div class="diff-block-wrapper">
       <div class="diff-header">
         <span class="diff-description">${escapeHtml(description)}</span>
-        <button class="copy-btn" onclick="copyCode('${elementId}-new-code', true)">Copy Code</button>
       </div>
       <div class="diff-container">
         <div class="diff-side diff-left">
