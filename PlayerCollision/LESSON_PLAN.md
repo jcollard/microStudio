@@ -110,12 +110,12 @@ end
 Update `init_player()` to add the `isDestroyed` property.
 
 **Implementation:**
-```lua
-function init_player()
-  player = create_box(0, -80, 25, 25, 0, 0, "#00FF00")
-  player.isDestroyed = false  -- NEW: Add destroyed flag
-  rotation = 0
-end
+```diff
+ function init_player()
+   player = create_box(0, -80, 25, 25, 0, 0, "#00FF00")
++  player.isDestroyed = false  -- NEW: Add destroyed flag
+   rotation = 0
+ end
 ```
 
 **Key Concepts:**
@@ -135,40 +135,43 @@ end
 **Task:**
 Update `update_player()` and `draw_player()` to check `isDestroyed` before processing.
 
-**Implementation:**
-```lua
-function update_player()
-  if player.isDestroyed then
-    return  -- Don't process input if destroyed
-  end
+**Implementation - Update update_player:**
+```diff
+ function update_player()
++  if player.isDestroyed then
++    return  -- Don't process input if destroyed
++  end
++
+   rotation = 0
 
-  rotation = 0
+   if keyboard.LEFT == 1 then
+     player.x = player.x - 1
+     rotation = 15
+   end
 
-  if keyboard.LEFT == 1 then
-    player.x = player.x - 1
-    rotation = 15
-  end
+   if keyboard.RIGHT == 1 then
+     player.x = player.x + 1
+     rotation = -15
+   end
 
-  if keyboard.RIGHT == 1 then
-    player.x = player.x + 1
-    rotation = -15
-  end
+   if player.x < -100 then player.x = -100 end
+   if player.x > 100 then player.x = 100 end
+ end
+```
 
-  if player.x < -100 then player.x = -100 end
-  if player.x > 100 then player.x = 100 end
-end
-
-function draw_player()
-  if player.isDestroyed then
-    return  -- Don't draw if destroyed
-  end
-
-  screen:setDrawRotation(0)
-  draw_box(player)
-  screen:setDrawRotation(rotation)
-  screen:drawSprite("player", player.x, player.y, 99*0.25, 75*0.25)
-  screen:setDrawRotation(0)
-end
+**Implementation - Update draw_player:**
+```diff
+ function draw_player()
++  if player.isDestroyed then
++    return  -- Don't draw if destroyed
++  end
++
+   screen:setDrawRotation(0)
+   draw_box(player)
+   screen:setDrawRotation(rotation)
+   screen:drawSprite("player", player.x, player.y, 99*0.25, 75*0.25)
+   screen:setDrawRotation(0)
+ end
 ```
 
 **Key Concepts:**
@@ -191,31 +194,30 @@ end
 Update `fire_laser()` to check if player is destroyed before creating a laser.
 
 **Implementation:**
-```lua
-function fire_laser()
-  if player.isDestroyed then
-    return  -- Can't fire if destroyed
-  end
+```diff
+ function fire_laser()
++  if player.isDestroyed then
++    return  -- Can't fire if destroyed
++  end
++
+   if keyboard.press.SPACE == 1 then
+     fired_laser = nil
 
-  if keyboard.press.SPACE == 1 then
-    -- Existing laser firing code...
-    fired_laser = nil
+     for ix, laser in pairs(lasers) do
+       if lasers[ix].y > 300 then
+         fired_laser = lasers[ix]
+       end
+     end
 
-    for ix, laser in pairs(lasers) do
-      if lasers[ix].y > 300 then
-        fired_laser = lasers[ix]
-      end
-    end
+     if fired_laser == nil then
+       fired_laser = create_laser()
+       table.insert(lasers, fired_laser)
+     end
 
-    if fired_laser == nil then
-      fired_laser = create_laser()
-      table.insert(lasers, fired_laser)
-    end
-
-    fired_laser.y = player.y + 15
-    fired_laser.x = player.x
-  end
-end
+     fired_laser.y = player.y + 15
+     fired_laser.x = player.x
+   end
+ end
 ```
 
 **Key Concepts:**
@@ -237,36 +239,34 @@ end
 Update `check_collisions()` to also check if any enemy is colliding with the player.
 
 **Implementation:**
-```lua
-function check_collisions()
-
-  -- Existing laser-enemy collision code
-  for ix, laser in pairs(lasers) do
-    for jx, enemy in pairs(enemies) do
-      if not enemy.isDestroyed then
-        if boxes_colliding(laser, enemy) then
-          enemy.isDestroyed = true
-        end
-      end
-    end
-  end
-
-  -- Skip all collision checks if player is destroyed
-  if player.isDestroyed then
-    return
-  end
-
-  -- NEW: Check if any enemy is colliding with the player
-  for ix, enemy in pairs(enemies) do
-    if not enemy.isDestroyed then
-      if boxes_colliding(player, enemy) then
-        player.isDestroyed = true
-        enemy.isDestroyed = true  -- Destroy the enemy too
-        return  -- Exit early, player is destroyed
-      end
-    end
-  end
-end
+```diff
+ function check_collisions()
+   for ix, laser in pairs(lasers) do
+     for jx, enemy in pairs(enemies) do
+       if not enemy.isDestroyed then
+         if boxes_colliding(laser, enemy) then
+           enemy.isDestroyed = true
+         end
+       end
+     end
+   end
++
++  -- Skip player collision checks if player is already destroyed
++  if player.isDestroyed then
++    return
++  end
++
++  -- NEW: Check if any enemy is colliding with the player
++  for ix, enemy in pairs(enemies) do
++    if not enemy.isDestroyed then
++      if boxes_colliding(player, enemy) then
++        player.isDestroyed = true
++        enemy.isDestroyed = true  -- Destroy the enemy too
++        return  -- Exit early, player is destroyed
++      end
++    end
++  end
+ end
 ```
 
 **Key Concepts:**
@@ -296,13 +296,13 @@ RESPAWN_DELAY = 120  -- 2 seconds at 60 FPS
 ```
 
 **Implementation - Update init_player:**
-```lua
-function init_player()
-  player = create_box(0, -80, 25, 25, 0, 0, "#00FF00")
-  player.isDestroyed = false
-  player.respawn_timer = 0  -- NEW: Timer for respawn delay
-  rotation = 0
-end
+```diff
+ function init_player()
+   player = create_box(0, -80, 25, 25, 0, 0, "#00FF00")
+   player.isDestroyed = false
++  player.respawn_timer = 0  -- NEW: Timer for respawn delay
+   rotation = 0
+ end
 ```
 
 **Implementation - Create respawn_player function:**
@@ -329,29 +329,28 @@ end
 ```
 
 **Implementation - Update update_player:**
-```lua
-function update_player()
-  if player.isDestroyed then
-    update_respawn()  -- Handle respawn logic
-    return
-  end
+```diff
+ function update_player()
+   if player.isDestroyed then
++    update_respawn()  -- Handle respawn logic
+     return
+   end
 
-  -- Existing movement code...
-  rotation = 0
+   rotation = 0
 
-  if keyboard.LEFT == 1 then
-    player.x = player.x - 1
-    rotation = 15
-  end
+   if keyboard.LEFT == 1 then
+     player.x = player.x - 1
+     rotation = 15
+   end
 
-  if keyboard.RIGHT == 1 then
-    player.x = player.x + 1
-    rotation = -15
-  end
+   if keyboard.RIGHT == 1 then
+     player.x = player.x + 1
+     rotation = -15
+   end
 
-  if player.x < -100 then player.x = -100 end
-  if player.x > 100 then player.x = 100 end
-end
+   if player.x < -100 then player.x = -100 end
+   if player.x > 100 then player.x = 100 end
+ end
 ```
 
 **Implementation - Create draw_ui function:**
@@ -373,16 +372,16 @@ end
 
 Add `draw_ui()` at the end so text appears on top of everything:
 
-```lua
-draw = function()
-  screen:clear("rgb(0, 0, 20)")
+```diff
+ draw = function()
+   screen:clear("rgb(0, 0, 20)")
 
-  draw_stars()
-  draw_enemies()
-  draw_player()
-  draw_lasers()
-  draw_ui()  -- NEW: Draw all UI text last (on top)
-end
+   draw_stars()
+   draw_enemies()
+   draw_player()
+   draw_lasers()
++  draw_ui()  -- NEW: Draw all UI text last (on top)
+ end
 ```
 
 **Note:** The `draw_player()` function stays the same as Step 2b - it just returns early when destroyed. All text drawing is handled by `draw_ui()`.
@@ -427,31 +426,32 @@ end
 ```
 
 **Implementation - Update check_collisions:**
-```lua
--- In check_collisions(), when player is hit:
-if boxes_colliding(player, enemy) then
-  player_hit()
-  enemy.isDestroyed = true
-  return
-end
+```diff
+ -- In check_collisions(), when player is hit:
+ if boxes_colliding(player, enemy) then
+-  player.isDestroyed = true
++  player_hit()
+   enemy.isDestroyed = true
+   return
+ end
 ```
 
 **Implementation - Update draw_ui function:**
 
 Extend `draw_ui()` to show the lives counter. The lives display should always be visible during gameplay:
 
-```lua
-function draw_ui()
-  -- Lives display (always visible during gameplay)
-  screen:drawText("Ships: " .. lives, 0, screen.height / 2 - 10, 15, "#FFFFFF")
-
-  -- Respawn message (only when player is destroyed and timer elapsed)
-  if player.isDestroyed then
-    if player.respawn_timer >= RESPAWN_DELAY then
-      screen:drawText("Press Enter to Respawn", 0, 0, 20, "#FFFFFF")
-    end
-  end
-end
+```diff
+ function draw_ui()
++  -- Lives display (always visible during gameplay)
++  screen:drawText("Ships: " .. lives, 0, screen.height / 2 - 10, 15, "#FFFFFF")
++
+   -- Respawn message (only when player is destroyed and timer elapsed)
+   if player.isDestroyed then
+     if player.respawn_timer >= RESPAWN_DELAY then
+       screen:drawText("Press Enter to Respawn", 0, 0, 20, "#FFFFFF")
+     end
+   end
+ end
 ```
 
 **Key Concepts:**
@@ -477,45 +477,49 @@ When destroyed and `lives <= 0`, show "Game Over" instead of respawn prompt.
 
 Update `draw_ui()` to show game over screen when lives run out:
 
-```lua
-function draw_ui()
-  -- Lives display (always visible during gameplay)
-  screen:drawText("Ships: " .. lives, 0, screen.height / 2 - 10, 15, "#FFFFFF")
+```diff
+ function draw_ui()
+   -- Lives display (always visible during gameplay)
+   screen:drawText("Ships: " .. lives, 0, screen.height / 2 - 10, 15, "#FFFFFF")
 
-  -- Respawn or Game Over message
-  if player.isDestroyed then
-    if player.respawn_timer >= RESPAWN_DELAY then
-      if lives <= 0 then
-        -- Game Over screen
-        screen:drawText("GAME OVER", 0, 20, 40, "#FF0000")
-        screen:drawText("Press Enter to Continue", 0, -20, 15, "#FFFFFF")
-      else
-        -- Respawn prompt
-        screen:drawText("Press Enter to Respawn", 0, 0, 20, "#FFFFFF")
-      end
-    end
-  end
-end
+-  -- Respawn message (only when player is destroyed and timer elapsed)
++  -- Respawn or Game Over message
+   if player.isDestroyed then
+     if player.respawn_timer >= RESPAWN_DELAY then
+-      screen:drawText("Press Enter to Respawn", 0, 0, 20, "#FFFFFF")
++      if lives <= 0 then
++        -- Game Over screen
++        screen:drawText("GAME OVER", 0, 20, 40, "#FF0000")
++        screen:drawText("Press Enter to Continue", 0, -20, 15, "#FFFFFF")
++      else
++        -- Respawn prompt
++        screen:drawText("Press Enter to Respawn", 0, 0, 20, "#FFFFFF")
++      end
+     end
+   end
+ end
 ```
 
 **Implementation - Update update_respawn:**
 
 Update `update_respawn()` to only allow respawn when lives remain. When game over, pressing Enter does nothing yet (we'll wire this up in Step 8):
 
-```lua
-function update_respawn()
-  player.respawn_timer = player.respawn_timer + 1
+```diff
+ function update_respawn()
+   player.respawn_timer = player.respawn_timer + 1
 
-  if player.respawn_timer >= RESPAWN_DELAY then
-    -- Only allow respawn if lives remain
-    if lives > 0 then
-      if keyboard.press.ENTER then
-        respawn_player()
-      end
-    end
-    -- When lives <= 0, Enter does nothing (yet)
-  end
-end
+   if player.respawn_timer >= RESPAWN_DELAY then
+-    if keyboard.press.ENTER then
+-      respawn_player()
++    -- Only allow respawn if lives remain
++    if lives > 0 then
++      if keyboard.press.ENTER then
++        respawn_player()
++      end
+     end
++    -- When lives <= 0, Enter does nothing (yet)
+   end
+ end
 ```
 
 **Key Concepts:**
@@ -567,90 +571,95 @@ end
 ```
 
 **Implementation - Update init function:**
-```lua
-init = function()
-  init_stars()
-  init_player()
-  init_lasers()
-  enemies = {}  -- Empty enemies table, don't spawn yet
-
-  -- Start on title screen
-  game_state = "title"
-  player.isDestroyed = true  -- Hide player on title
-end
+```diff
+ init = function()
+   init_stars()
+   init_player()
+-  init_enemies()
+   init_lasers()
++  enemies = {}  -- Empty enemies table, don't spawn yet
++
++  -- Start on title screen
++  game_state = "title"
++  player.isDestroyed = true  -- Hide player on title
+ end
 ```
 
 **Implementation - Update update function:**
-```lua
-update = function()
-  update_stars()  -- Stars always update (background effect)
-
-  if game_state == "title" then
-    if keyboard.press.ENTER then
-      init_game()
-    end
-    return
-  end
-
-  -- Playing state
-  update_player()
-  update_enemies()
-  move_lasers()
-  fire_laser()
-  check_collisions()
-end
+```diff
+ update = function()
+   update_stars()
++
++  if game_state == "title" then
++    if keyboard.press.ENTER then
++      init_game()
++    end
++    return
++  end
++
++  -- Playing state
+   update_player()
+   update_enemies()
+   move_lasers()
+   fire_laser()
+   check_collisions()
+ end
 ```
 
 **Implementation - Update draw_ui function:**
 
 Update `draw_ui()` to handle the title screen using `game_state`. This keeps all text drawing in one place:
 
-```lua
-function draw_ui()
-  -- Title screen
-  if game_state == "title" then
-    screen:drawText("SPACE FLYER", 0, 30, 50, "#FFFFFF")
-    screen:drawText("Press Enter to Take Flight!", 0, -20, 18, "#AAAAAA")
-    return
-  end
+```diff
+ function draw_ui()
++  -- Title screen
++  if game_state == "title" then
++    screen:drawText("SPACE FLYER", 0, 30, 50, "#FFFFFF")
++    screen:drawText("Press Enter to Take Flight!", 0, -20, 18, "#AAAAAA")
++    return
++  end
++
++  -- Playing state UI
+   -- Lives display (always visible during gameplay)
+   screen:drawText("Ships: " .. lives, 0, screen.height / 2 - 10, 15, "#FFFFFF")
 
-  -- Playing state UI
-  -- Lives display (always visible during gameplay)
-  screen:drawText("Ships: " .. lives, 0, screen.height / 2 - 10, 15, "#FFFFFF")
-
-  -- Respawn or Game Over message
-  if player.isDestroyed then
-    if player.respawn_timer >= RESPAWN_DELAY then
-      if lives <= 0 then
-        -- Game Over screen
-        screen:drawText("GAME OVER", 0, 20, 40, "#FF0000")
-        screen:drawText("Press Enter to Continue", 0, -20, 15, "#FFFFFF")
-      else
-        -- Respawn prompt
-        screen:drawText("Press Enter to Respawn", 0, 0, 20, "#FFFFFF")
-      end
-    end
-  end
-end
+   -- Respawn or Game Over message
+   if player.isDestroyed then
+     if player.respawn_timer >= RESPAWN_DELAY then
+       if lives <= 0 then
+         -- Game Over screen
+         screen:drawText("GAME OVER", 0, 20, 40, "#FF0000")
+         screen:drawText("Press Enter to Continue", 0, -20, 15, "#FFFFFF")
+       else
+         -- Respawn prompt
+         screen:drawText("Press Enter to Respawn", 0, 0, 20, "#FFFFFF")
+       end
+     end
+   end
+ end
 ```
 
 **Implementation - Update draw function:**
 
 The draw function now always calls `draw_ui()` at the end. The `draw_ui()` function handles game state internally:
 
-```lua
-draw = function()
-  screen:clear("rgb(0, 0, 20)")
-  draw_stars()  -- Stars always draw (background)
-
-  if game_state == "playing" then
-    draw_enemies()
-    draw_player()
-    draw_lasers()
-  end
-
-  draw_ui()  -- Always draw UI last (handles all game states)
-end
+```diff
+ draw = function()
+   screen:clear("rgb(0, 0, 20)")
+-
+   draw_stars()
+-  draw_enemies()
+-  draw_player()
+-  draw_lasers()
++
++  if game_state == "playing" then
++    draw_enemies()
++    draw_player()
++    draw_lasers()
++  end
++
+   draw_ui()
+ end
 ```
 
 **Key Concepts:**
@@ -697,20 +706,24 @@ end
 
 Now wire up the game over path to call `show_title_screen()`:
 
-```lua
-function update_respawn()
-  player.respawn_timer = player.respawn_timer + 1
+```diff
+ function update_respawn()
+   player.respawn_timer = player.respawn_timer + 1
 
-  if player.respawn_timer >= RESPAWN_DELAY then
-    if keyboard.press.ENTER then
-      if lives <= 0 then
-        show_title_screen()  -- NEW: Go to title on game over
-      else
-        respawn_player()
-      end
-    end
-  end
-end
+   if player.respawn_timer >= RESPAWN_DELAY then
+-    -- Only allow respawn if lives remain
+-    if lives > 0 then
+-      if keyboard.press.ENTER then
++    if keyboard.press.ENTER then
++      if lives <= 0 then
++        show_title_screen()  -- NEW: Go to title on game over
++      else
+         respawn_player()
+       end
+     end
+-    -- When lives <= 0, Enter does nothing (yet)
+   end
+ end
 ```
 
 **Key Concepts:**
