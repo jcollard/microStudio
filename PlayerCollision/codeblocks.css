@@ -1,0 +1,303 @@
+/**
+ * Code Block and Diff Styles
+ * Simple, clean styling for code display
+ */
+
+/* ===== CODE BLOCK STYLES ===== */
+
+.code-block-wrapper {
+  margin: 20px 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #1e1e1e;
+}
+
+.code-block-header {
+  background: #2d2d2d;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid #3d3d3d;
+}
+
+.code-block-wrapper pre {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  background: #1e1e1e;
+}
+
+.code-block-wrapper code {
+  font-family: Consolas, Monaco, 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ===== DIFF BLOCK STYLES ===== */
+
+.diff-block-wrapper {
+  margin: 20px 0;
+  border: 1px solid #3d3d3d;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #1e1e1e;
+}
+
+.diff-header {
+  background: #2d2d2d;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #3d3d3d;
+}
+
+.diff-description {
+  font-weight: 600;
+  color: #e0e0e0;
+  font-size: 14px;
+}
+
+.diff-container {
+  display: flex;
+  overflow-x: auto;
+}
+
+.diff-side {
+  flex: 1;
+  min-width: 0;
+}
+
+.diff-left {
+  border-right: 2px solid #3d3d3d;
+}
+
+.diff-side-header {
+  background: #252525;
+  padding: 8px 12px;
+  font-weight: 600;
+  font-size: 13px;
+  color: #999;
+  border-bottom: 1px solid #3d3d3d;
+  text-align: center;
+}
+
+.diff-lines {
+  font-family: Consolas, Monaco, 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.diff-lines > div {
+  display: flex;
+  min-height: 21px;
+  white-space: pre;
+}
+
+.line-num {
+  display: inline-block;
+  width: 45px;
+  padding: 2px 8px;
+  text-align: right;
+  color: #666;
+  background: #252525;
+  border-right: 1px solid #3d3d3d;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.line-content {
+  padding: 2px 12px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: visible;
+}
+
+/* Diff line types - Dark theme */
+
+.diff-line-removed {
+  background: #4a1f1f;
+}
+
+.diff-line-removed .line-content {
+  color: #ff8080;
+}
+
+.diff-line-removed .line-num {
+  background: #3d1919;
+  color: #ff6b6b;
+}
+
+.diff-line-added {
+  background: #1f3d1f;
+}
+
+.diff-line-added .line-content {
+  color: #80ff80;
+}
+
+.diff-line-added .line-num {
+  background: #193d19;
+  color: #6bff6b;
+}
+
+.diff-line-unchanged {
+  background: #1e1e1e;
+}
+
+.diff-line-unchanged .line-content {
+  color: #d4d4d4;
+}
+
+.diff-line-empty {
+  background: #1a1a1a;
+}
+
+.diff-line-empty .line-num {
+  background: #252525;
+}
+
+/* ===== SYNTAX HIGHLIGHTING IN DIFFS ===== */
+
+/* Removed lines - use cyan/blue tones for contrast against red background */
+.diff-line-removed .line-content .hljs-keyword,
+.diff-line-removed .line-content .hljs-built_in {
+  color: #4fc3f7;  /* Light blue - high contrast on red */
+  font-weight: bold;
+}
+
+.diff-line-removed .line-content .hljs-type {
+  color: #81d4fa;
+  font-weight: bold;
+}
+
+.diff-line-removed .line-content .hljs-string {
+  color: #ffeb3b;  /* Yellow - excellent contrast on red */
+}
+
+.diff-line-removed .line-content .hljs-number {
+  color: #a5d6a7;  /* Light green - good contrast */
+}
+
+.diff-line-removed .line-content .hljs-comment {
+  color: #b0bec5;  /* Light gray - neutral */
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.diff-line-removed .line-content {
+  color: #ffcccc;  /* Light pink for default text */
+}
+
+/* Added lines - use blue/cyan tones for contrast against green background */
+.diff-line-added .line-content .hljs-keyword,
+.diff-line-added .line-content .hljs-built_in {
+  color: #90caf9;  /* Light blue - high contrast on green */
+  font-weight: bold;
+}
+
+.diff-line-added .line-content .hljs-type {
+  color: #64b5f6;
+  font-weight: bold;
+}
+
+.diff-line-added .line-content .hljs-string {
+  color: #ffeb3b;  /* Yellow - excellent contrast on green */
+}
+
+.diff-line-added .line-content .hljs-number {
+  color: #ffab91;  /* Light orange - good contrast */
+}
+
+.diff-line-added .line-content .hljs-comment {
+  color: #b0bec5;  /* Light gray - neutral */
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.diff-line-added .line-content {
+  color: #ccffcc;  /* Light green for default text */
+}
+
+/* Unchanged lines use standard syntax highlighting */
+.diff-line-unchanged .line-content .hljs-keyword {
+  color: #569cd6;
+}
+
+.diff-line-unchanged .line-content .hljs-built_in {
+  color: #4ec9b0;
+}
+
+.diff-line-unchanged .line-content .hljs-string {
+  color: #ce9178;
+}
+
+.diff-line-unchanged .line-content .hljs-number {
+  color: #b5cea8;
+}
+
+.diff-line-unchanged .line-content .hljs-comment {
+  color: #6a9955;
+  font-style: italic;
+}
+
+/* ===== COPY BUTTON STYLES ===== */
+
+.copy-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.copy-btn:hover {
+  background: #45a049;
+}
+
+.copy-btn:active {
+  background: #3d8b40;
+}
+
+.copy-btn.copied {
+  background: #2196F3;
+}
+
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+
+@media (max-width: 768px) {
+  .diff-container {
+    flex-direction: column;
+  }
+
+  .diff-left {
+    border-right: none;
+    border-bottom: 2px solid #ddd;
+  }
+
+  .line-num {
+    width: 35px;
+    font-size: 11px;
+  }
+
+  .diff-lines {
+    font-size: 12px;
+  }
+
+  .code-block-wrapper code {
+    font-size: 12px;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+  .copy-btn {
+    display: none;
+  }
+}
