@@ -500,20 +500,20 @@ end
 
 **Implementation - Update update_respawn:**
 
-Update `update_respawn()` to handle both respawn and game over paths:
+Update `update_respawn()` to only allow respawn when lives remain. When game over, pressing Enter does nothing yet (we'll wire this up in Step 8):
 
 ```lua
 function update_respawn()
   player.respawn_timer = player.respawn_timer + 1
 
   if player.respawn_timer >= RESPAWN_DELAY then
-    if keyboard.press.ENTER then
-      if lives <= 0 then
-        show_title_screen()  -- Go to title (implemented in Step 8)
-      else
+    -- Only allow respawn if lives remain
+    if lives > 0 then
+      if keyboard.press.ENTER then
         respawn_player()
       end
     end
+    -- When lives <= 0, Enter does nothing (yet)
   end
 end
 ```
@@ -527,6 +527,7 @@ end
 **Testing:**
 - Lose all 3 lives
 - Should see "GAME OVER" instead of respawn message
+- Pressing Enter on game over does nothing (this is expected - we'll fix it in Step 8)
 
 ---
 
@@ -692,7 +693,25 @@ function show_title_screen()
 end
 ```
 
-**Note:** The `update_player()` already calls `show_title_screen()` when Enter is pressed with `lives <= 0` (from Step 6).
+**Implementation - Update update_respawn:**
+
+Now wire up the game over path to call `show_title_screen()`:
+
+```lua
+function update_respawn()
+  player.respawn_timer = player.respawn_timer + 1
+
+  if player.respawn_timer >= RESPAWN_DELAY then
+    if keyboard.press.ENTER then
+      if lives <= 0 then
+        show_title_screen()  -- NEW: Go to title on game over
+      else
+        respawn_player()
+      end
+    end
+  end
+end
+```
 
 **Key Concepts:**
 - State transitions
